@@ -1,2 +1,4 @@
-# aoc_2022
-Advent of Code 2021 in Python 
+Мои решения задач Advent of Code 2022.
+Advent of Code — ежегодный рождественский календарь, в котором каждый день открывается новая задача по программированию.
+
+https://adventofcode.com/2022
