@@ -21,6 +21,28 @@ COMPARISON_MATRIX = [
     [6, 0, 3],
 ]
 
+RESULT_PRICE = {
+    "X": 0,
+    "Y": 3,
+    "Z": 6,
+}
+
+INDEX_MOVE = {
+    0: "X",
+    1: "Y",
+    2: "Z",
+}
+
+
+def get_round_result_2(moves):
+    elf_move, my_move = moves
+
+    my_result_price = RESULT_PRICE[my_move]
+    index = COMPARISON_MATRIX[MOVE_INDEX[elf_move]].index(my_result_price)
+    my_move_price = MOVE_PRICE[INDEX_MOVE[index]]
+
+    return my_result_price + my_move_price
+
 
 def get_round_result(moves):
     elf_move, my_move = moves
@@ -39,6 +61,7 @@ def read_input():
 def main():
     moves = read_input()
     print(sum(map(get_round_result, moves)))
+    print(sum(map(get_round_result_2, moves)))
 
 
 if __name__ == "__main__":
@@ -47,4 +70,8 @@ if __name__ == "__main__":
     assert get_round_result(("A", "Z")) == 3
     assert get_round_result(("B", "X")) == 1
     assert get_round_result(("C", "Z")) == 6
+
+    assert get_round_result_2(("A", "Y")) == 4
+    assert get_round_result_2(("B", "X")) == 1
+    assert get_round_result_2(("C", "Z")) == 7
     main()
