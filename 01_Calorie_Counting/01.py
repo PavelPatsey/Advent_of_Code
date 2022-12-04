@@ -13,7 +13,7 @@ def main():
     sum_calories = list(map(sum, calories))
     max_calories = max(sum_calories)
     print(max_calories)
-    
+
     sorted_sum_calories = sorted(sum_calories, reverse=True)
     print(sum(sorted_sum_calories[:3]))
 

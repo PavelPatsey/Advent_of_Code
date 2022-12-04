@@ -39,6 +39,3 @@ if __name__ == "__main__":
     assert is_intersected([2, 8, 6, 9]) == True
 
     main()
-
-
-# z = x.issubset(y)
