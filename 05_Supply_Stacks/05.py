@@ -3,6 +3,14 @@ from pprint import pprint
 INPUT = "test_input"
 
 
+def convert_move(move):
+    move = filter(lambda x: x.isdigit(), move.split())
+    move = list(map(int, move))
+    move[1] -= 1
+    move[2] -= 1
+    return move
+
+
 def make_stacks(stacks):
     stacks_number = int(stacks[-1].strip().split()[-1])
 
@@ -27,17 +35,17 @@ def read_input():
     with open(INPUT, "r") as file:
         data = file.read().split("\n\n")
 
-        stacks = data[0]
-        stacks = stacks.split("\n")
+        stacks = data[0].split("\n")
         stacks = make_stacks(stacks)
-        print(stacks)
 
-        moves = data[1]
-        print(moves)
+        moves = data[1].strip().split("\n")
+        moves = tuple(map(convert_move, moves))
+
+        return stacks, moves
 
 
 def main():
-    read_input()
+    stacks, moves = read_input()
 
 
 if __name__ == "__main__":
