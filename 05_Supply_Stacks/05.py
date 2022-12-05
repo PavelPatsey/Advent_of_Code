@@ -10,38 +10,25 @@ def get_message(stacks):
 def make_procedure(stacks, moves):
     new_stacks = copy.deepcopy(stacks)
     for move in moves:
-        new_stacks = do_move(new_stacks, move)
+        items_number = move[0]
+        from_stack = move[1]
+        to_stack = move[2]
+        for _ in range(items_number):
+            new_stacks[to_stack].append(new_stacks[from_stack].pop())
+
     return new_stacks
 
 
 def make_procedure_2(stacks, moves):
     new_stacks = copy.deepcopy(stacks)
     for move in moves:
-        new_stacks = do_move_2(new_stacks, move)
-    return new_stacks
+        items_number = move[0]
+        from_stack = move[1]
+        to_stack = move[2]
 
-
-def do_move(stacks, move):
-    new_stacks = copy.deepcopy(stacks)
-    items_number = move[0]
-    from_stack = move[1]
-    to_stack = move[2]
-
-    for _ in range(items_number):
-        new_stacks[to_stack].append(new_stacks[from_stack].pop())
-
-    return new_stacks
-
-
-def do_move_2(stacks, move):
-    new_stacks = copy.deepcopy(stacks)
-    items_number = move[0]
-    from_stack = move[1]
-    to_stack = move[2]
-
-    lst = [new_stacks[from_stack].pop() for _ in range(items_number)]
-    lst.reverse()
-    new_stacks[to_stack].extend(lst)
+        lst = [new_stacks[from_stack].pop() for _ in range(items_number)]
+        lst.reverse()
+        new_stacks[to_stack].extend(lst)
 
     return new_stacks
 
@@ -94,25 +81,4 @@ def main():
 
 
 if __name__ == "__main__":
-    stacks_0 = [
-        ["1", "Z", "N"],
-        ["2", "M", "C", "D"],
-        ["3", "P"],
-    ]
-    move = (1, 1, 0)
-    stacks_1 = [
-        ["1", "Z", "N", "D"],
-        ["2", "M", "C"],
-        ["3", "P"],
-    ]
-    assert do_move(stacks_0, move) == stacks_1
-
-    stacks_1 = [
-        ["1"],
-        ["2", "M", "C", "D", "Z", "N"],
-        ["3", "P"],
-    ]
-    move = (2, 0, 1)
-    assert do_move_2(stacks_0, move) == stacks_1
-
     main()
