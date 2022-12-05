@@ -1,6 +1,30 @@
 from pprint import pprint
 
-INPUT = "test_input"
+INPUT = "input"
+
+
+def get_message(stacks):
+    message = ""
+    for stack in stacks:
+        message += stack.pop()
+    return message
+
+
+def make_procedure(stacks, moves):
+    for move in moves:
+        stacks = do_move(stacks, move)
+    return stacks
+
+
+def do_move(stacks, move):
+    items_number = move[0]
+    from_stack = move[1]
+    to_stack = move[2]
+
+    for _ in range(items_number):
+        stacks[to_stack].append(stacks[from_stack].pop())
+
+    return stacks
 
 
 def convert_move(move):
@@ -8,7 +32,7 @@ def convert_move(move):
     move = list(map(int, move))
     move[1] -= 1
     move[2] -= 1
-    return move
+    return tuple(move)
 
 
 def make_stacks(stacks):
@@ -46,7 +70,22 @@ def read_input():
 
 def main():
     stacks, moves = read_input()
+    print(get_message(make_procedure(stacks, moves)))
 
 
 if __name__ == "__main__":
+    stacks_0 = [
+        ["1", "Z", "N"],
+        ["2", "M", "C", "D"],
+        ["3", "P"],
+    ]
+    move = (1, 1, 0)
+    stacks_1 = [
+        ["1", "Z", "N", "D"],
+        ["2", "M", "C"],
+        ["3", "P"],
+    ]
+
+    assert do_move(stacks_0, move) == stacks_1
+
     main()
