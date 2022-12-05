@@ -1,30 +1,49 @@
-from pprint import pprint
+import copy
 
 INPUT = "input"
 
 
 def get_message(stacks):
-    message = ""
-    for stack in stacks:
-        message += stack.pop()
-    return message
+    return "".join(x[-1] for x in stacks)
 
 
 def make_procedure(stacks, moves):
+    new_stacks = copy.deepcopy(stacks)
     for move in moves:
-        stacks = do_move(stacks, move)
-    return stacks
+        new_stacks = do_move(new_stacks, move)
+    return new_stacks
+
+
+def make_procedure_2(stacks, moves):
+    new_stacks = copy.deepcopy(stacks)
+    for move in moves:
+        new_stacks = do_move_2(new_stacks, move)
+    return new_stacks
 
 
 def do_move(stacks, move):
+    new_stacks = copy.deepcopy(stacks)
     items_number = move[0]
     from_stack = move[1]
     to_stack = move[2]
 
     for _ in range(items_number):
-        stacks[to_stack].append(stacks[from_stack].pop())
+        new_stacks[to_stack].append(new_stacks[from_stack].pop())
 
-    return stacks
+    return new_stacks
+
+
+def do_move_2(stacks, move):
+    new_stacks = copy.deepcopy(stacks)
+    items_number = move[0]
+    from_stack = move[1]
+    to_stack = move[2]
+
+    lst = [new_stacks[from_stack].pop() for _ in range(items_number)]
+    lst.reverse()
+    new_stacks[to_stack].extend(lst)
+
+    return new_stacks
 
 
 def convert_move(move):
@@ -71,6 +90,7 @@ def read_input():
 def main():
     stacks, moves = read_input()
     print(get_message(make_procedure(stacks, moves)))
+    print(get_message(make_procedure_2(stacks, moves)))
 
 
 if __name__ == "__main__":
@@ -85,7 +105,14 @@ if __name__ == "__main__":
         ["2", "M", "C"],
         ["3", "P"],
     ]
-
     assert do_move(stacks_0, move) == stacks_1
+
+    stacks_1 = [
+        ["1"],
+        ["2", "M", "C", "D", "Z", "N"],
+        ["3", "P"],
+    ]
+    move = (2, 0, 1)
+    assert do_move_2(stacks_0, move) == stacks_1
 
     main()
