@@ -1,5 +1,4 @@
 def get_index(string, number):
-    string = list(string)
     N = len(string)
     i = number - 1
     while i < N:
