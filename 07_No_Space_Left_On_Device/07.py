@@ -43,7 +43,7 @@ def main():
     print(sum(filter(lambda x: x <= 100000, sizes_dict.values())))
 
     needed_space = 30000000 - (70000000 - sizes_dict["/"])
-    print(list(filter(lambda x: x >= needed_space, sorted(sizes_dict.values())))[0])
+    print(min(filter(lambda x: x >= needed_space, sizes_dict.values())))
 
 
 if __name__ == "__main__":
