@@ -11,14 +11,14 @@ def get_sizes_dict(lines):
         if words[0] == "$":
             if words[1] == "cd" and words[2] == "..":
                 path_stack.pop()
-                continue
-            if words[1] == "cd":
+            elif words[1] == "cd":
                 path_stack.append(words[2])
-                continue
-            if words[1] == "ls":
-                continue
+            elif words[1] == "ls":
+                pass
+            else:
+                print("error: неучтенный случай c $")
         elif words[0] == "dir":
-            continue
+            pass
         elif words[0].isdigit():
             N = len(path_stack)
             size = int(words[0])
