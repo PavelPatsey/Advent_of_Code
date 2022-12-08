@@ -16,16 +16,10 @@ def is_visible(trees, x, y):
     if all(map(lambda t: t < trees[y][x], trees[y][x + 1 :])):
         return True
 
-    lst = []
-    for j in range(y):
-        lst.append(trees[j][x])
-    if all(map(lambda t: t < trees[y][x], lst)):
+    if all(map(lambda t: t < trees[y][x], [trees[j][x] for j in range(y)])):
         return True
 
-    lst = []
-    for j in range(y + 1, Y):
-        lst.append(trees[j][x])
-    if all(map(lambda t: t < trees[y][x], lst)):
+    if all(map(lambda t: t < trees[y][x], [trees[j][x] for j in range(y + 1, Y)])):
         return True
 
     return False
