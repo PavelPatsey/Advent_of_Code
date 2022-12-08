@@ -1,4 +1,4 @@
-import numpy as np
+from functools import reduce
 
 INPUT = "input"
 
@@ -43,6 +43,66 @@ def get_visible_trees(trees):
     return visible_trees
 
 
+def get_score(trees, x, y):
+    X = len(trees[0])
+    Y = len(trees)
+    counter_stack = []
+
+    i = y
+    counter = 0
+    tree_is_found = False
+    while i > 0 and not tree_is_found:
+        if trees[i - 1][x] >= trees[y][x]:
+            tree_is_found = True
+        counter += 1
+        i -= 1
+    counter_stack.append(counter)
+
+    i = y
+    counter = 0
+    tree_is_found = False
+    while i < Y - 1 and not tree_is_found:
+        if trees[i + 1][x] >= trees[y][x]:
+            tree_is_found = True
+        counter += 1
+        i += 1
+    counter_stack.append(counter)
+
+    j = x
+    counter = 0
+    tree_is_found = False
+    while j > 0 and not tree_is_found:
+        if trees[y][j - 1] >= trees[y][x]:
+            tree_is_found = True
+        counter += 1
+        j -= 1
+    counter_stack.append(counter)
+
+    j = x
+    counter = 0
+    tree_is_found = False
+    while j < X - 1 and not tree_is_found:
+        if trees[y][j + 1] >= trees[y][x]:
+            tree_is_found = True
+        counter += 1
+        j += 1
+    counter_stack.append(counter)
+
+    return reduce(lambda acc, x: acc * x, counter_stack, 1)
+
+
+def get_trees_scores(trees):
+    X = len(trees[0])
+    Y = len(trees)
+    trees_score = [[0 for y in range(Y)] for x in range(X)]
+
+    for y in range(Y):
+        for x in range(X):
+            trees_score[y][x] = get_score(trees, x, y)
+
+    return trees_score
+
+
 def read_input():
     with open(INPUT, "r") as file:
         trees = [[int(y) for y in line] for line in file.read().strip().splitlines()]
@@ -55,6 +115,7 @@ def main():
 
     X = len(visible_trees[0])
     Y = len(visible_trees)
+
     print(
         len(
             [
@@ -65,6 +126,9 @@ def main():
             ]
         )
     )
+
+    trees_score = get_trees_scores(trees)
+    print(max([trees_score[x][y] for y in range(Y) for x in range(X)]))
 
 
 if __name__ == "__main__":
@@ -78,5 +142,9 @@ if __name__ == "__main__":
     assert is_visible(trees, 0, 0) == True
     assert is_visible(trees, 1, 1) == True
     assert is_visible(trees, 1, 3) == False
+
+    assert get_score(trees, 2, 1) == 4
+    assert get_score(trees, 2, 3) == 8
+    assert get_score(trees, 0, 0) == 0
 
     main()
