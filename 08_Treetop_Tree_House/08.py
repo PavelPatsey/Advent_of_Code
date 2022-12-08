@@ -31,18 +31,6 @@ def is_visible(trees, x, y):
     return False
 
 
-def get_visible_trees(trees):
-    X = len(trees[0])
-    Y = len(trees)
-    visible_trees = [[False for y in range(Y)] for x in range(X)]
-
-    for y in range(Y):
-        for x in range(X):
-            visible_trees[y][x] = is_visible(trees, x, y)
-
-    return visible_trees
-
-
 def get_score(trees, x, y):
     X = len(trees[0])
     Y = len(trees)
@@ -91,18 +79,6 @@ def get_score(trees, x, y):
     return reduce(lambda acc, x: acc * x, counter_stack, 1)
 
 
-def get_trees_scores(trees):
-    X = len(trees[0])
-    Y = len(trees)
-    trees_score = [[0 for y in range(Y)] for x in range(X)]
-
-    for y in range(Y):
-        for x in range(X):
-            trees_score[y][x] = get_score(trees, x, y)
-
-    return trees_score
-
-
 def read_input():
     with open(INPUT, "r") as file:
         trees = [[int(y) for y in line] for line in file.read().strip().splitlines()]
@@ -111,11 +87,11 @@ def read_input():
 
 def main():
     trees = read_input()
-    visible_trees = get_visible_trees(trees)
 
-    X = len(visible_trees[0])
-    Y = len(visible_trees)
+    X = len(trees[0])
+    Y = len(trees)
 
+    visible_trees = [[is_visible(trees, x, y) for y in range(Y)] for x in range(X)]
     print(
         len(
             [
@@ -127,7 +103,7 @@ def main():
         )
     )
 
-    trees_score = get_trees_scores(trees)
+    trees_score = [[get_score(trees, x, y) for y in range(Y)] for x in range(X)]
     print(max([trees_score[x][y] for y in range(Y) for x in range(X)]))
 
 
