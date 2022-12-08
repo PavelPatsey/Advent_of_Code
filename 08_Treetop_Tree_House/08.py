@@ -28,7 +28,7 @@ def is_visible(trees, x, y):
 def get_score(trees, x, y):
     X = len(trees[0])
     Y = len(trees)
-    counter_stack = []
+    counters = []
 
     i = y
     counter = 0
@@ -38,7 +38,7 @@ def get_score(trees, x, y):
             tree_is_found = True
         counter += 1
         i -= 1
-    counter_stack.append(counter)
+    counters.append(counter)
 
     i = y
     counter = 0
@@ -48,7 +48,7 @@ def get_score(trees, x, y):
             tree_is_found = True
         counter += 1
         i += 1
-    counter_stack.append(counter)
+    counters.append(counter)
 
     j = x
     counter = 0
@@ -58,7 +58,7 @@ def get_score(trees, x, y):
             tree_is_found = True
         counter += 1
         j -= 1
-    counter_stack.append(counter)
+    counters.append(counter)
 
     j = x
     counter = 0
@@ -68,9 +68,9 @@ def get_score(trees, x, y):
             tree_is_found = True
         counter += 1
         j += 1
-    counter_stack.append(counter)
+    counters.append(counter)
 
-    return reduce(lambda acc, x: acc * x, counter_stack, 1)
+    return reduce(lambda acc, x: acc * x, counters, 1)
 
 
 def read_input():
