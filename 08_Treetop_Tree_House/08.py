@@ -51,18 +51,20 @@ def read_input():
 
 def main():
     trees = read_input()
-    print(get_visible_trees(trees))
     visible_trees = get_visible_trees(trees)
 
     X = len(visible_trees[0])
     Y = len(visible_trees)
-
-    counter = 0
-    for y in range(Y):
-        for x in range(X):
-            if visible_trees[x][y] == True:
-                counter += 1
-    print(counter)
+    print(
+        len(
+            [
+                visible_trees[x][y]
+                for y in range(Y)
+                for x in range(X)
+                if visible_trees[x][y]
+            ]
+        )
+    )
 
 
 if __name__ == "__main__":
