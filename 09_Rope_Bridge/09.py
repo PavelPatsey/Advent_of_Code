@@ -17,9 +17,7 @@ def follow_head(head, tail):
     dx = head[0] - tail[0]
     dy = head[1] - tail[1]
 
-    if abs(dx) <= 1 and abs(dy) <= 1:
-        pass
-    else:
+    if not (abs(dx) <= 1 and abs(dy) <= 1):
         tail = (tail[0] + sign(dx), tail[1] + sign(dy))
 
     return tail[0], tail[1]
