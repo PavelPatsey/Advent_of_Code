@@ -17,7 +17,7 @@ def follow_head(head, tail):
     dx = head[0] - tail[0]
     dy = head[1] - tail[1]
 
-    if not (abs(dx) <= 1 and abs(dy) <= 1):
+    if abs(dx) > 1 or abs(dy) > 1:
         tail = (tail[0] + sign(dx), tail[1] + sign(dy))
 
     return tail
@@ -31,25 +31,10 @@ def read_input():
 
 
 def main():
-    # head = (0, 0)
-    # tail = (0, 0)
-    # tail_stack = set()
-    # tail_stack.add(tail)
-
-    # commands = read_input()
-    # for command in commands:
-    #     direction, step_count = command[0], command[1]
-    #     for _ in range(step_count):
-    #         head = (head[0] + DX[direction], head[1] + DY[direction])
-    #         tail = follow_head(head, tail)
-    #         tail_stack.add(tail)
-
-    # print(len(tail_stack))
-
     head = (0, 0)
     tail = [(0, 0) for _ in range(9)]
-    tail_stack = set()
-    tail_stack.add(tail[8])
+    tail_stack_0 = set(tail[0])
+    tail_stack_8 = set(tail[8])
 
     commands = read_input()
     for command in commands:
@@ -59,9 +44,11 @@ def main():
             tail[0] = follow_head(head, tail[0])
             for i in range(1, 9):
                 tail[i] = follow_head(tail[i - 1], tail[i])
-            tail_stack.add(tail[8])
+            tail_stack_0.add(tail[0])
+            tail_stack_8.add(tail[8])
 
-    print(len(tail_stack))
+    print(len(tail_stack_0))
+    print(len(tail_stack_8))
 
 
 if __name__ == "__main__":
