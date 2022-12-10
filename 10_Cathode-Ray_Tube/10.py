@@ -1,10 +1,10 @@
-INPUT = "test_input"
+INPUT = "input"
 
 
 def get_values(commands):
     x = 1
     values = [x]
-    
+
     for command in commands:
         if "noop" in command:
             values.append(x)
@@ -27,15 +27,10 @@ def read_input():
 def main():
     commands = read_input()
     values = get_values(commands)
-    print(list(enumerate(values)))
-    print()
-    
-    print(list(filter(lambda x: (x[0]-20)%40==0, enumerate(values))))
-    print()
-    print(list(map(lambda x: (x[0])*x[1], filter(lambda x: (x[0]+1-20)%40==0, enumerate(values)))))
 
-    print(sum(list(map(lambda x: x[0]*x[1], filter(lambda x: (x[0]+1-20)%40==0, enumerate(values))))))
-
+    filtered = filter(lambda x: (x[0] + 1 - 20) % 40 == 0, enumerate(values))
+    mapped = map(lambda x: (x[0] + 1) * x[1], filtered)
+    print(sum(mapped))
 
 
 if __name__ == "__main__":
