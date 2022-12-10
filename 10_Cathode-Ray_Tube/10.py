@@ -10,8 +10,8 @@ def get_values(commands):
             values.append(x)
         elif "addx" in command:
             values.append(x)
-            x += int(command.strip().split()[1])
             values.append(x)
+            x += int(command.strip().split()[1])
         else:
             print("error!")
 
@@ -28,8 +28,8 @@ def main():
     commands = read_input()
     values = get_values(commands)
 
-    filtered = filter(lambda x: (x[0] + 1 - 20) % 40 == 0, enumerate(values))
-    mapped = map(lambda x: (x[0] + 1) * x[1], filtered)
+    filtered = filter(lambda x: (x[0] - 20) % 40 == 0, enumerate(values))
+    mapped = map(lambda x: x[0] * x[1], filtered)
     print(sum(mapped))
 
 
