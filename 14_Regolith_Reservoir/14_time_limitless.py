@@ -94,8 +94,8 @@ def get_sand_unit_coordinates_2(unit_coordinates, rock_set, sand_set, max_y):
         return unit_coordinates[0], max_y - 1
 
     tile = min(filtered, key=lambda x: x[1])
-    
-    if tile == (500,0):
+
+    if tile == (500, 0):
         return False
 
     unit = tile[0] - 1, tile[1]
