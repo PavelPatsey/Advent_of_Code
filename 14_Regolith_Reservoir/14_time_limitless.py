@@ -78,11 +78,65 @@ def get_sand_set(rock_set):
     return sand_set
 
 
+def get_sand_unit_coordinates_2(unit_coordinates, rock_set, sand_set, max_y):
+    if unit_coordinates[1] == max_y - 1:
+        return unit_coordinates[0], max_y - 1
+
+    union_set = rock_set.union(sand_set)
+    filtered = set(
+        filter(
+            lambda x: x[0] == unit_coordinates[0] and x[1] > unit_coordinates[1],
+            union_set,
+        )
+    )
+
+    if filtered == set():
+        return unit_coordinates[0], max_y - 1
+
+    tile = min(filtered, key=lambda x: x[1])
+    
+    if tile == (500,0):
+        return False
+
+    unit = tile[0] - 1, tile[1]
+    if not unit in union_set:
+        return get_sand_unit_coordinates_2(unit, rock_set, sand_set, max_y)
+
+    unit = tile[0] + 1, tile[1]
+    if not unit in union_set:
+        return get_sand_unit_coordinates_2(unit, rock_set, sand_set, max_y)
+
+    return tile[0], tile[1] - 1
+
+
+def get_sand_set_2(rock_set, max_y):
+    sand_set = set()
+
+    is_blocked = False
+    while not is_blocked:
+        sand_unit_coordinates = get_sand_unit_coordinates_2(
+            (500, -2),
+            rock_set,
+            sand_set,
+            max_y,
+        )
+        if sand_unit_coordinates:
+            sand_set.add(sand_unit_coordinates)
+        else:
+            is_blocked = True
+
+    return sand_set
+
+
 def main():
     rock_traces = read_input()
     rock_set = get_rock_set(rock_traces)
     sand_set = get_sand_set(rock_set)
     print(len(sand_set))
+
+    # max_y = max(rock_set, key=lambda x: x[1])[1] + 2
+    # sand_set_2 = get_sand_set_2(rock_set, max_y)
+    # print(len(sand_set_2))
 
 
 if __name__ == "__main__":
