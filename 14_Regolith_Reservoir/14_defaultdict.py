@@ -1,6 +1,18 @@
+import time
 from collections import defaultdict
 
 INPUT = "input"
+
+
+def clock(function):
+    def _wrapped(*args, **kwargs):
+        t0 = time.time()
+        res = function(*args, **kwargs)
+        dt = time.time() - t0
+        print(f"{dt = } sec")
+        return res
+
+    return _wrapped
 
 
 def read_input():
@@ -69,6 +81,7 @@ def get_sand_unit_coordinates(unit_coordinates, rock_dict, sand_dict):
     return tile[0], tile[1] - 1
 
 
+@clock
 def get_sand_dict(rock_dict):
     sand_dict = defaultdict(set)
 
@@ -118,6 +131,7 @@ def get_sand_unit_coordinates_2(unit_coordinates, rock_dict, sand_dict, max_y):
     return tile[0], tile[1] - 1
 
 
+@clock
 def get_sand_dict_2(rock_dict, max_y):
     sand_dict = defaultdict(set)
 
