@@ -156,8 +156,8 @@ def main():
     print(sum(map(len, sand_dict.values())))
 
     max_y = max(rock_set, key=lambda x: x[1])[1] + 2
-    sand_dict = get_sand_dict_2(rock_dict, max_y)
-    print(sum(map(len, sand_dict.values())))
+    sand_dict_2 = get_sand_dict_2(rock_dict, max_y)
+    print(sum(map(len, sand_dict_2.values())))
 
 
 if __name__ == "__main__":
