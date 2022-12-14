@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-INPUT = "test_input"
+INPUT = "input"
 
 
 def read_input():
