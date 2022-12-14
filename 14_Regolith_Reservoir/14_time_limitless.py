@@ -1,4 +1,4 @@
-INPUT = "input"
+INPUT = "test_input"
 
 
 def read_input():
@@ -134,9 +134,9 @@ def main():
     sand_set = get_sand_set(rock_set)
     print(len(sand_set))
 
-    # max_y = max(rock_set, key=lambda x: x[1])[1] + 2
-    # sand_set_2 = get_sand_set_2(rock_set, max_y)
-    # print(len(sand_set_2))
+    max_y = max(rock_set, key=lambda x: x[1])[1] + 2
+    sand_set_2 = get_sand_set_2(rock_set, max_y)
+    print(len(sand_set_2))
 
 
 if __name__ == "__main__":
