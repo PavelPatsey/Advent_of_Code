@@ -1,6 +1,18 @@
 import re
+import time
 
 INPUT = "input"
+
+
+def clock(function):
+    def _wrapped(*args, **kwargs):
+        t0 = time.time()
+        res = function(*args, **kwargs)
+        dt = time.time() - t0
+        print(f"{dt = } sec")
+        return res
+
+    return _wrapped
 
 
 def read_input():
@@ -54,6 +66,7 @@ def is_cannot_possibly_exist(x, y, sensor_set, beacon_set):
         return False
 
 
+@clock
 def get_answer_1(sensor_set, beacon_set):
     if INPUT == "test_input":
         y = 10
@@ -89,6 +102,7 @@ def is_beacon(x, y, sensor_set, beacon_set):
         return False
 
 
+@clock
 def get_answer_2(sensor_set, beacon_set):
     if INPUT == "test_input":
         min_y = 0
@@ -102,7 +116,6 @@ def get_answer_2(sensor_set, beacon_set):
         max_x = 4_000_000
 
     for (x, y, d) in sensor_set:
-        print(x, y, d)
         for dx in range(d + 2):
             dy = (d + 1) - dx
             for sign_x, sign_y in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
@@ -110,15 +123,14 @@ def get_answer_2(sensor_set, beacon_set):
                 candidate_y = y + dy * sign_y
                 if min_x <= candidate_x <= max_x and min_y <= candidate_y <= max_y:
                     if is_beacon(candidate_x, candidate_y, sensor_set, beacon_set):
-                        print(f"{candidate_x=} {candidate_y=}")
                         return candidate_x * 4_000_000 + candidate_y
 
 
 def main():
     sensor_set, sensor_set_x_y, beacon_set = read_input()
 
-    # print(get_answer_1(sensor_set, beacon_set))
-    # print_matrix(sensor_set, sensor_set_x_y, beacon_set)
+    print(get_answer_1(sensor_set, beacon_set))
+    print_matrix(sensor_set, sensor_set_x_y, beacon_set)
     print(get_answer_2(sensor_set, beacon_set))
 
 
