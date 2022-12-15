@@ -130,7 +130,7 @@ def main():
     sensor_set, sensor_set_x_y, beacon_set = read_input()
 
     print(get_answer_1(sensor_set, beacon_set))
-    print_matrix(sensor_set, sensor_set_x_y, beacon_set)
+    # print_matrix(sensor_set, sensor_set_x_y, beacon_set)
     print(get_answer_2(sensor_set, beacon_set))
 
 
