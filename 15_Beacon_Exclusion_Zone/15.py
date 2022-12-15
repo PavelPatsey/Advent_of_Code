@@ -101,24 +101,17 @@ def get_answer_2(sensor_set, beacon_set):
         min_x = 0
         max_x = 4_000_000
 
-
-    candidates = set()
-    for (x,y,d) in sensor_set:
-        for dx in range(d+2):
-            dy = (d+1)-dx
+    for (x, y, d) in sensor_set:
+        print(x, y, d)
+        for dx in range(d + 2):
+            dy = (d + 1) - dx
             for sign_x, sign_y in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
-                candidate_x = x + dx
-                candidate_y = y + dy
+                candidate_x = x + dx * sign_x
+                candidate_y = y + dy * sign_y
                 if min_x <= candidate_x <= max_x and min_y <= candidate_y <= max_y:
-                    candidates.add((candidate_x, candidate_y))
-
-    for (x,y) in candidates:
-        if is_beacon(x, y, sensor_set, beacon_set):
-                result = x * 4_000_000 + y
-                print(f"{x=} {y=}")
-                break
-
-    return result
+                    if is_beacon(candidate_x, candidate_y, sensor_set, beacon_set):
+                        print(f"{candidate_x=} {candidate_y=}")
+                        return candidate_x * 4_000_000 + candidate_y
 
 
 def main():
