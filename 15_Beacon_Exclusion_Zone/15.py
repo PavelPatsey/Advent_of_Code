@@ -1,6 +1,6 @@
 import re
 
-INPUT = "input"
+INPUT = "test_input"
 
 
 def read_input():
@@ -33,9 +33,7 @@ def is_cannot_possibly_exist(x, y, sensor_set, beacon_set):
         return False
 
 
-def main():
-    sensor_set, beacon_set = read_input()
-
+def get_answer_1(sensor_set, beacon_set):
     if INPUT == "test_input":
         y = 10
         min_x = -100
@@ -50,7 +48,14 @@ def main():
         y = y
         if is_cannot_possibly_exist(x, y, sensor_set, beacon_set):
             counter += 1
-    print(counter)
+
+    return counter
+
+
+def main():
+    sensor_set, beacon_set = read_input()
+
+    print(get_answer_1(sensor_set, beacon_set))
 
 
 if __name__ == "__main__":
