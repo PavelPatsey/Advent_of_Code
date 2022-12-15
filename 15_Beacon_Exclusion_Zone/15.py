@@ -44,7 +44,7 @@ def print_matrix(sensor_set, sensor_set_x_y, beacon_set):
 
 
 def is_cannot_possibly_exist(x, y, sensor_set, beacon_set):
-    if (x, y) in beacon_set:
+    if (x, y) in beacon_set or (x, y) in sensor_set:
         return False
     else:
         for (s_x, s_y, d) in sensor_set:
@@ -52,19 +52,6 @@ def is_cannot_possibly_exist(x, y, sensor_set, beacon_set):
             if d_x_y <= d:
                 return True
         return False
-
-
-def is_beacon(x, y, sensor_set, beacon_set):
-    result = True
-    if (x, y) in beacon_set:
-        result = False
-    else:
-        for (s_x, s_y, d) in sensor_set:
-            d_x_y = abs(s_x - x) + abs(s_y - y)
-            if d_x_y <= d:
-                result = result and False
-
-    return result
 
 
 def get_answer_1(sensor_set, beacon_set):
@@ -86,6 +73,22 @@ def get_answer_1(sensor_set, beacon_set):
     return counter
 
 
+def is_beacon(x, y, sensor_set, beacon_set):
+    if (
+        not is_cannot_possibly_exist(x, y, sensor_set, beacon_set)
+        and not (x, y) in sensor_set
+        and not (x, y) in beacon_set
+    ):
+        is_beacon = True
+        for dx, dy in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
+            is_beacon = is_beacon and is_cannot_possibly_exist(
+                x + dx, y + dy, sensor_set, beacon_set
+            )
+        return is_beacon
+    else:
+        return False
+
+
 def get_answer_2(sensor_set, beacon_set):
     if INPUT == "test_input":
         min_y = 0
@@ -102,7 +105,7 @@ def get_answer_2(sensor_set, beacon_set):
         for y in range(min_y, max_y):
             if is_beacon(x, y, sensor_set, beacon_set):
                 result = x * 4_000_000 + y
-                print(x, y)
+                print(f"{x=} {y=}")
                 break
 
     return result
@@ -111,8 +114,8 @@ def get_answer_2(sensor_set, beacon_set):
 def main():
     sensor_set, sensor_set_x_y, beacon_set = read_input()
 
-    print(get_answer_1(sensor_set, beacon_set))
-    print_matrix(sensor_set, sensor_set_x_y, beacon_set)
+    # print(get_answer_1(sensor_set, beacon_set))
+    # print_matrix(sensor_set, sensor_set_x_y, beacon_set)
     print(get_answer_2(sensor_set, beacon_set))
 
 
