@@ -1,6 +1,6 @@
 import re
 
-INPUT = "test_input"
+INPUT = "input"
 
 
 def read_input():
