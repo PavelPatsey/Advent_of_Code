@@ -101,9 +101,19 @@ def get_answer_2(sensor_set, beacon_set):
         min_x = 0
         max_x = 4_000_000
 
-    for x in range(min_x, max_x):
-        for y in range(min_y, max_y):
-            if is_beacon(x, y, sensor_set, beacon_set):
+
+    candidates = set()
+    for (x,y,d) in sensor_set:
+        for dx in range(d+2):
+            dy = (d+1)-dx
+            for sign_x, sign_y in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
+                candidate_x = x + dx
+                candidate_y = y + dy
+                if min_x <= candidate_x <= max_x and min_y <= candidate_y <= max_y:
+                    candidates.add((candidate_x, candidate_y))
+
+    for (x,y) in candidates:
+        if is_beacon(x, y, sensor_set, beacon_set):
                 result = x * 4_000_000 + y
                 print(f"{x=} {y=}")
                 break
