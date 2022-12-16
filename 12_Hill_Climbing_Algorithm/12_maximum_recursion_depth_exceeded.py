@@ -24,14 +24,14 @@ def print_matrix(matrix):
 
 
 def traverse_matrix(matrix, r, c, acc):
-    print(r, c)
+    print(r, c, acc)
     print_matrix(matrix)
 
     if matrix[r][c] in ("$", "#"):
         return
 
     if matrix[r][c] == "{":
-        print(f"{acc=}")
+        print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {acc=}")
         print_matrix(matrix)
         return
 
@@ -40,7 +40,8 @@ def traverse_matrix(matrix, r, c, acc):
 
     for (dr, dc) in ((-1, 0), (0, 1), (1, 0), (0, -1)):
         if ord(matrix[r + dr][c + dc]) <= 1 + ord(char):
-            traverse_matrix(copy.deepcopy(matrix), r + dr, c + dc, acc + 1)
+            # traverse_matrix(copy.deepcopy(matrix), r + dr, c + dc, acc + 1)
+            traverse_matrix(matrix, r + dr, c + dc, acc + 1)
 
 
 def main():
