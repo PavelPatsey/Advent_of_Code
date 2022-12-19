@@ -1,5 +1,5 @@
-from collections import deque
 import time
+from collections import deque
 
 INPUT = "input"
 
