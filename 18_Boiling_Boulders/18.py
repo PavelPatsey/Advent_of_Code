@@ -1,8 +1,20 @@
 from collections import deque
+import time
 
 INPUT = "input"
 
 MAX_VISITED_LEN = 2500
+
+
+def timer(function):
+    def _wrapped(*args, **kwargs):
+        t0 = time.time()
+        res = function(*args, **kwargs)
+        dt = time.time() - t0
+        print(f"{dt = } sec")
+        return res
+
+    return _wrapped
 
 
 def read_input():
@@ -12,6 +24,7 @@ def read_input():
     return points
 
 
+@timer
 def get_total_surface_area(points):
     counter = 0
     for x, y, z in points:
@@ -54,6 +67,7 @@ def is_water(x, y, z, points):
     return False
 
 
+@timer
 def get_touching_water_surface_area(points):
     counter = 0
     for x, y, z in points:
