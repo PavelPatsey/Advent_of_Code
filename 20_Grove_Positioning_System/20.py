@@ -1,6 +1,6 @@
 from collections import deque
 
-INPUT = "test_input"
+INPUT = "input"
 
 
 def read_input():
@@ -19,8 +19,6 @@ def main():
     for x in enumerate(data):
         index = queue.index(x)
         queue.rotate(-index)
-        print(x)
-        print(queue)
         if x[1] == 0:
             continue
         if x[1] > 0:
@@ -31,10 +29,21 @@ def main():
             queue.popleft()
             queue.rotate(-x[1])
             queue.append(x)
-        print(queue)
-        print()
 
     print(queue)
+
+    null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
+    # null = [x for x in enumerate(data) if x[1] == 0 ]
+    print(null)
+    index = queue.index(null)
+    queue.rotate(-index)
+    print(queue)
+
+    sum = 0
+    for _ in range(3):
+        queue.rotate(-1_000)
+        sum += queue[0][1]
+    print(sum)
 
 
 if __name__ == "__main__":
