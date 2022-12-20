@@ -1,5 +1,6 @@
 from collections import deque
 
+
 INPUT = "input"
 
 
@@ -9,8 +10,7 @@ def read_input():
     return data
 
 
-def get_answer_1(data):
-    queue = deque(enumerate(data))
+def mix_queue(data, queue):
 
     for x in enumerate(data):
         if x[1] == 0:
@@ -25,6 +25,28 @@ def get_answer_1(data):
             queue.append(x)
         else:
             print("error!")
+
+
+def get_answer_1(data):
+    queue = deque(enumerate(data))
+    mix_queue(data, queue)
+
+    null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
+    index = queue.index(null)
+    queue.rotate(-index)
+
+    sum = 0
+    for _ in range(3):
+        queue.rotate(-1_000)
+        sum += queue[0][1]
+
+    return sum
+
+
+def get_answer_2(data):
+    queue = deque(enumerate(data))
+    for _ in range(10):
+        mix_queue(data, queue)
 
     null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
     index = queue.index(null)
@@ -41,6 +63,8 @@ def get_answer_1(data):
 def main():
     data = read_input()
     print(get_answer_1(data))
+    new_data = [x * 811589153 for x in data]
+    print(get_answer_2(new_data))
 
 
 if __name__ == "__main__":
