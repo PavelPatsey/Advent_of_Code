@@ -27,10 +27,7 @@ def mix_queue(data, queue):
             print("error!")
 
 
-def get_answer_1(data):
-    queue = deque(enumerate(data))
-    mix_queue(data, queue)
-
+def get_coordinates_sum(data, queue):
     null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
     index = queue.index(null)
     queue.rotate(-index)
@@ -41,6 +38,13 @@ def get_answer_1(data):
         sum += queue[0][1]
 
     return sum
+
+
+def get_answer_1(data):
+    queue = deque(enumerate(data))
+    mix_queue(data, queue)
+
+    return get_coordinates_sum(data, queue)
 
 
 def get_answer_2(data):
@@ -48,16 +52,7 @@ def get_answer_2(data):
     for _ in range(10):
         mix_queue(data, queue)
 
-    null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
-    index = queue.index(null)
-    queue.rotate(-index)
-
-    sum = 0
-    for _ in range(3):
-        queue.rotate(-1_000)
-        sum += queue[0][1]
-
-    return sum
+    return get_coordinates_sum(data, queue)
 
 
 def main():
