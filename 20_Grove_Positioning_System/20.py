@@ -9,41 +9,38 @@ def read_input():
     return data
 
 
-def main():
-    data = read_input()
-    print(data)
+def get_answer_1(data):
     queue = deque(enumerate(data))
-    print(queue)
-    print()
 
     for x in enumerate(data):
-        index = queue.index(x)
-        queue.rotate(-index)
         if x[1] == 0:
             continue
+        index = queue.index(x)
+        queue.rotate(-index)
+        queue.popleft()
+        queue.rotate(-x[1])
         if x[1] > 0:
-            queue.popleft()
-            queue.rotate(-x[1])
             queue.appendleft(x)
-        if x[1] < 0:
-            queue.popleft()
-            queue.rotate(-x[1])
+        elif x[1] < 0:
             queue.append(x)
-
-    print(queue)
+        else:
+            print("error!")
 
     null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
-    # null = [x for x in enumerate(data) if x[1] == 0 ]
-    print(null)
     index = queue.index(null)
     queue.rotate(-index)
-    print(queue)
 
     sum = 0
     for _ in range(3):
         queue.rotate(-1_000)
         sum += queue[0][1]
-    print(sum)
+
+    return sum
+
+
+def main():
+    data = read_input()
+    print(get_answer_1(data))
 
 
 if __name__ == "__main__":
