@@ -40,26 +40,18 @@ def get_coordinates_sum(data, queue):
     return sum
 
 
-def get_answer_1(data):
-    queue = deque(enumerate(data))
-    mix_queue(data, queue)
-
-    return get_coordinates_sum(data, queue)
-
-
-def get_answer_2(data):
-    queue = deque(enumerate(data))
-    for _ in range(10):
-        mix_queue(data, queue)
-
-    return get_coordinates_sum(data, queue)
-
-
 def main():
     data = read_input()
-    print(get_answer_1(data))
+
+    queue = deque(enumerate(data))
+    mix_queue(data, queue)
+    print(get_coordinates_sum(data, queue))
+
     new_data = [x * 811589153 for x in data]
-    print(get_answer_2(new_data))
+    queue = deque(enumerate(new_data))
+    for _ in range(10):
+        mix_queue(new_data, queue)
+    print(get_coordinates_sum(new_data, queue))
 
 
 if __name__ == "__main__":
