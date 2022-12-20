@@ -30,14 +30,12 @@ def mix_queue(data, queue):
 def get_grove_coordinates(data, queue):
     null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
     index = queue.index(null)
-    queue.rotate(-index)
-
-    grove_coordinates = []
-    for _ in range(3):
-        queue.rotate(-1_000)
-        grove_coordinates.append(queue[0][1])
-
-    return grove_coordinates
+    N = len(data)
+    return (
+        queue[(index + 1_000) % N][1],
+        queue[(index + 2_000) % N][1],
+        queue[(index + 3_000) % N][1],
+    )
 
 
 def main():
