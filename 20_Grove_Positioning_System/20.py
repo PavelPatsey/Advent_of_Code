@@ -27,17 +27,17 @@ def mix_queue(data, queue):
             print("error!")
 
 
-def get_coordinates_sum(data, queue):
+def get_grove_coordinates(data, queue):
     null = tuple(filter(lambda x: x[1] == 0, enumerate(data)))[0]
     index = queue.index(null)
     queue.rotate(-index)
 
-    sum = 0
+    grove_coordinates = []
     for _ in range(3):
         queue.rotate(-1_000)
-        sum += queue[0][1]
+        grove_coordinates.append(queue[0][1])
 
-    return sum
+    return grove_coordinates
 
 
 def main():
@@ -45,13 +45,13 @@ def main():
 
     queue = deque(enumerate(data))
     mix_queue(data, queue)
-    print(get_coordinates_sum(data, queue))
+    print(sum(get_grove_coordinates(data, queue)))
 
     new_data = [x * 811589153 for x in data]
     queue = deque(enumerate(new_data))
     for _ in range(10):
         mix_queue(new_data, queue)
-    print(get_coordinates_sum(new_data, queue))
+    print(sum(get_grove_coordinates(new_data, queue)))
 
 
 if __name__ == "__main__":
