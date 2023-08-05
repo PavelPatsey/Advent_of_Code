@@ -9,4 +9,10 @@ calories =
 
 calories_sums = Enum.map(calories, &Enum.sum/1)
 
-IO.puts(Enum.max(calories_sums))
+Enum.max(calories_sums)
+|> IO.inspect()
+
+Enum.sort(calories_sums)
+|> Enum.take(-3)
+|> Enum.sum()
+|> IO.inspect()
