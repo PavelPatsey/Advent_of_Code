@@ -1,5 +1,5 @@
-Мои решения задач Advent of Code.
+Мои решения задач Advent of Code 2022.
 
 Advent of Code — ежегодный рождественский календарь, в котором каждый день открывается новая задача по программированию.
 
-https://adventofcode.com
+https://adventofcode.com/2022
