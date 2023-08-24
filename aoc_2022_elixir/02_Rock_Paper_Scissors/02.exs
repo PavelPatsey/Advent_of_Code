@@ -8,6 +8,14 @@ defmodule AssertionTest do
   end
 end
 
-{:ok, file} = File.read("./test_input")
+defmodule Day02 do
+  def read_input do
+    {:ok, file} = File.read("./test_input")
 
-IO.puts(file)
+    String.trim(file)
+    |> String.split("\n")
+    |> Enum.map(&String.split/1)
+  end
+end
+
+rounds = Day02.read_input()
