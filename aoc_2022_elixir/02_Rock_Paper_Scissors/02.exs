@@ -8,15 +8,19 @@ defmodule AssertionTest do
   end
 
   test "get_shape_score" do
-    assert Day02.get_shape_score("X") == 0
-    assert Day02.get_shape_score("Y") == 1
-    assert Day02.get_shape_score("Z") == 2
+    assert Day02.get_shape_score("X") == 1
+    assert Day02.get_shape_score("Y") == 2
+    assert Day02.get_shape_score("Z") == 3
   end
 
   test "get_round_outcome" do
     assert Day02.get_round_outcome("A", "X") == 3
     assert Day02.get_round_outcome("A", "Y") == 6
     assert Day02.get_round_outcome("A", "Z") == 0
+  end
+
+  test "get_total_round_score" do
+    assert Day02.get_total_round_score(["A", "Y"]) == 8
   end
 end
 
@@ -37,14 +41,14 @@ defmodule Day02 do
   }
 
   def read_input do
-    {:ok, file} = File.read("./test_input")
+    {:ok, file} = File.read("./input")
 
     String.trim(file)
     |> String.split("\n")
     |> Enum.map(&String.split/1)
   end
 
-  def get_total_round_score(elf_move, my_move) do
+  def get_total_round_score([elf_move, my_move]) do
     get_round_outcome(elf_move, my_move) + get_shape_score(my_move)
   end
 
@@ -54,14 +58,15 @@ defmodule Day02 do
 
   def get_shape_score(my_move) do
     case my_move do
-      "X" -> 0
-      "Y" -> 1
-      "Z" -> 2
-      _ -> "Incorrect shape"
+      "X" -> 1
+      "Y" -> 2
+      "Z" -> 3
     end
   end
 end
 
 rounds = Day02.read_input()
 
-Day02.get_round_outcome("A", "X") |> IO.inspect()
+Enum.map(rounds, &Day02.get_total_round_score/1)
+|> Enum.sum()
+|> IO.inspect()
