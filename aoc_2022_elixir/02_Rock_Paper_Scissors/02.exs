@@ -22,6 +22,12 @@ defmodule AssertionTest do
   test "get_total_round_score" do
     assert Day02.get_total_round_score(["A", "Y"]) == 8
   end
+
+  test "get_total_round_score_2" do
+    assert Day02.get_total_round_score_2(["A", "Y"]) == 4
+    assert Day02.get_total_round_score_2(["B", "X"]) == 1
+    assert Day02.get_total_round_score_2(["C", "Z"]) == 7
+  end
 end
 
 defmodule Day02 do
@@ -63,10 +69,31 @@ defmodule Day02 do
       "Z" -> 3
     end
   end
+
+  def get_total_round_score_2([elf_move, my_move]) do
+    round_outcome =
+      case my_move do
+        "X" -> 0
+        "Y" -> 3
+        "Z" -> 6
+      end
+
+    shape_score =
+      elem(@round_outcome_matrix, @shape_index[elf_move])
+      |> Tuple.to_list()
+      |> Enum.find_index(fn x -> x == round_outcome end)
+      |> Kernel.+(1)
+
+    round_outcome + shape_score
+  end
 end
 
 rounds = Day02.read_input()
 
 Enum.map(rounds, &Day02.get_total_round_score/1)
+|> Enum.sum()
+|> IO.inspect()
+
+Enum.map(rounds, &Day02.get_total_round_score_2/1)
 |> Enum.sum()
 |> IO.inspect()
