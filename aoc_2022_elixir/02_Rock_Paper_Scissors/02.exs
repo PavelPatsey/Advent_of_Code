@@ -7,20 +7,10 @@ defmodule AssertionTest do
     assert true
   end
 
-  test "get_shape_score" do
-    assert Day02.get_shape_score("X") == 1
-    assert Day02.get_shape_score("Y") == 2
-    assert Day02.get_shape_score("Z") == 3
-  end
-
-  test "get_round_outcome" do
-    assert Day02.get_round_outcome("A", "X") == 3
-    assert Day02.get_round_outcome("A", "Y") == 6
-    assert Day02.get_round_outcome("A", "Z") == 0
-  end
-
   test "get_total_round_score" do
     assert Day02.get_total_round_score(["A", "Y"]) == 8
+    assert Day02.get_total_round_score(["B", "X"]) == 1
+    assert Day02.get_total_round_score(["C", "Z"]) == 6
   end
 
   test "get_total_round_score_2" do
@@ -55,19 +45,17 @@ defmodule Day02 do
   end
 
   def get_total_round_score([elf_move, my_move]) do
-    get_round_outcome(elf_move, my_move) + get_shape_score(my_move)
-  end
+    round_outcome =
+      elem(elem(@round_outcome_matrix, @shape_index[elf_move]), @shape_index[my_move])
 
-  def get_round_outcome(elf_move, my_move) do
-    elem(elem(@round_outcome_matrix, @shape_index[elf_move]), @shape_index[my_move])
-  end
+    shape_score =
+      case my_move do
+        "X" -> 1
+        "Y" -> 2
+        "Z" -> 3
+      end
 
-  def get_shape_score(my_move) do
-    case my_move do
-      "X" -> 1
-      "Y" -> 2
-      "Z" -> 3
-    end
+    round_outcome + shape_score
   end
 
   def get_total_round_score_2([elf_move, my_move]) do
