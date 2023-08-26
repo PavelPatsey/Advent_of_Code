@@ -25,7 +25,7 @@ end
 
 defmodule Day03 do
   def read_input() do
-    {:ok, file} = File.read("./test_input")
+    {:ok, file} = File.read("./input")
     String.trim(file) |> String.split()
   end
 
@@ -48,6 +48,10 @@ defmodule Day03 do
   end
 end
 
-rucksacks =
-  Day03.read_input()
-  |> IO.inspect()
+rucksacks = Day03.read_input()
+
+rucksacks
+|> Enum.map(&Day03.get_repeating_item/1)
+|> Enum.map(&Day03.get_priority/1)
+|> Enum.sum()
+|> IO.inspect()
