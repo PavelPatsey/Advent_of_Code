@@ -7,14 +7,28 @@ defmodule AssertionTest do
     assert true
   end
 
-  test "get_repeating_item" do
+  test "test get_repeating_item" do
     assert Day03.get_repeating_item("qwertqs1df") == "q"
     assert Day03.get_repeating_item("vJrwpWtwJgWrhcsFMMfFFhFp") == "p"
     assert Day03.get_repeating_item("jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL") == "L"
     assert Day03.get_repeating_item("PmmdzqPrVvPwwTWBwg") == "P"
   end
 
-  test "get_priority" do
+  test "test get_badge" do
+    assert Day03.get_badge([
+             "vJrwpWtwJgWrhcsFMMfFFhFp",
+             "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+             "PmmdzqPrVvPwwTWBwg"
+           ]) == "r"
+
+    assert Day03.get_badge([
+             "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+             "ttgJtRGJQctTZtZT",
+             "CrZsJsPPZsGzwwsLwLmpwMDw"
+           ]) == "Z"
+  end
+
+  test "test get_priority" do
     assert Day03.get_priority("p") == 16
     assert Day03.get_priority("L") == 38
     assert Day03.get_priority("P") == 42
@@ -38,6 +52,16 @@ defmodule Day03 do
     |> Enum.at(0)
   end
 
+  def get_badge(rucksacks_group) do
+    [set_1, set_2, set_3] =
+      Enum.map(rucksacks_group, &String.codepoints/1)
+      |> Enum.map(&MapSet.new/1)
+
+    MapSet.intersection(set_1, set_2)
+    |> MapSet.intersection(set_3)
+    |> Enum.at(0)
+  end
+
   def get_priority(item) do
     item_code = hd(String.to_charlist(item))
 
@@ -52,6 +76,13 @@ rucksacks = Day03.read_input()
 
 rucksacks
 |> Enum.map(&Day03.get_repeating_item/1)
+|> Enum.map(&Day03.get_priority/1)
+|> Enum.sum()
+|> IO.inspect()
+
+rucksacks
+|> Enum.chunk_every(3)
+|> Enum.map(&Day03.get_badge/1)
 |> Enum.map(&Day03.get_priority/1)
 |> Enum.sum()
 |> IO.inspect()
