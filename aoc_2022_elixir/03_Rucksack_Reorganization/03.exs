@@ -13,6 +13,14 @@ defmodule AssertionTest do
     assert Day03.get_repeating_item("jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL") == "L"
     assert Day03.get_repeating_item("PmmdzqPrVvPwwTWBwg") == "P"
   end
+
+  test "get_priority" do
+    assert Day03.get_priority("p") == 16
+    assert Day03.get_priority("L") == 38
+    assert Day03.get_priority("P") == 42
+    assert Day03.get_priority("v") == 22
+    assert Day03.get_priority("Z") == 52
+  end
 end
 
 defmodule Day03 do
@@ -28,6 +36,15 @@ defmodule Day03 do
 
     MapSet.intersection(MapSet.new(part_1), MapSet.new(part_2))
     |> Enum.at(0)
+  end
+
+  def get_priority(item) do
+    item_code = hd(String.to_charlist(item))
+
+    cond do
+      item_code >= ?a and item_code <= ?z -> item_code - ?a + 1
+      item_code >= ?A and item_code <= ?Z -> item_code - ?A + 27
+    end
   end
 end
 
