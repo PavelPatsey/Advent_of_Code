@@ -18,13 +18,29 @@ defmodule Day05 do
       |> Enum.map(fn x -> tl(x) end)
       |> Enum.map(fn x -> Enum.filter(x, fn x -> x != " " end) end)
       |> Enum.map(&Enum.reverse/1)
-      |> IO.inspect()
 
-    stacks
+    moves =
+      moves_str
+      |> String.trim()
+      |> String.split("\n")
+      |> Enum.map(&String.split/1)
+      |> Enum.map(fn x ->
+        [_, x1, _, x2, _, x3] = x
+        x = [x1, x2, x3]
+        x
+      end)
+      |> Enum.map(fn x -> Enum.map(x, &String.to_integer/1) end)
+      |> Enum.map(fn x ->
+        [x1, x2, x3] = x
+        x = [x1, x2 - 1, x3 - 1]
+        x
+      end)
+
+    [stacks, moves]
   end
 end
 
-Day05.read_input()
-# [stacks, moves] = Day05.read_input()
-# IO.inspect(stacks)
-# IO.inspect(moves)
+# Day05.read_input()
+[stacks, moves] = Day05.read_input()
+IO.inspect(stacks)
+IO.inspect(moves)
