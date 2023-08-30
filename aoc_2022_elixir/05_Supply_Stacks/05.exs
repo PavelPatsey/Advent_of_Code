@@ -1,3 +1,21 @@
+ExUnit.start()
+
+defmodule AssertionTest do
+  use ExUnit.Case, async: true
+
+  test "the truth" do
+    assert true
+  end
+
+  test "test get_stacks_after_move" do
+    assert Day05.get_stacks_after_move(
+             [[1, "Z", "N"], [2, "M", "C", "D"], [3, "P"]],
+             [1, 2, 1]
+           ) ==
+             [[1, "Z", "N", "D"], [2, "M", "C"], [3, "P"]]
+  end
+end
+
 defmodule Day05 do
   def read_input() do
     {:ok, file} = File.read("./test_input")
@@ -35,20 +53,17 @@ defmodule Day05 do
     [stacks, moves]
   end
 
-  #   def get_stacks_after_move(stacks, move) do
-  #     [items_number, from_stack, to_stack] = move
+  def get_stacks_after_move(stacks, move) do
+    [items_number, from_stack, to_stack] = move
+  end
 
-  #     defp _get_stacks_after_move(stacks, 0, from_stack, to_stack), do: stacks
+  defp _get_stacks_after_move(stacks, 0, from_stack, to_stack), do: stacks
 
-  #     defp _get_stacks_after_move(stacks, items_number, from_stack, to_stack) do
-  #       1
-  #     end
-  #   end
+  defp _get_stacks_after_move(stacks, items_number, from_stack, to_stack) do
+    1
+  end
 end
 
 [stacks, moves] = Day05.read_input()
 IO.inspect(stacks)
 IO.inspect(moves)
-
-# Day05.get_stacks_after_procedure(stacks, moves)
-# |> IO.inspect()
