@@ -15,9 +15,11 @@ defmodule Day05 do
       |> Enum.map(&Tuple.to_list/1)
       |> Enum.map(&Enum.reverse/1)
       |> Enum.filter(fn x -> hd(x) not in [" ", ""] end)
-      |> Enum.map(fn x -> tl(x) end)
       |> Enum.map(fn x -> Enum.filter(x, fn x -> x != " " end) end)
-      |> Enum.map(&Enum.reverse/1)
+      |> Enum.map(fn x ->
+        [head | tail] = x
+        [String.to_integer(head) | tail]
+      end)
 
     moves =
       moves_str
@@ -29,15 +31,24 @@ defmodule Day05 do
         [x1, x2, x3]
       end)
       |> Enum.map(fn x -> Enum.map(x, &String.to_integer/1) end)
-      |> Enum.map(fn x ->
-        [x1, x2, x3] = x
-        [x1, x2 - 1, x3 - 1]
-      end)
 
     [stacks, moves]
   end
+
+  #   def get_stacks_after_move(stacks, move) do
+  #     [items_number, from_stack, to_stack] = move
+
+  #     defp _get_stacks_after_move(stacks, 0, from_stack, to_stack), do: stacks
+
+  #     defp _get_stacks_after_move(stacks, items_number, from_stack, to_stack) do
+  #       1
+  #     end
+  #   end
 end
 
 [stacks, moves] = Day05.read_input()
 IO.inspect(stacks)
 IO.inspect(moves)
+
+# Day05.get_stacks_after_procedure(stacks, moves)
+# |> IO.inspect()
