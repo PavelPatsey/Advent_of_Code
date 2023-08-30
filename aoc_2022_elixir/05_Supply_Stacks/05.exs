@@ -26,21 +26,18 @@ defmodule Day05 do
       |> Enum.map(&String.split/1)
       |> Enum.map(fn x ->
         [_, x1, _, x2, _, x3] = x
-        x = [x1, x2, x3]
-        x
+        [x1, x2, x3]
       end)
       |> Enum.map(fn x -> Enum.map(x, &String.to_integer/1) end)
       |> Enum.map(fn x ->
         [x1, x2, x3] = x
-        x = [x1, x2 - 1, x3 - 1]
-        x
+        [x1, x2 - 1, x3 - 1]
       end)
 
     [stacks, moves]
   end
 end
 
-# Day05.read_input()
 [stacks, moves] = Day05.read_input()
 IO.inspect(stacks)
 IO.inspect(moves)
