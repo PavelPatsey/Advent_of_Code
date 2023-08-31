@@ -29,8 +29,8 @@ defmodule AssertionTest do
 end
 
 defmodule Day05 do
-  def read_input() do
-    {:ok, file} = File.read("./test_input")
+  def read_input(path) do
+    {:ok, file} = File.read(path)
 
     [stacks_str, moves_str] =
       file
@@ -98,10 +98,20 @@ defmodule Day05 do
 
     get_stacks_after_move(stacks, [items_number - 1, from_stack, to_stack])
   end
+
+  def get_stacks_after_moving(stacks, []), do: stacks
+
+  def get_stacks_after_moving(stacks, moves) do
+    stacks = get_stacks_after_move(stacks, hd(moves))
+    get_stacks_after_moving(stacks, tl(moves))
+  end
 end
 
-[stacks, moves] = Day05.read_input()
-IO.inspect(stacks)
-IO.inspect(moves)
+[stacks, moves] = Day05.read_input("./input")
+# IO.inspect(stacks)
+# IO.inspect(moves)
 
-# Enum.map(stacks, )
+Day05.get_stacks_after_moving(stacks, moves)
+|> Enum.map(&hd/1)
+|> Enum.join()
+|> IO.inspect()
