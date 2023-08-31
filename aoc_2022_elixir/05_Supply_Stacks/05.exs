@@ -19,6 +19,12 @@ defmodule AssertionTest do
              [1, 2, 1]
            ) ==
              [["D", "N", "Z", 1], ["C", "M", 2], ["P", 3]]
+
+    assert Day05.get_stacks_after_move(
+             [["D", "N", "Z", 1], ["C", "M", 2], ["P", 3]],
+             [3, 1, 3]
+           ) ==
+             [[1], ["C", "M", 2], ["Z", "N", "D", "P", 3]]
   end
 end
 
@@ -97,3 +103,5 @@ end
 [stacks, moves] = Day05.read_input()
 IO.inspect(stacks)
 IO.inspect(moves)
+
+# Enum.map(stacks, )
