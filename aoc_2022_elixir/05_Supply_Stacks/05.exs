@@ -9,10 +9,16 @@ defmodule AssertionTest do
 
   test "test get_stacks_after_move" do
     assert Day05.get_stacks_after_move(
-             [[1, "Z", "N"], [2, "M", "C", "D"], [3, "P"]],
+             [["N", "Z", 1], ["D", "C", "M", 2], ["P", 3]],
+             [0, 2, 1]
+           ) ==
+             [["N", "Z", 1], ["D", "C", "M", 2], ["P", 3]]
+
+    assert Day05.get_stacks_after_move(
+             [["N", "Z", 1], ["D", "C", "M", 2], ["P", 3]],
              [1, 2, 1]
            ) ==
-             [[1, "Z", "N", "D"], [2, "M", "C"], [3, "P"]]
+             [["D", "N", "Z", 1], ["C", "M", 2], ["P", 3]]
   end
 end
 
@@ -38,6 +44,7 @@ defmodule Day05 do
         [head | tail] = x
         [String.to_integer(head) | tail]
       end)
+      |> Enum.map(&Enum.reverse/1)
 
     moves =
       moves_str
@@ -53,14 +60,37 @@ defmodule Day05 do
     [stacks, moves]
   end
 
-  def get_stacks_after_move(stacks, move) do
-    [items_number, from_stack, to_stack] = move
-  end
+  def get_stacks_after_move(stacks, [0, _, _]), do: stacks
 
-  defp _get_stacks_after_move(stacks, 0, from_stack, to_stack), do: stacks
+  def get_stacks_after_move(stacks, [items_number, from_stack, to_stack]) do
+    item =
+      Enum.filter(stacks, fn x ->
+        List.last(x) == from_stack
+      end)
+      |> hd()
+      |> hd()
 
-  defp _get_stacks_after_move(stacks, items_number, from_stack, to_stack) do
-    1
+    stacks =
+      stacks
+      |> Enum.map(fn x ->
+        if List.last(x) == from_stack do
+          tl(x)
+        else
+          x
+        end
+      end)
+
+    stacks =
+      stacks
+      |> Enum.map(fn x ->
+        if List.last(x) == to_stack do
+          [item | x]
+        else
+          x
+        end
+      end)
+
+    get_stacks_after_move(stacks, [items_number - 1, from_stack, to_stack])
   end
 end
 
