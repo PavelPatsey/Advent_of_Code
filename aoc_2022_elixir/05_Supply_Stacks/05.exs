@@ -120,10 +120,13 @@ defmodule Day05 do
 end
 
 [stacks, moves] = Day05.read_input("./input")
-# IO.inspect(stacks)
-# IO.inspect(moves)
 
 Day05.get_stacks_after_moving(stacks, moves, 1)
+|> Enum.map(&hd/1)
+|> Enum.join()
+|> IO.inspect()
+
+Day05.get_stacks_after_moving(stacks, moves, 2)
 |> Enum.map(&hd/1)
 |> Enum.join()
 |> IO.inspect()
