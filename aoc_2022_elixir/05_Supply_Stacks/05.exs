@@ -76,8 +76,11 @@ defmodule Day05 do
     [stacks, moves]
   end
 
+  def get_stacks_after_moving(stacks, [], _), do: stacks
+
   def get_stacks_after_moving(stacks, moves, part) do
     stacks = get_stacks_after_move(stacks, hd(moves), part)
+    get_stacks_after_moving(stacks, tl(moves), part)
   end
 
   def get_stacks_after_move(stacks, [items_number, from_stack, to_stack], part) do
@@ -105,24 +108,22 @@ defmodule Day05 do
         items
       end
 
-    stacks =
-      stacks
-      |> Enum.map(fn x ->
-        if List.last(x) == to_stack do
-          Enum.concat(items, x)
-        else
-          x
-        end
-      end)
+    stacks
+    |> Enum.map(fn x ->
+      if List.last(x) == to_stack do
+        Enum.concat(items, x)
+      else
+        x
+      end
+    end)
   end
 end
 
-[stacks, moves] = Day05.read_input("./test_input")
+[stacks, moves] = Day05.read_input("./input")
 # IO.inspect(stacks)
 # IO.inspect(moves)
 
 Day05.get_stacks_after_moving(stacks, moves, 1)
-|> IO.inspect()
 |> Enum.map(&hd/1)
 |> Enum.join()
 |> IO.inspect()
