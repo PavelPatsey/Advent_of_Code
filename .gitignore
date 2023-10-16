@@ -131,4 +131,5 @@ dmypy.json
 # .vscode
 /.vscode
 
-test_test
+# pycharm
+.idea
