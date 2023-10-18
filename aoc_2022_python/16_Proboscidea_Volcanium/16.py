@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 INPUT = "test_input"
 
@@ -11,10 +12,6 @@ class Valve:
 
     def __str__(self):
         return f"name = {self.name}, flow_rate = {self.flow_rate}, connection = {self.connections}"
-
-
-class Graph:
-    pass
 
 
 def get_valves():
@@ -36,10 +33,30 @@ def get_valves():
     return valves
 
 
+class Graph:
+    def __init__(self, valves: List):
+        self.valves = {}
+        for valve in valves:
+            self.add_valve(valve)
+        self.root = self.get_valve("AA")
+
+    def add_valve(self, valve: Valve):
+        self.valves[valve.name] = valve
+
+    def get_valve(self, valve_name: str):
+        return self.valves.get(valve_name)
+
+    def get_all_travels(self):
+        pass
+
+    def get_biggest_pressure_release(self):
+        pass
+
+
 def main():
     valves = get_valves()
-    for valve in valves:
-        print(valve)
+    graph = Graph(valves)
+    a = 1
 
 
 if __name__ == "__main__":
