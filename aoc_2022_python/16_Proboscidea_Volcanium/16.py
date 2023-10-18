@@ -46,17 +46,27 @@ class Graph:
     def get_valve(self, valve_name: str):
         return self.valves.get(valve_name)
 
-    def get_all_travels(self):
+    def get_max_pressure_release(self):
         pass
 
-    def get_biggest_pressure_release(self):
-        pass
+    def get_all_travels(self):
+        travels = []
+        released_pressures = []
+
+        def _travers(visited: List, released_pressure: int, past_minutes: int):
+            if past_minutes == 30:
+                travels.append(visited)
+                released_pressures.append(released_pressure)
+                return
+            return
+
+        _travers([], 0, 0)
+        return travels, released_pressures
 
 
 def main():
     valves = get_valves()
     graph = Graph(valves)
-    a = 1
 
 
 if __name__ == "__main__":
