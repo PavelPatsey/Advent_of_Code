@@ -15,12 +15,15 @@ class Graph:
 
 
 def read_input():
-    def split(string):
-        return re.split("Valve | has flow rate=|; tunnels lead to valves ", string)[1:]
+    def _split(string):
+        return re.split(
+            "Valve | has flow rate=|; tunnels lead to valves |; tunnel leads to valve ",
+            string,
+        )[1:]
 
     with open(INPUT, "r") as file:
         data = file.read().strip().splitlines()
-    return list(map(split, data))
+    return list(map(_split, data))
 
 
 def get_valves(data):
