@@ -11,7 +11,7 @@ class Valve:
         self.connections = connections
 
     def __str__(self):
-        return f"name = {self.name}, flow_rate = {self.flow_rate}, connection = {self.connections}"
+        return f"name = {self.name}, flow_rate = {self.flow_rate}, connections = {self.connections}"
 
 
 def get_valves():
