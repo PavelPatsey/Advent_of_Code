@@ -1,7 +1,10 @@
 import re
-from typing import List
+import time
+from typing import Dict, List
 
 INPUT = "test_input"
+ROOT_NAME = "AA"
+TIME_LIMIT = 20
 
 
 class Valve:
@@ -30,75 +33,63 @@ def get_valves():
         data = file.read().strip().splitlines()
 
     valve_attributes = list(map(_split, data))
-    valves = list(map(_make_valve, valve_attributes))
+
+    valves = {}
+    for valve in map(_make_valve, valve_attributes):
+        valves[valve.name] = valve
     return valves
 
 
-class Graph:
-    def __init__(self, valves: List):
-        self.valves = {}
-        for valve in valves:
-            self.add_valve(valve)
-        self.root = self.get_valve("AA")
+def get_all_travels(valves: Dict):
+    def _get_pressure_change(visited_valves_names):
+        valve_names = set(visited_valves_names)
+        pressure_change = 0
+        for valve_name in valve_names:
+            valve = valves[valve_name]
+            pressure_change += valve.flow_rate
+        return pressure_change
 
-    def add_valve(self, valve: Valve):
-        self.valves[valve.name] = valve
+    def _travers(
+        go_to_valve_name,
+        visited_valves_names: List,
+        released_pressure: int,
+        past_minutes: int,
+    ):
+        pressure_change = _get_pressure_change(visited_valves_names)
 
-    def get_valve(self, valve_name: str) -> Valve:
-        return self.valves.get(valve_name)
+        if past_minutes == TIME_LIMIT:
+            travels.append(visited_valves_names)
+            released_pressures.append(released_pressure + pressure_change)
+            len_travels = len(travels)
+            if len_travels % 1000 == 0:
+                print(len_travels)
+            return
 
-    def get_max_pressure_release(self):
-        pass
+        current_valve = valves[go_to_valve_name]
+        if not (current_valve.flow_rate == 0 or current_valve.is_opened):
+            current_valve.is_opened = True
 
-    def get_all_travels(self):
-        travels = []
-        released_pressures = []
+        for valve_name in current_valve.connections:
+            _travers(
+                valve_name,
+                visited_valves_names + [go_to_valve_name],
+                released_pressure + pressure_change,
+                past_minutes + 1,
+            )
 
-        def _get_pressure_release_per_minute(visited_valves_names):
-            valve_names = set(visited_valves_names)
-            pressure_release_per_minute = 0
-            for valve_name in valve_names:
-                valve = self.get_valve(valve_name)
-                pressure_release_per_minute += valve.flow_rate
-            return pressure_release_per_minute
-
-        def _travers(
-            go_to_valve_name,
-            visited_valves_names: List,
-            released_pressure: int,
-            past_minutes: int,
-        ):
-            visited_valves_names.append(go_to_valve_name)
-            print(past_minutes)
-            past_minutes += 1
-            released_pressure += _get_pressure_release_per_minute(visited_valves_names)
-
-            if past_minutes == 30:
-                travels.append(visited_valves_names)
-                released_pressures.append(released_pressure)
-                print(f"{len(visited_valves_names) = }")
-                print(visited_valves_names)
-                return
-
-            current_valve = self.get_valve(go_to_valve_name)
-            if not (current_valve.flow_rate == 0 or current_valve.is_opened):
-                current_valve.is_opened = True
-
-            for valve_name in current_valve.connections:
-                _travers(
-                    valve_name, visited_valves_names, released_pressure, past_minutes
-                )
-
-        _travers(self.root.name, [], 0, 0)
-        return travels, released_pressures
+    travels = []
+    released_pressures = []
+    _travers(ROOT_NAME, [], 0, 1)
+    return travels, released_pressures
 
 
 def main():
+    t0 = time.time()
     valves = get_valves()
-    graph = Graph(valves)
-    travels, released_pressures = graph.get_all_travels()
-    print(travels)
-    print(released_pressures)
+    travels, released_pressures = get_all_travels(valves)
+    # print(travels)
+    # print(released_pressures)
+    print(f"finished in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
