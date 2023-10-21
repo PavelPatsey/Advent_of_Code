@@ -53,10 +53,6 @@ def get_all_travels(valves: Dict):
         pressure_change: int,
         past_minutes: int,
     ):
-        # вот это условие не работает, так как можно много раз посещать один и тот же узел
-        # можно попробовать сделать по другому
-        # итеративно выяснять максимальный сброс давления к некоторому ходу, и отбрасывать например неудачные ходы
-
         if past_minutes == TIME_LIMIT or open_valves_number == len(valves):
             travels.append(visited_valves_names)
             released_pressures.append(
