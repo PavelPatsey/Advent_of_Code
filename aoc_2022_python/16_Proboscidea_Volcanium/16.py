@@ -4,8 +4,7 @@ from typing import Dict, List
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 20
-MAX_REPS = 5
+TIME_LIMIT = 13
 
 
 class Valve:
@@ -61,22 +60,16 @@ def get_all_travels(valves: Dict):
     def _valve_is_opened(valve: Valve, visited_valves_names: List):
         return valve.name + " opened" in visited_valves_names
 
-    # вот это условие не работает, так как можно много раз посещать один и тот же узел
-    # можно попробовать сделать по другому
-    # итеративно выяснять максимальный сброс давления к некоторому ходу, и отбрасывать например неудачные ходы
-    def _trip_is_relevant(visited_valves_names: List) -> bool:
-        return len(visited_valves_names) - len(set(visited_valves_names)) < MAX_REPS
-
     def _travers(
-        go_to_valve_name,
+        current_valve_name,
         visited_valves_names: List,
         released_pressure: int,
+        pressure_change: int,
         past_minutes: int,
     ):
-        pressure_change = _get_pressure_change(visited_valves_names)
-
-        if not _trip_is_relevant(visited_valves_names):
-            return
+        # вот это условие не работает, так как можно много раз посещать один и тот же узел
+        # можно попробовать сделать по другому
+        # итеративно выяснять максимальный сброс давления к некоторому ходу, и отбрасывать например неудачные ходы
 
         if past_minutes == TIME_LIMIT or _all_valves_are_opened(visited_valves_names):
             travels.append(visited_valves_names)
@@ -88,30 +81,39 @@ def get_all_travels(valves: Dict):
                 print(len_travels)
             return
 
-        current_valve = valves[go_to_valve_name]
-        if not (
-            current_valve.flow_rate == 0
-            or _valve_is_opened(current_valve, visited_valves_names)
-        ):
-            _travers(
-                go_to_valve_name,
-                visited_valves_names + [go_to_valve_name + " opened"],
-                released_pressure + pressure_change,
-                past_minutes + 1,
-            )
-
-        for valve_name in current_valve.connections:
-            _travers(
-                valve_name,
-                visited_valves_names + [go_to_valve_name],
-                released_pressure + pressure_change,
-                past_minutes + 1,
-            )
+        current_valve = valves[current_valve_name]
+        for valve_name in current_valve.connections + [current_valve_name]:
+            if valve_name == current_valve_name:
+                if not (
+                    current_valve.flow_rate == 0
+                    or _valve_is_opened(current_valve, visited_valves_names)
+                ):
+                    _travers(
+                        current_valve_name,
+                        visited_valves_names + [current_valve_name + " opened"],
+                        released_pressure + pressure_change,
+                        pressure_change + current_valve.flow_rate,
+                        past_minutes + 1,
+                    )
+            else:
+                _travers(
+                    valve_name,
+                    visited_valves_names + [valve_name],
+                    released_pressure + pressure_change,
+                    pressure_change,
+                    past_minutes + 1,
+                )
         return
 
     travels = []
     released_pressures = []
-    _travers(ROOT_NAME, [], 0, 1)
+    _travers(
+        current_valve_name=ROOT_NAME,
+        visited_valves_names=[ROOT_NAME],
+        released_pressure=0,
+        pressure_change=0,
+        past_minutes=0,
+    )
     return travels, released_pressures
 
 
@@ -120,10 +122,12 @@ def main():
     valves = get_valves()
     travels, released_pressures = get_all_travels(valves)
 
-    print(travels)
-    print("travels")
-    print(released_pressures)
-    print("released_pressures")
+    from pprint import pprint
+
+    # print("travels")
+    # pprint(travels)
+    # print("released_pressures")
+    # print(released_pressures)
 
     zipped = zip(travels, released_pressures)
     max_zipped = max(zipped, key=lambda x: x[1])
@@ -132,12 +136,14 @@ def main():
 
     test_example = [
         "AA",
-        "DD opened",
         "DD",
+        "DD opened",
         "CC",
+        "BB",
         "BB opened",
         "AA",
         "II",
+        "JJ",
         "JJ opened",
         "II",
         "AA",
@@ -145,13 +151,17 @@ def main():
         "EE",
         "FF",
         "GG",
+        "HH",
         "HH opened",
         "GG",
         "FF",
+        "EE",
         "EE opened",
         "DD",
-        "CC opened",
+        "CC",
+        "CC opened",  # 25
     ]
+    print((test_example, 1651))
 
 
 if __name__ == "__main__":
