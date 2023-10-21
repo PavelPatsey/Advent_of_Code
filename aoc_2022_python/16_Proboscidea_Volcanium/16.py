@@ -4,7 +4,7 @@ from typing import Dict, List
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 13
+TIME_LIMIT = 25
 
 
 class Valve:
@@ -43,6 +43,8 @@ def get_all_travels(valves: Dict):
     def _valve_is_opened(valve: Valve, visited_valves_names: List):
         return valve.name + " opened" in visited_valves_names
 
+    counter = 0
+
     def _travers(
         current_valve_name,
         visited_valves_names: List,
@@ -60,9 +62,6 @@ def get_all_travels(valves: Dict):
             released_pressures.append(
                 released_pressure + pressure_change * (TIME_LIMIT - past_minutes)
             )
-            len_travels = len(travels)
-            if len_travels % 1000 == 0:
-                print(len_travels)
             return
 
         current_valve = valves[current_valve_name]
