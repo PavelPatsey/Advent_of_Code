@@ -40,15 +40,6 @@ def get_valves():
 
 
 def get_all_travels(valves: Dict):
-    def _get_pressure_change(visited_valves_names):
-        valve_names = set(visited_valves_names)
-        pressure_change = 0
-        for valve_name in valve_names:
-            valve = valves.get(valve_name)
-            if valve:
-                pressure_change += valve.flow_rate
-        return pressure_change
-
     def _valve_is_opened(valve: Valve, visited_valves_names: List):
         return valve.name + " opened" in visited_valves_names
 
