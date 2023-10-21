@@ -4,7 +4,8 @@ from typing import Dict, List
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 10
+TIME_LIMIT = 20
+MAX_REPS = 5
 
 
 class Valve:
@@ -50,7 +51,21 @@ def get_all_travels(valves: Dict):
         return pressure_change
 
     def _all_valves_are_opened(visited_valves_names):
-        return False
+        return all(
+            map(
+                lambda valve: valve.name + " opened" in visited_valves_names,
+                valves.values(),
+            )
+        )
+
+    def _valve_is_opened(valve: Valve, visited_valves_names: List):
+        return valve.name + " opened" in visited_valves_names
+
+    # вот это условие не работает, так как можно много раз посещать один и тот же узел
+    # можно попробовать сделать по другому
+    # итеративно выяснять максимальный сброс давления к некоторому ходу, и отбрасывать например неудачные ходы
+    def _trip_is_relevant(visited_valves_names: List) -> bool:
+        return len(visited_valves_names) - len(set(visited_valves_names)) < MAX_REPS
 
     def _travers(
         go_to_valve_name,
@@ -60,23 +75,24 @@ def get_all_travels(valves: Dict):
     ):
         pressure_change = _get_pressure_change(visited_valves_names)
 
-        # если все клапаны открыты - выходить из функции
-        # _all_valves_is_opened должно считаться исходя visited_valves_names и valve_name + " opened"
-        # _get_pressure_change считать из аккумулятора аккумулятора давления
-
-        # если много повторных посещений - выходить из функции
+        if not _trip_is_relevant(visited_valves_names):
+            return
 
         if past_minutes == TIME_LIMIT or _all_valves_are_opened(visited_valves_names):
             travels.append(visited_valves_names)
-            released_pressures.append(released_pressure + pressure_change)
+            released_pressures.append(
+                released_pressure + pressure_change * (TIME_LIMIT - past_minutes)
+            )
             len_travels = len(travels)
             if len_travels % 1000 == 0:
                 print(len_travels)
             return
 
         current_valve = valves[go_to_valve_name]
-        if not (current_valve.flow_rate == 0 or current_valve.is_opened):
-            current_valve.is_opened = True
+        if not (
+            current_valve.flow_rate == 0
+            or _valve_is_opened(current_valve, visited_valves_names)
+        ):
             _travers(
                 go_to_valve_name,
                 visited_valves_names + [go_to_valve_name + " opened"],
@@ -103,10 +119,39 @@ def main():
     t0 = time.time()
     valves = get_valves()
     travels, released_pressures = get_all_travels(valves)
+
+    print(travels)
+    print("travels")
+    print(released_pressures)
+    print("released_pressures")
+
+    zipped = zip(travels, released_pressures)
+    max_zipped = max(zipped, key=lambda x: x[1])
+    print(max_zipped)
     print(f"finished in {time.time() - t0:0f} sec")
-    print(travels[0])
-    print(released_pressures[0])
-    print(f"finished in {time.time() - t0:0f} sec")
+
+    test_example = [
+        "AA",
+        "DD opened",
+        "DD",
+        "CC",
+        "BB opened",
+        "AA",
+        "II",
+        "JJ opened",
+        "II",
+        "AA",
+        "DD",
+        "EE",
+        "FF",
+        "GG",
+        "HH opened",
+        "GG",
+        "FF",
+        "EE opened",
+        "DD",
+        "CC opened",
+    ]
 
 
 if __name__ == "__main__":
