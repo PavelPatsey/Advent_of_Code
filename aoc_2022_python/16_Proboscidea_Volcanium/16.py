@@ -49,20 +49,13 @@ def get_all_travels(valves: Dict):
                 pressure_change += valve.flow_rate
         return pressure_change
 
-    def _all_valves_are_opened(visited_valves_names):
-        return all(
-            map(
-                lambda valve: valve.name + " opened" in visited_valves_names,
-                valves.values(),
-            )
-        )
-
     def _valve_is_opened(valve: Valve, visited_valves_names: List):
         return valve.name + " opened" in visited_valves_names
 
     def _travers(
         current_valve_name,
         visited_valves_names: List,
+        open_valves_number,
         released_pressure: int,
         pressure_change: int,
         past_minutes: int,
@@ -71,7 +64,7 @@ def get_all_travels(valves: Dict):
         # можно попробовать сделать по другому
         # итеративно выяснять максимальный сброс давления к некоторому ходу, и отбрасывать например неудачные ходы
 
-        if past_minutes == TIME_LIMIT or _all_valves_are_opened(visited_valves_names):
+        if past_minutes == TIME_LIMIT or open_valves_number == len(valves):
             travels.append(visited_valves_names)
             released_pressures.append(
                 released_pressure + pressure_change * (TIME_LIMIT - past_minutes)
@@ -91,6 +84,7 @@ def get_all_travels(valves: Dict):
                     _travers(
                         current_valve_name,
                         visited_valves_names + [current_valve_name + " opened"],
+                        open_valves_number + 1,
                         released_pressure + pressure_change,
                         pressure_change + current_valve.flow_rate,
                         past_minutes + 1,
@@ -99,6 +93,7 @@ def get_all_travels(valves: Dict):
                 _travers(
                     valve_name,
                     visited_valves_names + [valve_name],
+                    open_valves_number,
                     released_pressure + pressure_change,
                     pressure_change,
                     past_minutes + 1,
@@ -110,6 +105,7 @@ def get_all_travels(valves: Dict):
     _travers(
         current_valve_name=ROOT_NAME,
         visited_valves_names=[ROOT_NAME],
+        open_valves_number=0,
         released_pressure=0,
         pressure_change=0,
         past_minutes=0,
