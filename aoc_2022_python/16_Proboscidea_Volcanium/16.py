@@ -4,17 +4,7 @@ from typing import Dict, List
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 25
-
-
-class Valve:
-    def __init__(self, name, flow_rate, connections):
-        self.name = name
-        self.flow_rate = flow_rate
-        self.connections = connections
-
-    def __str__(self):
-        return f"name = {self.name}, flow_rate = {self.flow_rate}, connections = {self.connections}"
+TIME_LIMIT = 20
 
 
 def get_valves():
@@ -24,96 +14,47 @@ def get_valves():
             string,
         )[1:]
 
-    def _make_valve(valve_attributes):
-        name, flow_rate, connections = valve_attributes
-        return Valve(name, int(flow_rate), connections.split(", "))
-
     with open(INPUT, "r") as file:
         data = file.read().strip().splitlines()
 
     valve_attributes = list(map(_split, data))
 
-    valves = {}
-    for valve in map(_make_valve, valve_attributes):
-        valves[valve.name] = valve
-    return valves
-
-
-def get_all_travels(valves: Dict):
-    def _valve_is_opened(valve: Valve, visited_valves_names: List):
-        return valve.name + " opened" in visited_valves_names
-
-    counter = 0
-
-    def _travers(
-        current_valve_name,
-        visited_valves_names: List,
-        open_valves_number,
-        released_pressure: int,
-        pressure_change: int,
-        past_minutes: int,
-    ):
-        if past_minutes == TIME_LIMIT or open_valves_number == len(valves):
-            travels.append(visited_valves_names)
-            released_pressures.append(
-                released_pressure + pressure_change * (TIME_LIMIT - past_minutes)
-            )
-            return
-
-        current_valve = valves[current_valve_name]
-        for valve_name in current_valve.connections + [current_valve_name]:
-            if valve_name == current_valve_name:
-                if not (
-                    current_valve.flow_rate == 0
-                    or _valve_is_opened(current_valve, visited_valves_names)
-                ):
-                    _travers(
-                        current_valve_name,
-                        visited_valves_names + [current_valve_name + " opened"],
-                        open_valves_number + 1,
-                        released_pressure + pressure_change,
-                        pressure_change + current_valve.flow_rate,
-                        past_minutes + 1,
-                    )
-            else:
-                _travers(
-                    valve_name,
-                    visited_valves_names + [valve_name],
-                    open_valves_number,
-                    released_pressure + pressure_change,
-                    pressure_change,
-                    past_minutes + 1,
-                )
-        return
-
-    travels = []
-    released_pressures = []
-    _travers(
-        current_valve_name=ROOT_NAME,
-        visited_valves_names=[ROOT_NAME],
-        open_valves_number=0,
-        released_pressure=0,
-        pressure_change=0,
-        past_minutes=0,
-    )
-    return travels, released_pressures
+    valves = []
+    flow_rates = {}
+    tunnels = {}
+    for valve, flow_rate, tunnel in valve_attributes:
+        valves.append(valve)
+        flow_rates[valve] = int(flow_rate)
+        tunnels[valve] = tunnel.split(", ")
+    return valves, flow_rates, tunnels
 
 
 def main():
+    def walk(valve, dp, t, p_sum, opened):
+        a = 0
+        temp_p_sum = p_sum + dp
+        if t == TIME_LIMIT:
+            return p_sum
+
+        if flow_rates[valve] != 0 and valve not in opened:
+            temp_set = opened.copy()
+            temp_set.add(valve)
+            temp_dp = dp + flow_rates[valve]
+            a = walk(valve, temp_dp, t + 1, temp_p_sum, temp_set)
+
+        b = {}
+        for valve in tunnels[valve]:
+            b[valve] = walk(valve, dp, t + 1, temp_p_sum, opened)
+        return max([a] + list(b.values()))
+
     t0 = time.time()
-    valves = get_valves()
-    travels, released_pressures = get_all_travels(valves)
+    valves, flow_rates, tunnels = get_valves()
+    print(valves)
+    print(flow_rates)
+    print(tunnels)
+    max_sum_p = walk(ROOT_NAME, 0, 0, 0, set())
+    print(max_sum_p)
 
-    from pprint import pprint
-
-    # print("travels")
-    # pprint(travels)
-    # print("released_pressures")
-    # print(released_pressures)
-
-    zipped = zip(travels, released_pressures)
-    max_zipped = max(zipped, key=lambda x: x[1])
-    print(max_zipped)
     print(f"finished in {time.time() - t0:0f} sec")
 
     test_example = [
