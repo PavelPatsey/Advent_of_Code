@@ -1,5 +1,6 @@
 import re
 import time
+from collections import deque
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
@@ -30,12 +31,12 @@ def get_valves():
 
 def bfs(tunnels, root):
     visited = []
-    queue = []
+    queue = deque()
     visited.append(root)
     queue.append(root)
 
     while queue:
-        m = queue.pop(0)
+        m = queue.pop()
         print(m, end=" ")
 
         for neighbour in tunnels[m]:
