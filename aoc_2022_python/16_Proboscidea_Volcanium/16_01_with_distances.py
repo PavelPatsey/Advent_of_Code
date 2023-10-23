@@ -29,20 +29,41 @@ def get_valves():
     return valves, flow_rates, tunnels
 
 
-def bfs(tunnels, root):
+def get_bfs_shortest_path(graph, start, goal):
     visited = []
-    queue = deque()
-    visited.append(root)
-    queue.append(root)
+    queue = deque((start,))
+
+    if start == goal:
+        return []
 
     while queue:
-        m = queue.pop()
-        print(m, end=" ")
+        path = queue.popleft()
+        if type(path) == str:
+            node = path
+        elif type(path) == list:
+            node = path[-1]
+        else:
+            print("ERROR!")
+            return
+        if node not in visited:
+            neighbours = graph[node]
+            for neighbour in neighbours:
+                if type(path) == str:
+                    new_path = [path]
+                elif type(path) == list:
+                    new_path = path.copy()
+                else:
+                    print("ERROR!")
+                    return
 
-        for neighbour in tunnels[m]:
-            if neighbour not in visited:
-                visited.append(neighbour)
-                queue.append(neighbour)
+                new_path.append(neighbour)
+                queue.append(new_path)
+                if neighbour == goal:
+                    return new_path
+
+            visited.append(node)
+
+    return []
 
 
 def main():
@@ -69,41 +90,12 @@ def main():
     print(f"{flow_rates=}")
     print(f"{tunnels=}")
 
-    bfs(tunnels, ROOT_NAME)  # function calling
+    print(get_bfs_shortest_path(tunnels, ROOT_NAME, "GG"))
 
     # max_p_sum = walk(ROOT_NAME, 0, 0, 0, set())
     # print(max_p_sum)
 
     print(f"finished in {time.time() - t0:0f} sec")
-
-    test_example = [
-        "AA",
-        "DD",
-        "DD opened",
-        "CC",
-        "BB",
-        "BB opened",
-        "AA",
-        "II",
-        "JJ",
-        "JJ opened",
-        "II",
-        "AA",
-        "DD",
-        "EE",
-        "FF",
-        "GG",
-        "HH",
-        "HH opened",
-        "GG",
-        "FF",
-        "EE",
-        "EE opened",
-        "DD",
-        "CC",
-        "CC opened",  # 25
-    ]
-    print((test_example, 1651))
 
 
 if __name__ == "__main__":
