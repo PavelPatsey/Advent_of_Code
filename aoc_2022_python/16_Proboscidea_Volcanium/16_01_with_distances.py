@@ -3,7 +3,7 @@ import time
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 15
+TIME_LIMIT = 10
 
 
 def get_valves():
@@ -28,6 +28,22 @@ def get_valves():
     return valves, flow_rates, tunnels
 
 
+def bfs(tunnels, root):
+    visited = []
+    queue = []
+    visited.append(root)
+    queue.append(root)
+
+    while queue:
+        m = queue.pop(0)
+        print(m, end=" ")
+
+        for neighbour in tunnels[m]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
+
+
 def main():
     def walk(valve, dp, t, p_sum, opened):
         a = 0
@@ -48,11 +64,14 @@ def main():
 
     t0 = time.time()
     valves, flow_rates, tunnels = get_valves()
-    print(valves)
-    print(flow_rates)
-    print(tunnels)
-    max_sum_p = walk(ROOT_NAME, 0, 0, 0, set())
-    print(max_sum_p)
+    print(f"{valves=}")
+    print(f"{flow_rates=}")
+    print(f"{tunnels=}")
+
+    bfs(tunnels, ROOT_NAME)  # function calling
+
+    # max_p_sum = walk(ROOT_NAME, 0, 0, 0, set())
+    # print(max_p_sum)
 
     print(f"finished in {time.time() - t0:0f} sec")
 
