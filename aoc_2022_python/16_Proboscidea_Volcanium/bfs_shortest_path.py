@@ -45,3 +45,5 @@ graph = {
 }
 
 print(bfs_shortest_path(graph, "G", "D"))  # returns ['G', 'C', 'A', 'B', 'D']
+print(bfs_shortest_path(graph, "A", "D"))  # returns ['A', 'B', 'D']
+print(bfs_shortest_path(graph, "D", "D"))  # That was easy! Start = goal
