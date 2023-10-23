@@ -40,6 +40,7 @@ def get_bfs_shortest_path(graph, start, goal):
         path = queue.popleft()
         if type(path) == str:
             node = path
+            path = [path]
         elif type(path) == list:
             node = path[-1]
         else:
@@ -48,14 +49,7 @@ def get_bfs_shortest_path(graph, start, goal):
         if node not in visited:
             neighbours = graph[node]
             for neighbour in neighbours:
-                if type(path) == str:
-                    new_path = [path]
-                elif type(path) == list:
-                    new_path = path.copy()
-                else:
-                    print("ERROR!")
-                    return
-
+                new_path = list(path)
                 new_path.append(neighbour)
                 queue.append(new_path)
                 if neighbour == goal:
