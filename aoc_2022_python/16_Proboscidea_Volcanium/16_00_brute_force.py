@@ -1,10 +1,9 @@
 import re
 import time
-from typing import Dict, List
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 20
+TIME_LIMIT = 15
 
 
 def get_valves():
