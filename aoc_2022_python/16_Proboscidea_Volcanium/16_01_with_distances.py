@@ -38,10 +38,10 @@ def get_bfs_shortest_path(graph, start, goal):
 
     while queue:
         path = queue.popleft()
-        if type(path) == str:
+        if isinstance(path, str):
             node = path
             path = [path]
-        elif type(path) == list:
+        elif isinstance(path, list):
             node = path[-1]
         else:
             print("ERROR!")
