@@ -33,7 +33,6 @@ def bfs_shortest_path(graph, start, goal):
     return "So sorry, but a connecting path doesn't exist :("
 
 
-# sample graph implemented as a dictionary
 graph = {
     "A": ["B", "C", "E"],
     "B": ["A", "D", "E"],
@@ -44,6 +43,10 @@ graph = {
     "G": ["C"],
 }
 
-print(bfs_shortest_path(graph, "G", "D"))  # returns ['G', 'C', 'A', 'B', 'D']
-print(bfs_shortest_path(graph, "A", "D"))  # returns ['A', 'B', 'D']
-print(bfs_shortest_path(graph, "D", "D"))  # That was easy! Start = goal
+assert bfs_shortest_path(graph, "G", "D") == ["G", "C", "A", "B", "D"]
+assert bfs_shortest_path(graph, "A", "D") == ["A", "B", "D"]
+assert bfs_shortest_path(graph, "D", "D") == "That was easy! Start = goal"
+assert (
+    bfs_shortest_path(graph, "A", "Q")
+    == "So sorry, but a connecting path doesn't exist :("
+)
