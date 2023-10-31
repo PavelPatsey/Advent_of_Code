@@ -72,8 +72,8 @@ def get_distances(valves, flow_rates, tunnels):
     return distances
 
 
-def main():
-    def walk(valve, dp, t, p_sum, opened):
+def walk(flow_rates, tunnels):
+    def _walk(valve, dp, t, p_sum, opened):
         a = 0
         temp_p_sum = p_sum + dp
         if t == TIME_LIMIT:
@@ -83,13 +83,18 @@ def main():
             temp_set = opened.copy()
             temp_set.add(valve)
             temp_dp = dp + flow_rates[valve]
-            a = walk(valve, temp_dp, t + 1, temp_p_sum, temp_set)
+            a = _walk(valve, temp_dp, t + 1, temp_p_sum, temp_set)
 
         b = {}
         for valve in tunnels[valve]:
-            b[valve] = walk(valve, dp, t + 1, temp_p_sum, opened)
+            b[valve] = _walk(valve, dp, t + 1, temp_p_sum, opened)
         return max([a] + list(b.values()))
 
+    max_p_sum = _walk(ROOT_NAME, 0, 0, 0, set())
+    return max_p_sum
+
+
+def main():
     t0 = time.time()
     valves, flow_rates, tunnels = get_valves()
     print(f"{valves=}")
@@ -107,8 +112,8 @@ def main():
     distances = get_distances(valves, flow_rates, tunnels)
     print(f"{distances=}")
 
-    # max_p_sum = walk(ROOT_NAME, 0, 0, 0, set())
-    # print(max_p_sum)
+    max_p_sum = walk(flow_rates, tunnels)
+    print(max_p_sum)
 
     print(f"finished in {time.time() - t0:0f} sec")
 
