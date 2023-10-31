@@ -4,7 +4,7 @@ from collections import deque
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 7
+TIME_LIMIT = 11
 
 
 def get_valves():
