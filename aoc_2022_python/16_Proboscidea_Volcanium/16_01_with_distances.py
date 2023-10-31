@@ -4,7 +4,7 @@ from collections import deque
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 10
+TIME_LIMIT = 7
 
 
 def get_valves():
@@ -90,8 +90,8 @@ def walk(valves, flow_rates, tunnels, distances):
         a = 0
         t = t + dt
         temp_p_sum = p_sum + dp * dt
-        if t >= TIME_LIMIT:
-            return p_sum - (t - TIME_LIMIT) * dp
+        if t == TIME_LIMIT:
+            return p_sum
 
         bit = 1 << indices[valve]
         if flow_rates[valve] != 0 and not opened_bitmask & bit:
@@ -102,14 +102,25 @@ def walk(valves, flow_rates, tunnels, distances):
 
         b = {}
         for got_to_valve in tunnels[valve]:
-            b[got_to_valve] = _walk(
-                got_to_valve,
-                dp,
-                t,
-                distances[valve, got_to_valve],
-                temp_p_sum,
-                opened_bitmask,
-            )
+            dt = distances[valve, got_to_valve]
+            if t + dt > TIME_LIMIT:
+                b[got_to_valve] = _walk(
+                    valve,
+                    dp,
+                    t,
+                    1,
+                    temp_p_sum,
+                    opened_bitmask,
+                )
+            else:
+                b[got_to_valve] = _walk(
+                    got_to_valve,
+                    dp,
+                    t,
+                    dt,
+                    temp_p_sum,
+                    opened_bitmask,
+                )
         max_value = max([a] + list(b.values()))
         cache[(valve, dp, t, p_sum, opened_bitmask)] = max_value
         return max_value
