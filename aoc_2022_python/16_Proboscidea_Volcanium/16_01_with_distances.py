@@ -60,6 +60,18 @@ def get_bfs_shortest_path(graph, start, goal):
     return []
 
 
+def get_distances(valves, flow_rates, tunnels):
+    valve_list = list(filter(lambda x: flow_rates[x] != 0, valves))
+    if ROOT_NAME not in valve_list:
+        valve_list = [ROOT_NAME] + valve_list
+    distances = {}
+    for i in valve_list:
+        for j in valve_list:
+            length = len(get_bfs_shortest_path(tunnels, i, j))
+            distances[i, j] = length - 1 if length != 0 else 0
+    return distances
+
+
 def main():
     def walk(valve, dp, t, p_sum, opened):
         a = 0
@@ -84,7 +96,16 @@ def main():
     print(f"{flow_rates=}")
     print(f"{tunnels=}")
 
-    print(get_bfs_shortest_path(tunnels, ROOT_NAME, "GG"))
+    assert get_bfs_shortest_path(tunnels, ROOT_NAME, "GG") == [
+        "AA",
+        "DD",
+        "EE",
+        "FF",
+        "GG",
+    ]
+
+    distances = get_distances(valves, flow_rates, tunnels)
+    print(f"{distances=}")
 
     # max_p_sum = walk(ROOT_NAME, 0, 0, 0, set())
     # print(max_p_sum)
