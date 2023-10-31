@@ -4,7 +4,7 @@ from collections import deque
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 15
+TIME_LIMIT = 10
 
 
 def get_valves():
@@ -94,7 +94,7 @@ def walk(valves, flow_rates, tunnels, distances):
             return p_sum - (t - TIME_LIMIT) * dp
 
         bit = 1 << indices[valve]
-        if flow_rates[valve] != 0 and opened_bitmask & bit == 0:
+        if flow_rates[valve] != 0 and not opened_bitmask & bit:
             temp_bitmask = "%s" % opened_bitmask
             temp_bitmask = int(temp_bitmask) | bit
             temp_dp = dp + flow_rates[valve]
