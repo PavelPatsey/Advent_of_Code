@@ -77,10 +77,7 @@ def get_distances_and_tunnels(valves, tunnels):
 
 
 def walk(valves, flow_rates, tunnels, distances):
-    indices = {}
-    for index, element in enumerate(valves):
-        indices[element] = index
-
+    indices = dict((element, index) for index, element in enumerate(valves))
     cache = {}
 
     def _walk(valve, dp, t, dt, p_sum, opened_bitmask):

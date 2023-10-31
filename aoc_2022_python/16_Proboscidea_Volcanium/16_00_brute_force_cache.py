@@ -29,10 +29,7 @@ def get_valves():
 
 
 def walk(valves, flow_rates, tunnels):
-    indices = {}
-    for index, element in enumerate(valves):
-        indices[element] = index
-
+    indices = dict((element, index) for index, element in enumerate(valves))
     cache = {}
 
     def _walk(valve, dp, t, p_sum, opened_bitmask):
