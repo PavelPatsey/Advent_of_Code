@@ -76,28 +76,38 @@ def get_distances_and_tunnels(valves, tunnels):
     return distances, non_zero_tunnels
 
 
-def walk(flow_rates, tunnels, distances):
-    def _walk(valve, dp, t, dt, p_sum, opened):
+def walk(valves, flow_rates, tunnels, distances):
+    indices = {}
+    for index, element in enumerate(valves):
+        indices[element] = index
+
+    def _walk(valve, dp, t, dt, p_sum, opened_bitmask):
         a = 0
         t = t + dt
         temp_p_sum = p_sum + dp * dt
         if t >= TIME_LIMIT:
             return p_sum - (t - TIME_LIMIT) * dp
 
-        if flow_rates[valve] != 0 and valve not in opened:
-            temp_set = opened.copy()
-            temp_set.add(valve)
+        bit = 1 << indices[valve]
+        if flow_rates[valve] != 0 and opened_bitmask & bit == 0:
+            temp_bitmask = "%s" % opened_bitmask
+            temp_bitmask = int(temp_bitmask) | bit
             temp_dp = dp + flow_rates[valve]
-            a = _walk(valve, temp_dp, t, 1, temp_p_sum, temp_set)
+            a = _walk(valve, temp_dp, t, 1, temp_p_sum, temp_bitmask)
 
         b = {}
         for got_to_valve in tunnels[valve]:
             b[got_to_valve] = _walk(
-                got_to_valve, dp, t, distances[valve, got_to_valve], temp_p_sum, opened
+                got_to_valve,
+                dp,
+                t,
+                distances[valve, got_to_valve],
+                temp_p_sum,
+                opened_bitmask,
             )
         return max([a] + list(b.values()))
 
-    max_p_sum = _walk(ROOT_NAME, 0, 0, 0, 0, set())
+    max_p_sum = _walk(ROOT_NAME, 0, 0, 0, 0, 0)
     return max_p_sum
 
 
@@ -125,7 +135,7 @@ def main():
     print(f"{non_zero_tunnels=}")
 
     print("start")
-    max_p_sum = walk(flow_rates, non_zero_tunnels, distances)
+    max_p_sum = walk(non_zero_valves, flow_rates, non_zero_tunnels, distances)
     print(max_p_sum)
 
     print(f"finished in {time.time() - t0:0f} sec")
