@@ -4,7 +4,7 @@ from collections import deque
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 11
+TIME_LIMIT = 15
 
 
 def get_valves():
@@ -60,13 +60,20 @@ def get_bfs_shortest_path(graph, start, goal):
     return []
 
 
-def get_distances(valves, tunnels):
+def get_distances_and_tunnels(valves, tunnels):
     distances = {}
+    non_zero_tunnels = {}
     for i in valves:
         for j in valves:
             length = len(get_bfs_shortest_path(tunnels, i, j))
-            distances[i, j] = length - 1 if length != 0 else 0
-    return distances
+            if length != 0:
+                distances[i, j] = length - 1
+                if non_zero_tunnels.get(i) is None:
+                    non_zero_tunnels[i] = [j]
+                else:
+                    non_zero_tunnels[i].append(j)
+
+    return distances, non_zero_tunnels
 
 
 def walk(flow_rates, tunnels, distances):
@@ -74,8 +81,8 @@ def walk(flow_rates, tunnels, distances):
         a = 0
         t = t + dt
         temp_p_sum = p_sum + dp * dt
-        if t == TIME_LIMIT:
-            return p_sum
+        if t >= TIME_LIMIT:
+            return p_sum - (t - TIME_LIMIT) * dp
 
         if flow_rates[valve] != 0 and valve not in opened:
             temp_set = opened.copy()
@@ -113,10 +120,12 @@ def main():
     if ROOT_NAME not in non_zero_valves:
         non_zero_valves = [ROOT_NAME] + non_zero_valves
 
-    distances = get_distances(valves, tunnels)
+    distances, non_zero_tunnels = get_distances_and_tunnels(non_zero_valves, tunnels)
     print(f"{distances=}")
+    print(f"{non_zero_tunnels=}")
 
-    max_p_sum = walk(flow_rates, tunnels, distances)
+    print("start")
+    max_p_sum = walk(flow_rates, non_zero_tunnels, distances)
     print(max_p_sum)
 
     print(f"finished in {time.time() - t0:0f} sec")
