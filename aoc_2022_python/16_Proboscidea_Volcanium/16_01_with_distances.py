@@ -80,7 +80,7 @@ def walk(valves, flow_rates, tunnels, distances):
     indices = dict((element, index) for index, element in enumerate(valves))
     cache = {}
 
-    def _walk(valve, dp, t, dt, p_sum, opened_bitmask):
+    def _walk(valve, t, dt, p_sum, dp, opened_bitmask):
         if (valve, t, p_sum, opened_bitmask) in cache:
             return cache[(valve, t, p_sum, opened_bitmask)]
 
@@ -96,7 +96,7 @@ def walk(valves, flow_rates, tunnels, distances):
             temp_bitmask = "%s" % opened_bitmask
             temp_bitmask = int(temp_bitmask) | bit
             temp_dp = dp + flow_rates[valve]
-            a = _walk(valve, temp_dp, temp_t, 1, temp_p_sum, temp_bitmask)
+            a = _walk(valve, temp_t, 1, temp_p_sum, temp_dp, temp_bitmask)
 
         b = {}
         for got_to_valve in tunnels[valve]:
@@ -104,19 +104,19 @@ def walk(valves, flow_rates, tunnels, distances):
             if temp_t + temp_dt > TIME_LIMIT:
                 b[got_to_valve] = _walk(
                     valve,
-                    dp,
                     temp_t,
                     1,
                     temp_p_sum,
+                    dp,
                     opened_bitmask,
                 )
             else:
                 b[got_to_valve] = _walk(
                     got_to_valve,
-                    dp,
                     temp_t,
                     temp_dt,
                     temp_p_sum,
+                    dp,
                     opened_bitmask,
                 )
         max_value = max([a] + list(b.values()))
