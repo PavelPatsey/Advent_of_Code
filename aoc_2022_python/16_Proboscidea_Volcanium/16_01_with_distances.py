@@ -4,7 +4,7 @@ from collections import deque
 
 INPUT = "test_input"
 ROOT_NAME = "AA"
-TIME_LIMIT = 16
+TIME_LIMIT = 26
 
 
 def get_valves():
@@ -81,13 +81,14 @@ def walk(valves, flow_rates, tunnels, distances):
     cache = {}
 
     def _walk(valve, dp, t, dt, p_sum, opened_bitmask):
-        if (valve, t + dt, opened_bitmask) in cache:
-            return cache[(valve, t + dt, opened_bitmask)]
-
         a = 0
-        t = t + dt
+        temp_t = t + dt
         temp_p_sum = p_sum + dp * dt
-        if t == TIME_LIMIT:
+
+        if (valve, temp_t, opened_bitmask) in cache:
+            return cache[(valve, temp_t, opened_bitmask)]
+
+        if temp_t == TIME_LIMIT:
             return p_sum
 
         bit = 1 << indices[valve]
@@ -95,16 +96,16 @@ def walk(valves, flow_rates, tunnels, distances):
             temp_bitmask = "%s" % opened_bitmask
             temp_bitmask = int(temp_bitmask) | bit
             temp_dp = dp + flow_rates[valve]
-            a = _walk(valve, temp_dp, t, 1, temp_p_sum, temp_bitmask)
+            a = _walk(valve, temp_dp, temp_t, 1, temp_p_sum, temp_bitmask)
 
         b = {}
         for got_to_valve in tunnels[valve]:
             dt = distances[valve, got_to_valve]
-            if t + dt > TIME_LIMIT:
+            if temp_t + dt > TIME_LIMIT:
                 b[got_to_valve] = _walk(
                     valve,
                     dp,
-                    t,
+                    temp_t,
                     1,
                     temp_p_sum,
                     opened_bitmask,
@@ -113,13 +114,13 @@ def walk(valves, flow_rates, tunnels, distances):
                 b[got_to_valve] = _walk(
                     got_to_valve,
                     dp,
-                    t,
+                    temp_t,
                     dt,
                     temp_p_sum,
                     opened_bitmask,
                 )
         max_value = max([a] + list(b.values()))
-        cache[(valve, t + dt, opened_bitmask)] = max_value
+        cache[(valve, temp_t + dt, opened_bitmask)] = max_value
         return max_value
 
     max_p_sum = _walk(ROOT_NAME, 0, 0, 0, 0, 0)
