@@ -2,7 +2,7 @@ import re
 import time
 from collections import deque
 
-INPUT = "test_input"
+INPUT = "input"
 ROOT_NAME = "AA"
 TIME_LIMIT = 30
 
@@ -130,30 +130,14 @@ def walk(valves, flow_rates, tunnels, distances):
 def main():
     t0 = time.time()
     valves, flow_rates, tunnels = get_valves()
-    print(f"{valves=}")
-    print(f"{flow_rates=}")
-    print(f"{tunnels=}")
-
-    assert get_bfs_shortest_path(tunnels, ROOT_NAME, "GG") == [
-        "AA",
-        "DD",
-        "EE",
-        "FF",
-        "GG",
-    ]
 
     non_zero_valves = list(filter(lambda x: flow_rates[x] != 0, valves))
     if ROOT_NAME not in non_zero_valves:
         non_zero_valves = [ROOT_NAME] + non_zero_valves
 
     distances, non_zero_tunnels = get_distances_and_tunnels(non_zero_valves, tunnels)
-    print(f"{distances=}")
-    print(f"{non_zero_tunnels=}")
 
-    print("start")
-    max_p_sum = walk(non_zero_valves, flow_rates, non_zero_tunnels, distances)
-    print(max_p_sum)
-
+    print(walk(non_zero_valves, flow_rates, non_zero_tunnels, distances))
     print(f"finished in {time.time() - t0:0f} sec")
 
 
