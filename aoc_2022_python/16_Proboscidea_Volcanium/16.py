@@ -26,9 +26,9 @@ def get_valves():
 
     flow_rates = {}
     neighbors = {}
-    for valve, flow_rate, tunnel in valve_attributes:
+    for valve, flow_rate, neighbor in valve_attributes:
         flow_rates[valve] = int(flow_rate)
-        neighbors[valve] = tunnel.split(", ")
+        neighbors[valve] = neighbor.split(", ")
     return flow_rates, neighbors
 
 
