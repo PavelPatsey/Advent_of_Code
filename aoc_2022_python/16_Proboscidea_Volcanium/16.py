@@ -24,14 +24,12 @@ def get_valves():
 
     valve_attributes = list(map(_split, data))
 
-    valves = []
     flow_rates = {}
     neighbors = {}
     for valve, flow_rate, tunnel in valve_attributes:
-        valves.append(valve)
         flow_rates[valve] = int(flow_rate)
         neighbors[valve] = tunnel.split(", ")
-    return valves, flow_rates, neighbors
+    return flow_rates, neighbors
 
 
 def solve(flow_rates, neighbors):
@@ -60,7 +58,7 @@ def solve(flow_rates, neighbors):
 
 def main():
     t0 = time.time()
-    valves, flow_rates, neighbors = get_valves()
+    flow_rates, neighbors = get_valves()
     print(solve(flow_rates, neighbors))
     print(f"finished in {time.time() - t0:0f} sec")
 
