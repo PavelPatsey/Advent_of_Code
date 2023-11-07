@@ -34,14 +34,14 @@ def get_valves():
     return valves, flow_rates, neighbors
 
 
-def solve_1(flow_rates, neighbors):
+def solve(flow_rates, neighbors):
     @cache
-    def _solve_1(valve, time, opened):
+    def _solve(valve, time, opened):
         if time == 0:
             return 0
 
         b = max(
-            _solve_1(neighbor, time - 1, frozenset(opened))
+            _solve(neighbor, time - 1, frozenset(opened))
             for neighbor in neighbors[valve]
         )
 
@@ -49,19 +49,19 @@ def solve_1(flow_rates, neighbors):
         if flow_rates[valve] != 0 and valve not in opened:
             new_opened = set(opened)
             new_opened.add(valve)
-            a = flow_rates[valve] * (time - 1) + _solve_1(
+            a = flow_rates[valve] * (time - 1) + _solve(
                 valve, time - 1, frozenset(new_opened)
             )
 
         return max(a, b)
 
-    return _solve_1(ROOT_NAME, TIME_LIMIT, frozenset())
+    return _solve(ROOT_NAME, TIME_LIMIT, frozenset())
 
 
 def main():
     t0 = time.time()
     valves, flow_rates, neighbors = get_valves()
-    print(solve_1(flow_rates, neighbors))
+    print(solve(flow_rates, neighbors))
     print(f"finished in {time.time() - t0:0f} sec")
 
 
