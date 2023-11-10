@@ -48,11 +48,11 @@ def get_resources_change(robots):
 
 
 def get_available_robots(blueprint, resources):
-    def is_available(robot_name):
+    def _is_available(robot_name):
         robot_price = blueprint[robot_name]
         return all(map(lambda x: x[0] <= x[1], zip(robot_price, resources)))
 
-    return set(filter(is_available, blueprint))
+    return set(filter(_is_available, blueprint))
 
 
 def get_max_obsidian(blueprint, t, robots, resources):
