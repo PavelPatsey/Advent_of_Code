@@ -53,7 +53,7 @@ def get_available_robots(blueprint, resources):
 
 def get_max_obsidian(blueprint, t, robots, resources):
     # @cache
-    def _get_max_obsidian(t, robots, resources):
+    def _get_max_obsidian(t, robots: Tuple, resources: Tuple) -> int:
         if t == 0:
             return 0
 
