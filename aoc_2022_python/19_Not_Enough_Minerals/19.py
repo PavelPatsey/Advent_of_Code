@@ -3,7 +3,12 @@ TIME_LIMIT = 24
 
 
 def get_resources_change(robots):
-    return 0
+    return (
+        robots["ore_robot"],
+        robots["clay_robot"],
+        robots["obsidian_robot"],
+        robots["geode_robot"],
+    )
 
 
 def get_available_robots(blueprint, resources):
@@ -16,10 +21,13 @@ def get_available_robots(blueprint, resources):
 
 def get_max_obsidian(blueprint, t, robots, resources):
     new_t = t + 1
+
     if new_t == TIME_LIMIT:
         print(resources)
         return resources["geode"]
-    new_resources = get_resources_change(robots)
+
+    new_resources = (i + j for i, j in zip(resources, get_resources_change(robots)))
+
     b = []
     for robot in get_available_robots(blueprint, resources):
         new_robots = dict(robots)
@@ -102,5 +110,29 @@ if __name__ == "__main__":
         "geode_robot",
         "clay_robot",
     }
+
+    robots = {
+        "ore_robot": 0,
+        "clay_robot": 0,
+        "obsidian_robot": 0,
+        "geode_robot": 0,
+    }
+    assert get_resources_change(robots) == (0, 0, 0, 0)
+
+    robots = {
+        "ore_robot": 0,
+        "clay_robot": 0,
+        "obsidian_robot": 3,
+        "geode_robot": 0,
+    }
+    assert get_resources_change(robots) == (0, 0, 3, 0)
+
+    robots = {
+        "ore_robot": 1,
+        "clay_robot": 2,
+        "obsidian_robot": 44,
+        "geode_robot": 210,
+    }
+    assert get_resources_change(robots) == (1, 2, 44, 210)
 
     main()
