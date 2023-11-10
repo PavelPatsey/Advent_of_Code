@@ -3,7 +3,7 @@ from typing import Tuple
 from functools import cache
 
 INPUT = "test_input"
-TIME_LIMIT = 19
+TIME_LIMIT = 24
 
 
 def get_blueprints():
@@ -64,6 +64,8 @@ def get_max_obsidian(blueprint, t, robots, resources):
         available_robots = get_available_robots(blueprint, resources)
         if "geode_robot" in available_robots:
             available_robots = {"geode_robot"}
+
+        # надо добавить условие, чтобы не строить роботов больше чем максимальное значение конкретного ресурса в чертееже
 
         b = [
             _get_max_obsidian(
