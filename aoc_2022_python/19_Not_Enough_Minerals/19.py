@@ -1,5 +1,8 @@
+import time
+from functools import cache
+
 INPUT = "test_input"
-TIME_LIMIT = 24
+TIME_LIMIT = 20
 
 
 def get_resources_change(robots):
@@ -19,21 +22,31 @@ def get_available_robots(blueprint, resources):
     return set(filter(is_available, blueprint))
 
 
+# @cache
 def get_max_obsidian(blueprint, t, robots, resources):
-    new_t = t + 1
+    if t == TIME_LIMIT:
+        # print(robots)
+        # print(resources)
+        return resources[-1]
 
-    if new_t == TIME_LIMIT:
-        print(resources)
-        return resources["geode"]
-
-    new_resources = (i + j for i, j in zip(resources, get_resources_change(robots)))
+    new_resources = tuple(
+        i + j for i, j in zip(resources, get_resources_change(robots))
+    )
 
     b = []
-    for robot in get_available_robots(blueprint, resources):
-        new_robots = dict(robots)
-        b.append(get_max_obsidian(blueprint, new_t, new_robots, new_resources))
+    for robot_name in get_available_robots(blueprint, resources):
+        new_robots = robots.copy()
+        new_robots[robot_name] += 1
+        b.append(
+            get_max_obsidian(
+                blueprint,
+                t + 1,
+                new_robots,
+                tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
+            )
+        )
 
-    a = get_max_obsidian(blueprint, new_t, dict(robots), new_resources)
+    a = get_max_obsidian(blueprint, t + 1, robots.copy(), new_resources)
 
     return max([a] + b)
 
@@ -59,16 +72,17 @@ def get_blueprints():
 
 
 def main():
+    t0 = time.time()
     blueprints = get_blueprints()
-    print(blueprints)
-    resources = {
-        "ore": 0,
-        "clay": 0,
-        "obsidian": 0,
-        "geode": 0,
+    robots = {
+        "ore_robot": 1,
+        "clay_robot": 0,
+        "obsidian_robot": 0,
+        "geode_robot": 0,
     }
     blueprint = blueprints[0]
-    print()
+    print(get_max_obsidian(blueprint, 0, robots, (0, 0, 0, 0)))
+    print(f"finished in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
