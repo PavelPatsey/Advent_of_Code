@@ -26,6 +26,10 @@ def get_blueprints():
     return blueprints
 
 
+def get_max_prices(blueprint):
+    return tuple(map(max, zip(*blueprint.values())))
+
+
 def get_updated_robots(robot_name: str, robots: Tuple) -> Tuple:
     dct = {
         "ore_robot": 0,
@@ -52,7 +56,8 @@ def get_available_robots(blueprint, resources):
 
 
 def get_max_obsidian(blueprint, t, robots, resources):
-    # @cache
+    max_prices = get_max_prices(blueprint)
+
     def _get_max_obsidian(t, robots: Tuple, resources: Tuple) -> int:
         if t == 0:
             return 0
@@ -64,8 +69,6 @@ def get_max_obsidian(blueprint, t, robots, resources):
         available_robots = get_available_robots(blueprint, resources)
         if "geode_robot" in available_robots:
             available_robots = {"geode_robot"}
-
-        # надо добавить условие, чтобы не строить роботов больше чем максимальное значение конкретного ресурса в чертееже
 
         b = [
             _get_max_obsidian(
@@ -152,5 +155,21 @@ if __name__ == "__main__":
     robots = (33, 42, 51, 6)
     robot_name = "geode_robot"
     assert get_updated_robots(robot_name, robots) == (33, 42, 51, 7)
+
+    blueprint = {
+        "ore_robot": (4, 0, 0, 0),
+        "clay_robot": (2, 0, 0, 0),
+        "obsidian_robot": (3, 14, 0, 0),
+        "geode_robot": (2, 0, 7, 0),
+    }
+    assert get_max_prices(blueprint) == (4, 14, 7, 0)
+
+    blueprint = {
+        "ore_robot": (46, 2, 1, 2),
+        "clay_robot": (4, 17, 2, 6),
+        "obsidian_robot": (10, 55, 88, 1),
+        "geode_robot": (2, 0, 7, 0),
+    }
+    assert get_max_prices(blueprint) == (46, 55, 88, 6)
 
     main()
