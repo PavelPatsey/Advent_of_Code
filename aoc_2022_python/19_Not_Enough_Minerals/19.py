@@ -13,9 +13,9 @@ def get_updated_robots(robot_name: str, robots: Tuple) -> Tuple:
         "obsidian_robot": 2,
         "geode_robot": 3,
     }
-    n = dct[robot_name]
+    index = dct[robot_name]
     lst = list(robots)
-    lst[n] += 1
+    lst[index] += 1
     return tuple(lst)
 
 
