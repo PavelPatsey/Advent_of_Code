@@ -3,14 +3,14 @@ from typing import Tuple
 from functools import cache
 
 INPUT = "test_input"
-TIME_LIMIT = 24
+TIME_LIMIT = 19
 
 
 def get_blueprints():
-    def get_numbers_from_string(string: str):
+    def _get_numbers_from_string(string: str):
         return list(map(int, (filter(lambda x: x.isnumeric(), string.split()))))
 
-    def make_blueprint(lst):
+    def _make_blueprint(lst):
         return {
             "ore_robot": (lst[0], 0, 0, 0),
             "clay_robot": (lst[1], 0, 0, 0),
@@ -21,8 +21,8 @@ def get_blueprints():
     with open(INPUT) as file:
         data = file.readlines()
 
-    blueprints = map(get_numbers_from_string, data)
-    blueprints = list(map(make_blueprint, blueprints))
+    blueprints = map(_get_numbers_from_string, data)
+    blueprints = list(map(_make_blueprint, blueprints))
     return blueprints
 
 
