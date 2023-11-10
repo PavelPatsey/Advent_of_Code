@@ -79,8 +79,6 @@ def get_max_obsidian(blueprint, t, robots, resources):
 
         available_robots = get_available_robots(blueprint, resources)
         robots_to_build = get_robots_to_build(robots, max_prices, available_robots)
-        if available_robots != robots_to_build and robots_to_build != {}:
-            print(available_robots, robots_to_build, robots)
 
         b = [
             _get_max_obsidian(
