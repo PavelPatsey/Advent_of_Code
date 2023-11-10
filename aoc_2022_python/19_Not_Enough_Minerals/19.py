@@ -2,7 +2,7 @@ import time
 from functools import cache
 
 INPUT = "test_input"
-TIME_LIMIT = 20
+TIME_LIMIT = 5
 
 
 def get_resources_change(robots):
@@ -24,31 +24,34 @@ def get_available_robots(blueprint, resources):
 
 # @cache
 def get_max_obsidian(blueprint, t, robots, resources):
-    if t == TIME_LIMIT:
-        # print(robots)
-        # print(resources)
-        return resources[-1]
+    def _get_max_obsidian(t, robots, resources):
+        if t == TIME_LIMIT:
+            # print(robots)
+            # print(resources)
+            return resources[-1]
 
-    new_resources = tuple(
-        i + j for i, j in zip(resources, get_resources_change(robots))
-    )
-
-    b = []
-    for robot_name in get_available_robots(blueprint, resources):
-        new_robots = robots.copy()
-        new_robots[robot_name] += 1
-        b.append(
-            get_max_obsidian(
-                blueprint,
-                t + 1,
-                new_robots,
-                tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
-            )
+        new_resources = tuple(
+            i + j for i, j in zip(resources, get_resources_change(robots))
         )
 
-    a = get_max_obsidian(blueprint, t + 1, robots.copy(), new_resources)
+        b = []
+        for robot_name in get_available_robots(blueprint, resources):
+            new_robots = robots.copy()
+            new_robots[robot_name] += 1
+            b.append(
+                get_max_obsidian(
+                    blueprint,
+                    t + 1,
+                    new_robots,
+                    tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
+                )
+            )
 
-    return max([a] + b)
+        a = get_max_obsidian(blueprint, t + 1, robots.copy(), new_resources)
+
+        return max([a] + b)
+
+    return _get_max_obsidian(t, robots, resources)
 
 
 def get_blueprints():
