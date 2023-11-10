@@ -42,17 +42,15 @@ def get_max_obsidian(blueprint, t, robots, resources):
             i + j for i, j in zip(resources, get_resources_change(robots))
         )
 
-        b = []
-        for robot_name in get_available_robots(blueprint, resources):
-            new_robots = get_updated_robots(robot_name, robots)
-            b.append(
-                get_max_obsidian(
-                    blueprint,
-                    t + 1,
-                    new_robots,
-                    tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
-                )
+        b = [
+            get_max_obsidian(
+                blueprint,
+                t + 1,
+                get_updated_robots(robot_name, robots),
+                tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
             )
+            for robot_name in get_available_robots(blueprint, resources)
+        ]
 
         a = get_max_obsidian(blueprint, t + 1, tuple(i for i in robots), new_resources)
 
