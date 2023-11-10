@@ -33,7 +33,7 @@ def get_available_robots(blueprint, resources):
 
 def get_max_obsidian(blueprint, t, robots, resources):
     def _get_max_obsidian(t, robots, resources):
-        if t == TIME_LIMIT:
+        if t == 0:
             # print(robots)
             # print(resources)
             return resources[-1]
@@ -45,14 +45,14 @@ def get_max_obsidian(blueprint, t, robots, resources):
         b = [
             get_max_obsidian(
                 blueprint,
-                t + 1,
+                t - 1,
                 get_updated_robots(robot_name, robots),
                 tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
             )
             for robot_name in get_available_robots(blueprint, resources)
         ]
 
-        a = get_max_obsidian(blueprint, t + 1, tuple(i for i in robots), new_resources)
+        a = get_max_obsidian(blueprint, t - 1, tuple(i for i in robots), new_resources)
 
         return max([a] + b)
 
@@ -83,7 +83,7 @@ def main():
     t0 = time.time()
     blueprints = get_blueprints()
     blueprint = blueprints[0]
-    print(get_max_obsidian(blueprint, 0, (1, 0, 0, 0), (0, 0, 0, 0)))
+    print(get_max_obsidian(blueprint, TIME_LIMIT, (1, 0, 0, 0), (0, 0, 0, 0)))
     print(f"finished in {time.time() - t0:0f} sec")
 
 
