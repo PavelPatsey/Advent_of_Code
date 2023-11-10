@@ -1,9 +1,15 @@
 import time
-from typing import Tuple
 from functools import cache
+from typing import Set, Tuple
 
 INPUT = "test_input"
 TIME_LIMIT = 19
+ROBOT_INDEXES = {
+    "ore_robot": 0,
+    "clay_robot": 1,
+    "obsidian_robot": 2,
+    "geode_robot": 3,
+}
 
 
 def get_blueprints():
@@ -31,13 +37,7 @@ def get_max_prices(blueprint):
 
 
 def get_updated_robots(robot_name: str, robots: Tuple) -> Tuple:
-    dct = {
-        "ore_robot": 0,
-        "clay_robot": 1,
-        "obsidian_robot": 2,
-        "geode_robot": 3,
-    }
-    index = dct[robot_name]
+    index = ROBOT_INDEXES[robot_name]
     lst = list(robots)
     lst[index] += 1
     return tuple(lst)
@@ -55,6 +55,16 @@ def get_available_robots(blueprint, resources):
     return set(filter(_is_available, blueprint))
 
 
+def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set) -> Set:
+    def _is_to_build(name):
+        return (
+            robots[ROBOT_INDEXES[name]] < max_prices[ROBOT_INDEXES[name]]
+            or name == "geode_robot"
+        )
+
+    return set(filter(_is_to_build, available_robots))
+
+
 def get_max_obsidian(blueprint, t, robots, resources):
     max_prices = get_max_prices(blueprint)
 
@@ -67,8 +77,7 @@ def get_max_obsidian(blueprint, t, robots, resources):
         )
 
         available_robots = get_available_robots(blueprint, resources)
-        if "geode_robot" in available_robots:
-            available_robots = {"geode_robot"}
+        robots_to_build = get_robots_to_build(robots, max_prices, available_robots)
 
         b = [
             _get_max_obsidian(
@@ -77,7 +86,7 @@ def get_max_obsidian(blueprint, t, robots, resources):
                 tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
             )
             + (t - 1) * (1 if robot_name == "geode_robot" else 0)
-            for robot_name in available_robots
+            for robot_name in robots_to_build
         ]
 
         a = get_max_obsidian(blueprint, t - 1, tuple(i for i in robots), new_resources)
@@ -171,5 +180,41 @@ if __name__ == "__main__":
         "geode_robot": (2, 0, 7, 0),
     }
     assert get_max_prices(blueprint) == (46, 55, 88, 6)
+
+    available_robots = {
+        "ore_robot",
+        "obsidian_robot",
+        "geode_robot",
+        "clay_robot",
+    }
+    max_prices = (4, 2, 7, 0)
+    robots = (3, 4, 5, 6)
+    assert get_robots_to_build(robots, max_prices, available_robots) == {
+        "ore_robot",
+        "obsidian_robot",
+        "geode_robot",
+    }
+
+    available_robots = {
+        "ore_robot",
+        "geode_robot",
+    }
+    max_prices = (4, 2, 7, 0)
+    robots = (4, 4, 4, 4)
+    assert get_robots_to_build(robots, max_prices, available_robots) == {
+        "geode_robot",
+    }
+
+    available_robots = {
+        "ore_robot",
+        "obsidian_robot",
+        "clay_robot",
+    }
+    max_prices = (4, 2, 7, 0)
+    robots = (3, 4, 5, 6)
+    assert get_robots_to_build(robots, max_prices, available_robots) == {
+        "ore_robot",
+        "obsidian_robot",
+    }
 
     main()
