@@ -3,7 +3,7 @@ from typing import Tuple
 from functools import cache
 
 INPUT = "test_input"
-TIME_LIMIT = 19
+TIME_LIMIT = 20
 
 
 def get_updated_robots(robot_name: str, robots: Tuple) -> Tuple:
@@ -34,9 +34,7 @@ def get_available_robots(blueprint, resources):
 def get_max_obsidian(blueprint, t, robots, resources):
     def _get_max_obsidian(t, robots, resources):
         if t == 0:
-            # print(robots)
-            # print(resources)
-            return resources[-1]
+            return 0
 
         new_resources = tuple(
             i + j for i, j in zip(resources, get_resources_change(robots))
@@ -49,6 +47,7 @@ def get_max_obsidian(blueprint, t, robots, resources):
                 get_updated_robots(robot_name, robots),
                 tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
             )
+            + (t - 1) * (1 if robot_name == "geode_robot" else 0)
             for robot_name in get_available_robots(blueprint, resources)
         ]
 
