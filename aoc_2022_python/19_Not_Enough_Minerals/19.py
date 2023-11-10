@@ -3,7 +3,27 @@ from typing import Tuple
 from functools import cache
 
 INPUT = "test_input"
-TIME_LIMIT = 20
+TIME_LIMIT = 19
+
+
+def get_blueprints():
+    def get_numbers_from_string(string: str):
+        return list(map(int, (filter(lambda x: x.isnumeric(), string.split()))))
+
+    def make_blueprint(lst):
+        return {
+            "ore_robot": (lst[0], 0, 0, 0),
+            "clay_robot": (lst[1], 0, 0, 0),
+            "obsidian_robot": (lst[2], lst[3], 0, 0),
+            "geode_robot": (lst[4], 0, lst[5], 0),
+        }
+
+    with open(INPUT) as file:
+        data = file.readlines()
+
+    blueprints = map(get_numbers_from_string, data)
+    blueprints = list(map(make_blueprint, blueprints))
+    return blueprints
 
 
 def get_updated_robots(robot_name: str, robots: Tuple) -> Tuple:
@@ -32,6 +52,7 @@ def get_available_robots(blueprint, resources):
 
 
 def get_max_obsidian(blueprint, t, robots, resources):
+    # @cache
     def _get_max_obsidian(t, robots, resources):
         if t == 0:
             return 0
@@ -40,15 +61,18 @@ def get_max_obsidian(blueprint, t, robots, resources):
             i + j for i, j in zip(resources, get_resources_change(robots))
         )
 
+        available_robots = get_available_robots(blueprint, resources)
+        if "geode_robot" in available_robots:
+            available_robots = {"geode_robot"}
+
         b = [
-            get_max_obsidian(
-                blueprint,
+            _get_max_obsidian(
                 t - 1,
                 get_updated_robots(robot_name, robots),
                 tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
             )
             + (t - 1) * (1 if robot_name == "geode_robot" else 0)
-            for robot_name in get_available_robots(blueprint, resources)
+            for robot_name in available_robots
         ]
 
         a = get_max_obsidian(blueprint, t - 1, tuple(i for i in robots), new_resources)
@@ -56,26 +80,6 @@ def get_max_obsidian(blueprint, t, robots, resources):
         return max([a] + b)
 
     return _get_max_obsidian(t, robots, resources)
-
-
-def get_blueprints():
-    def get_numbers_from_string(string: str):
-        return list(map(int, (filter(lambda x: x.isnumeric(), string.split()))))
-
-    def make_blueprint(lst):
-        return {
-            "ore_robot": (lst[0], 0, 0, 0),
-            "clay_robot": (lst[1], 0, 0, 0),
-            "obsidian_robot": (lst[2], lst[3], 0, 0),
-            "geode_robot": (lst[4], 0, lst[5], 0),
-        }
-
-    with open(INPUT) as file:
-        data = file.readlines()
-
-    blueprints = map(get_numbers_from_string, data)
-    blueprints = list(map(make_blueprint, blueprints))
-    return blueprints
 
 
 def main():
