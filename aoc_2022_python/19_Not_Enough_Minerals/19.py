@@ -1,17 +1,26 @@
 import time
+from typing import Tuple
 from functools import cache
 
 INPUT = "test_input"
-TIME_LIMIT = 5
+TIME_LIMIT = 19
+
+
+def get_updated_robots(robot_name: str, robots: Tuple) -> Tuple:
+    dct = {
+        "ore_robot": 0,
+        "clay_robot": 1,
+        "obsidian_robot": 2,
+        "geode_robot": 3,
+    }
+    n = dct[robot_name]
+    lst = list(robots)
+    lst[n] += 1
+    return tuple(lst)
 
 
 def get_resources_change(robots):
-    return (
-        robots["ore_robot"],
-        robots["clay_robot"],
-        robots["obsidian_robot"],
-        robots["geode_robot"],
-    )
+    return robots
 
 
 def get_available_robots(blueprint, resources):
@@ -22,7 +31,6 @@ def get_available_robots(blueprint, resources):
     return set(filter(is_available, blueprint))
 
 
-# @cache
 def get_max_obsidian(blueprint, t, robots, resources):
     def _get_max_obsidian(t, robots, resources):
         if t == TIME_LIMIT:
@@ -36,8 +44,7 @@ def get_max_obsidian(blueprint, t, robots, resources):
 
         b = []
         for robot_name in get_available_robots(blueprint, resources):
-            new_robots = robots.copy()
-            new_robots[robot_name] += 1
+            new_robots = get_updated_robots(robot_name, robots)
             b.append(
                 get_max_obsidian(
                     blueprint,
@@ -47,7 +54,7 @@ def get_max_obsidian(blueprint, t, robots, resources):
                 )
             )
 
-        a = get_max_obsidian(blueprint, t + 1, robots.copy(), new_resources)
+        a = get_max_obsidian(blueprint, t + 1, tuple(i for i in robots), new_resources)
 
         return max([a] + b)
 
@@ -77,14 +84,8 @@ def get_blueprints():
 def main():
     t0 = time.time()
     blueprints = get_blueprints()
-    robots = {
-        "ore_robot": 1,
-        "clay_robot": 0,
-        "obsidian_robot": 0,
-        "geode_robot": 0,
-    }
     blueprint = blueprints[0]
-    print(get_max_obsidian(blueprint, 0, robots, (0, 0, 0, 0)))
+    print(get_max_obsidian(blueprint, 0, (1, 0, 0, 0), (0, 0, 0, 0)))
     print(f"finished in {time.time() - t0:0f} sec")
 
 
@@ -128,28 +129,25 @@ if __name__ == "__main__":
         "clay_robot",
     }
 
-    robots = {
-        "ore_robot": 0,
-        "clay_robot": 0,
-        "obsidian_robot": 0,
-        "geode_robot": 0,
-    }
+    robots = (0, 0, 0, 0)
     assert get_resources_change(robots) == (0, 0, 0, 0)
 
-    robots = {
-        "ore_robot": 0,
-        "clay_robot": 0,
-        "obsidian_robot": 3,
-        "geode_robot": 0,
-    }
+    robots = (0, 0, 3, 0)
     assert get_resources_change(robots) == (0, 0, 3, 0)
 
-    robots = {
-        "ore_robot": 1,
-        "clay_robot": 2,
-        "obsidian_robot": 44,
-        "geode_robot": 210,
-    }
+    robots = (1, 2, 44, 210)
     assert get_resources_change(robots) == (1, 2, 44, 210)
+
+    robots = (0, 0, 0, 0)
+    robot_name = "ore_robot"
+    assert get_updated_robots(robot_name, robots) == (1, 0, 0, 0)
+
+    robots = (3, 4, 5, 6)
+    robot_name = "ore_robot"
+    assert get_updated_robots(robot_name, robots) == (4, 4, 5, 6)
+
+    robots = (33, 42, 51, 6)
+    robot_name = "geode_robot"
+    assert get_updated_robots(robot_name, robots) == (33, 42, 51, 7)
 
     main()
