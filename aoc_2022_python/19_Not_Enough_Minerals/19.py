@@ -68,6 +68,7 @@ def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set)
 def get_max_obsidian(blueprint, t, robots, resources):
     max_prices = get_max_prices(blueprint)
 
+    # @cache
     def _get_max_obsidian(t, robots: Tuple, resources: Tuple) -> int:
         if t == 0:
             return 0
@@ -78,6 +79,8 @@ def get_max_obsidian(blueprint, t, robots, resources):
 
         available_robots = get_available_robots(blueprint, resources)
         robots_to_build = get_robots_to_build(robots, max_prices, available_robots)
+        if available_robots != robots_to_build and robots_to_build != {}:
+            print(available_robots, robots_to_build, robots)
 
         b = [
             _get_max_obsidian(
@@ -216,5 +219,17 @@ if __name__ == "__main__":
         "ore_robot",
         "obsidian_robot",
     }
+
+    available_robots = {
+        "ore_robot",
+    }
+    max_prices = (4, 2, 7, 0)
+    robots = (7, 4, 5, 6)
+    assert get_robots_to_build(robots, max_prices, available_robots) == set()
+
+    available_robots = set()
+    max_prices = (4, 2, 7, 0)
+    robots = (7, 4, 5, 6)
+    assert get_robots_to_build(robots, max_prices, available_robots) == set()
 
     main()
