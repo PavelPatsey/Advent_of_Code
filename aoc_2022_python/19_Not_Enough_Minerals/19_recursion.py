@@ -90,7 +90,7 @@ def get_max_obsidian(blueprint, t, robots, resources):
             for robot_name in robots_to_build
         ]
 
-        a = get_max_obsidian(blueprint, t - 1, tuple(i for i in robots), new_resources)
+        a = _get_max_obsidian(t - 1, tuple(i for i in robots), new_resources)
 
         return max([a] + b)
 
