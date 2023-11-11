@@ -3,7 +3,7 @@ from collections import deque
 from typing import Set, Tuple
 
 INPUT = "test_input"
-TIME_LIMIT = 24
+TIME_LIMIT = 21
 ROBOT_INDEXES = {
     "ore_robot": 0,
     "clay_robot": 1,
@@ -105,7 +105,7 @@ def get_max_obsidian(blueprint):
                 )
             )
 
-        queue.append((t - 1, tuple(i for i in robots), new_resources))
+        queue.append((t - 1, robots, new_resources))
 
     return max_geodes
 

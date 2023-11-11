@@ -3,7 +3,7 @@ from functools import cache
 from typing import Set, Tuple
 
 INPUT = "test_input"
-TIME_LIMIT = 24
+TIME_LIMIT = 21
 ROBOT_INDEXES = {
     "ore_robot": 0,
     "clay_robot": 1,
