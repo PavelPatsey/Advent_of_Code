@@ -3,7 +3,7 @@ from collections import deque
 from typing import Set, Tuple
 
 INPUT = "test_input"
-TIME_LIMIT = 21
+TIME_LIMIT = 24
 ROBOT_INDEXES = {
     "ore_robot": 0,
     "clay_robot": 1,
@@ -113,8 +113,13 @@ def get_max_obsidian(blueprint):
 def main():
     t0 = time.time()
     blueprints = get_blueprints()
-    blueprint = blueprints[0]
-    print(get_max_obsidian(blueprint))
+    sum = 0
+    for i, blueprint in enumerate(blueprints):
+        a = (i + 1) * get_max_obsidian(blueprint)
+        print(a)
+        print(f"finished in {time.time() - t0:0f} sec")
+        sum += a
+    print(f"{sum=}")
     print(f"finished in {time.time() - t0:0f} sec")
 
 
