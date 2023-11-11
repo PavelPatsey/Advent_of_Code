@@ -3,7 +3,7 @@ from functools import cache
 from typing import Set, Tuple
 
 INPUT = "test_input"
-TIME_LIMIT = 19
+TIME_LIMIT = 24
 ROBOT_INDEXES = {
     "ore_robot": 0,
     "clay_robot": 1,
@@ -68,7 +68,7 @@ def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set)
 def get_max_obsidian(blueprint, t, robots, resources):
     max_prices = get_max_prices(blueprint)
 
-    # @cache
+    @cache
     def _get_max_obsidian(t, robots: Tuple, resources: Tuple) -> int:
         if t == 0:
             return 0
