@@ -41,8 +41,7 @@ def get_available_robots(blueprint, resources):
     def _is_available(robot_price):
         return all(map(lambda x: x[0] <= x[1], zip(robot_price, resources)))
 
-    mapped = map(_is_available, blueprint)
-    return {i for i, blue_print in enumerate(mapped) if blue_print}
+    return {i for i, price in enumerate(map(_is_available, blueprint)) if price}
 
 
 def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set) -> Set:
@@ -115,16 +114,16 @@ def main():
     print(f"{part_1 = }")
     print(f"part 1 finished in {time.time() - t0:0f} sec")
 
-    # t0 = time.time()
-    # part_2 = 1
-    # for i, blueprint in enumerate(blueprints[:3]):
-    #     ti = time.time()
-    #     a = (i + 1) * get_max_geodes(TIME_LIMIT_2, blueprint)
-    #     print(i, a)
-    #     print(f"finished {i} blueprint in {time.time() - ti:0f} sec")
-    #     part_2 *= a
-    # print(f"{part_2 = }")
-    # print(f"part 2 finished in {time.time() - t0:0f} sec")
+    t0 = time.time()
+    part_2 = 1
+    for i, blueprint in enumerate(blueprints[:3]):
+        ti = time.time()
+        a = (i + 1) * get_max_geodes(TIME_LIMIT_2, blueprint)
+        print(i, a)
+        print(f"finished {i} blueprint in {time.time() - ti:0f} sec")
+        part_2 *= a
+    print(f"{part_2 = }")
+    print(f"part 2 finished in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
