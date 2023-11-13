@@ -37,10 +37,6 @@ def get_updated_robots(robot_id: int, robots: Tuple) -> Tuple:
     return tuple(lst)
 
 
-def get_resources_change(robots):
-    return robots
-
-
 def get_available_robots(blueprint, resources):
     def _is_available(robot_price):
         return all(map(lambda x: x[0] <= x[1], zip(robot_price, resources)))
@@ -83,9 +79,7 @@ def get_max_geodes(time_limit, blueprint):
         if t == 0:
             continue
 
-        new_resources = tuple(
-            i + j for i, j in zip(resources, get_resources_change(robots))
-        )
+        new_resources = tuple(i + j for i, j in zip(resources, robots))
 
         available_robots = get_available_robots(blueprint, resources)
         robots_to_build = get_robots_to_build(robots, max_prices, available_robots)
@@ -160,15 +154,6 @@ if __name__ == "__main__":
 
     resources = [5, 14, 7, 0]
     assert get_available_robots(blueprint, resources) == {0, 1, 2, 3}
-
-    robots = (0, 0, 0, 0)
-    assert get_resources_change(robots) == (0, 0, 0, 0)
-
-    robots = (0, 0, 3, 0)
-    assert get_resources_change(robots) == (0, 0, 3, 0)
-
-    robots = (1, 2, 44, 210)
-    assert get_resources_change(robots) == (1, 2, 44, 210)
 
     robots = (0, 0, 0, 0)
     robot_id = 0
