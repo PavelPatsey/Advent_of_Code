@@ -72,6 +72,8 @@ def get_max_geodes(time_limit, blueprint):
         if (t, robots, resources) in seen:
             continue
         seen.add((t, robots, resources))
+        if len(seen) % 1000000 == 0:
+            print(f"{t=}, {max_geodes=}, {len(seen)=}")
 
         max_geodes = max(max_geodes, resources[3] + t * robots[3])
 
