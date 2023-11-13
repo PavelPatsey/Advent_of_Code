@@ -1,46 +1,39 @@
 import time
 from collections import deque
-from typing import Set, Tuple
+from typing import List, Set, Tuple
 
 INPUT = "input"
 TIME_LIMIT = 24
 TIME_LIMIT_2 = 32
-ROBOT_INDEXES = {
-    "ore_robot": 0,
-    "clay_robot": 1,
-    "obsidian_robot": 2,
-    "geode_robot": 3,
-}
 
 
 def get_blueprints():
     def _get_numbers_from_string(string: str):
         return list(map(int, (filter(lambda x: x.isnumeric(), string.split()))))
 
-    def _make_blueprint(lst):
-        return {
-            "ore_robot": (lst[0], 0, 0, 0),
-            "clay_robot": (lst[1], 0, 0, 0),
-            "obsidian_robot": (lst[2], lst[3], 0, 0),
-            "geode_robot": (lst[4], 0, lst[5], 0),
-        }
+    def _make_blueprint(lst: List) -> Tuple:
+        return (
+            (lst[0], 0, 0, 0),
+            (lst[1], 0, 0, 0),
+            (lst[2], lst[3], 0, 0),
+            (lst[4], 0, lst[5], 0),
+        )
 
     with open(INPUT) as file:
         data = file.readlines()
 
-    blueprints = map(_get_numbers_from_string, data)
-    blueprints = list(map(_make_blueprint, blueprints))
+    blueprints = list(map(_get_numbers_from_string, data))
+    blueprints = tuple(map(_make_blueprint, blueprints))
     return blueprints
 
 
 def get_max_prices(blueprint):
-    return tuple(map(max, zip(*blueprint.values())))
+    return tuple(map(max, zip(*blueprint)))
 
 
-def get_updated_robots(robot_name: str, robots: Tuple) -> Tuple:
-    index = ROBOT_INDEXES[robot_name]
+def get_updated_robots(robot_id: int, robots: Tuple) -> Tuple:
     lst = list(robots)
-    lst[index] += 1
+    lst[robot_id] += 1
     return tuple(lst)
 
 
@@ -49,22 +42,19 @@ def get_resources_change(robots):
 
 
 def get_available_robots(blueprint, resources):
-    def _is_available(robot_name):
-        robot_price = blueprint[robot_name]
+    def _is_available(robot_price):
         return all(map(lambda x: x[0] <= x[1], zip(robot_price, resources)))
 
-    return set(filter(_is_available, blueprint))
+    mapped = map(_is_available, blueprint)
+    return {i for i, blue_print in enumerate(mapped) if blue_print}
 
 
 def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set) -> Set:
-    def _is_to_build(name):
-        return (
-            robots[ROBOT_INDEXES[name]] < max_prices[ROBOT_INDEXES[name]]
-            or name == "geode_robot"
-        )
+    def _is_to_build(robot_id):
+        return robots[robot_id] < max_prices[robot_id] or robot_id == 3
 
     filtered = set(filter(_is_to_build, available_robots))
-    filtered = {"geode_robot"} if "geode_robot" in filtered else filtered
+    filtered = {3} if 3 in filtered else filtered
 
     return filtered
 
@@ -100,12 +90,12 @@ def get_max_geodes(time_limit, blueprint):
         available_robots = get_available_robots(blueprint, resources)
         robots_to_build = get_robots_to_build(robots, max_prices, available_robots)
 
-        for robot_name in robots_to_build:
+        for robot_id in robots_to_build:
             queue.append(
                 (
                     t - 1,
-                    get_updated_robots(robot_name, robots),
-                    tuple(i - j for i, j in zip(new_resources, blueprint[robot_name])),
+                    get_updated_robots(robot_id, robots),
+                    tuple(i - j for i, j in zip(new_resources, blueprint[robot_id])),
                 )
             )
 
@@ -120,6 +110,7 @@ def get_max_geodes(time_limit, blueprint):
 def main():
     t0 = time.time()
     blueprints = get_blueprints()
+
     part_1 = 0
     for i, blueprint in enumerate(blueprints):
         ti = time.time()
@@ -130,25 +121,25 @@ def main():
     print(f"{part_1 = }")
     print(f"part 1 finished in {time.time() - t0:0f} sec")
 
-    t0 = time.time()
-    part_2 = 1
-    for i, blueprint in enumerate(blueprints[:3]):
-        ti = time.time()
-        a = (i + 1) * get_max_geodes(TIME_LIMIT_2, blueprint)
-        print(i, a)
-        print(f"finished {i} blueprint in {time.time() - ti:0f} sec")
-        part_2 *= a
-    print(f"{part_2 = }")
-    print(f"part 2 finished in {time.time() - t0:0f} sec")
+    # t0 = time.time()
+    # part_2 = 1
+    # for i, blueprint in enumerate(blueprints[:3]):
+    #     ti = time.time()
+    #     a = (i + 1) * get_max_geodes(TIME_LIMIT_2, blueprint)
+    #     print(i, a)
+    #     print(f"finished {i} blueprint in {time.time() - ti:0f} sec")
+    #     part_2 *= a
+    # print(f"{part_2 = }")
+    # print(f"part 2 finished in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
-    blueprint = {
-        "ore_robot": (4, 0, 0, 0),
-        "clay_robot": (2, 0, 0, 0),
-        "obsidian_robot": (3, 14, 0, 0),
-        "geode_robot": (2, 0, 7, 0),
-    }
+    blueprint = (
+        (4, 0, 0, 0),
+        (2, 0, 0, 0),
+        (3, 14, 0, 0),
+        (2, 0, 7, 0),
+    )
     resources = [0, 0, 0, 0]
     assert get_available_robots(blueprint, resources) == set()
 
@@ -156,31 +147,19 @@ if __name__ == "__main__":
     assert get_available_robots(blueprint, resources) == set()
 
     resources = [2, 0, 0, 0]
-    assert get_available_robots(blueprint, resources) == {"clay_robot"}
+    assert get_available_robots(blueprint, resources) == {1}
 
     resources = [4, 0, 0, 0]
-    assert get_available_robots(blueprint, resources) == {"clay_robot", "ore_robot"}
+    assert get_available_robots(blueprint, resources) == {0, 1}
 
     resources = [3, 14, 0, 0]
-    assert get_available_robots(blueprint, resources) == {
-        "clay_robot",
-        "obsidian_robot",
-    }
+    assert get_available_robots(blueprint, resources) == {1, 2}
 
     resources = [5, 14, 0, 0]
-    assert get_available_robots(blueprint, resources) == {
-        "clay_robot",
-        "ore_robot",
-        "obsidian_robot",
-    }
+    assert get_available_robots(blueprint, resources) == {0, 1, 2}
 
     resources = [5, 14, 7, 0]
-    assert get_available_robots(blueprint, resources) == {
-        "ore_robot",
-        "obsidian_robot",
-        "geode_robot",
-        "clay_robot",
-    }
+    assert get_available_robots(blueprint, resources) == {0, 1, 2, 3}
 
     robots = (0, 0, 0, 0)
     assert get_resources_change(robots) == (0, 0, 0, 0)
@@ -192,70 +171,49 @@ if __name__ == "__main__":
     assert get_resources_change(robots) == (1, 2, 44, 210)
 
     robots = (0, 0, 0, 0)
-    robot_name = "ore_robot"
-    assert get_updated_robots(robot_name, robots) == (1, 0, 0, 0)
+    robot_id = 0
+    assert get_updated_robots(robot_id, robots) == (1, 0, 0, 0)
 
     robots = (3, 4, 5, 6)
-    robot_name = "ore_robot"
-    assert get_updated_robots(robot_name, robots) == (4, 4, 5, 6)
+    robot_id = 0
+    assert get_updated_robots(robot_id, robots) == (4, 4, 5, 6)
 
     robots = (33, 42, 51, 6)
-    robot_name = "geode_robot"
-    assert get_updated_robots(robot_name, robots) == (33, 42, 51, 7)
+    robot_id = 3
+    assert get_updated_robots(robot_id, robots) == (33, 42, 51, 7)
 
-    blueprint = {
-        "ore_robot": (4, 0, 0, 0),
-        "clay_robot": (2, 0, 0, 0),
-        "obsidian_robot": (3, 14, 0, 0),
-        "geode_robot": (2, 0, 7, 0),
-    }
+    blueprint = (
+        (4, 0, 0, 0),
+        (2, 0, 0, 0),
+        (3, 14, 0, 0),
+        (2, 0, 7, 0),
+    )
     assert get_max_prices(blueprint) == (4, 14, 7, 0)
 
-    blueprint = {
-        "ore_robot": (46, 2, 1, 2),
-        "clay_robot": (4, 17, 2, 6),
-        "obsidian_robot": (10, 55, 88, 1),
-        "geode_robot": (2, 0, 7, 0),
-    }
+    blueprint = (
+        (46, 2, 1, 2),
+        (4, 17, 2, 6),
+        (10, 55, 88, 1),
+        (2, 0, 7, 0),
+    )
     assert get_max_prices(blueprint) == (46, 55, 88, 6)
 
-    available_robots = {
-        "ore_robot",
-        "obsidian_robot",
-        "geode_robot",
-        "clay_robot",
-    }
+    available_robots = {0, 1, 2, 3}
     max_prices = (4, 2, 7, 0)
     robots = (3, 4, 5, 6)
-    assert get_robots_to_build(robots, max_prices, available_robots) == {
-        "geode_robot",
-    }
+    assert get_robots_to_build(robots, max_prices, available_robots) == {3}
 
-    available_robots = {
-        "ore_robot",
-        "geode_robot",
-    }
+    available_robots = {0, 3}
     max_prices = (4, 2, 7, 0)
     robots = (4, 4, 4, 4)
-    assert get_robots_to_build(robots, max_prices, available_robots) == {
-        "geode_robot",
-    }
+    assert get_robots_to_build(robots, max_prices, available_robots) == {3}
 
-    available_robots = {
-        "ore_robot",
-        "obsidian_robot",
-        "clay_robot",
-    }
+    available_robots = {0, 1, 2}
     max_prices = (4, 2, 7, 0)
     robots = (3, 4, 5, 6)
-    assert get_robots_to_build(robots, max_prices, available_robots) == {
-        "ore_robot",
-        "obsidian_robot",
-    }
+    assert get_robots_to_build(robots, max_prices, available_robots) == {0, 2}
 
-    available_robots = {
-        "ore_robot",
-    }
+    available_robots = {0}
     max_prices = (4, 2, 7, 0)
     robots = (7, 4, 5, 6)
     assert get_robots_to_build(robots, max_prices, available_robots) == set()
