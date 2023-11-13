@@ -84,11 +84,11 @@ def get_max_geodes(time_limit, blueprint):
     while queue:
         t, robots, resources = queue.popleft()
 
-        max_geodes = max(max_geodes, resources[3] + t * robots[3])
-
         if (t, robots, resources) in seen:
             continue
         seen.add((t, robots, resources))
+
+        max_geodes = max(max_geodes, resources[3] + t * robots[3])
 
         if t == 0:
             continue
