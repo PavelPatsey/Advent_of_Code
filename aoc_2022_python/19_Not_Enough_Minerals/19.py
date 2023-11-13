@@ -64,8 +64,7 @@ def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set)
         )
 
     filtered = set(filter(_is_to_build, available_robots))
-    if len(filtered) == 4:
-        filtered = {"geode_robot"}
+    filtered = {"geode_robot"} if "geode_robot" in filtered else filtered
 
     return filtered
 
@@ -114,8 +113,6 @@ def get_max_geodes(time_limit, blueprint):
             continue
         else:
             queue.append((t - 1, robots, new_resources))
-
-        # queue.append((t - 1, robots, new_resources))
 
     return max_geodes
 
@@ -231,8 +228,6 @@ if __name__ == "__main__":
     max_prices = (4, 2, 7, 0)
     robots = (3, 4, 5, 6)
     assert get_robots_to_build(robots, max_prices, available_robots) == {
-        "ore_robot",
-        "obsidian_robot",
         "geode_robot",
     }
 
