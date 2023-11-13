@@ -4,6 +4,7 @@ from typing import Set, Tuple
 
 INPUT = "input"
 TIME_LIMIT = 24
+TIME_LIMIT_2 = 32
 ROBOT_INDEXES = {
     "ore_robot": 0,
     "clay_robot": 1,
@@ -62,14 +63,18 @@ def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set)
             or name == "geode_robot"
         )
 
-    return set(filter(_is_to_build, available_robots))
+    filtered = set(filter(_is_to_build, available_robots))
+    if len(filtered) == 4:
+        filtered = {"geode_robot"}
+
+    return filtered
 
 
-def get_max_obsidian(blueprint):
+def get_max_geodes(time_limit, blueprint):
     max_prices = get_max_prices(blueprint)
     queue = deque()
     t, robots, resources = (
-        TIME_LIMIT,
+        time_limit,
         (1, 0, 0, 0),
         (0, 0, 0, 0),
     )
@@ -105,7 +110,12 @@ def get_max_obsidian(blueprint):
                 )
             )
 
-        queue.append((t - 1, robots, new_resources))
+        if len(available_robots) == 4:
+            continue
+        else:
+            queue.append((t - 1, robots, new_resources))
+
+        # queue.append((t - 1, robots, new_resources))
 
     return max_geodes
 
@@ -113,15 +123,26 @@ def get_max_obsidian(blueprint):
 def main():
     t0 = time.time()
     blueprints = get_blueprints()
-    sum = 0
+    part_1 = 0
     for i, blueprint in enumerate(blueprints):
         ti = time.time()
-        a = (i + 1) * get_max_obsidian(blueprint)
+        a = (i + 1) * get_max_geodes(TIME_LIMIT, blueprint)
         print(i, a)
         print(f"finished {i} blueprint in {time.time() - ti:0f} sec")
-        sum += a
-    print(f"{sum=}")
-    print(f"finished in {time.time() - t0:0f} sec")
+        part_1 += a
+    print(f"{part_1 = }")
+    print(f"part 1 finished in {time.time() - t0:0f} sec")
+
+    t0 = time.time()
+    part_2 = 1
+    for i, blueprint in enumerate(blueprints[:3]):
+        ti = time.time()
+        a = (i + 1) * get_max_geodes(TIME_LIMIT_2, blueprint)
+        print(i, a)
+        print(f"finished {i} blueprint in {time.time() - ti:0f} sec")
+        part_2 *= a
+    print(f"{part_2 = }")
+    print(f"part 2 finished in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
