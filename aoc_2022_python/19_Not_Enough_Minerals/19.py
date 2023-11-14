@@ -50,7 +50,6 @@ def get_robots_to_build(robots: Tuple, max_prices: Tuple, available_robots: Set)
 
     filtered = set(filter(_is_to_build, available_robots))
     filtered = {3} if 3 in filtered else filtered
-
     return filtered
 
 
@@ -72,8 +71,9 @@ def get_max_geodes(time_limit, blueprint):
         if (t, robots, resources) in seen:
             continue
         seen.add((t, robots, resources))
-        if len(seen) % 1000000 == 0:
-            print(f"{t=}, {max_geodes=}, {len(seen)=}")
+        if len(seen) % 1_000_000 == 0:
+            length = "{:_}".format(len(seen))
+            print(f"{t=}, {max_geodes=}, length=" + length)
 
         max_geodes = max(max_geodes, resources[3] + t * robots[3])
 
@@ -94,9 +94,7 @@ def get_max_geodes(time_limit, blueprint):
                 )
             )
 
-        if len(available_robots) == 4:
-            continue
-        else:
+        if 3 not in robots_to_build:
             queue.append((t - 1, robots, new_resources))
 
     return max_geodes
@@ -120,7 +118,7 @@ def main():
     part_2 = 1
     for i, blueprint in enumerate(blueprints[:3]):
         ti = time.time()
-        a = (i + 1) * get_max_geodes(TIME_LIMIT_2, blueprint)
+        a = get_max_geodes(TIME_LIMIT_2, blueprint)
         print(i, a)
         print(f"finished {i} blueprint in {time.time() - ti:0f} sec")
         part_2 *= a
