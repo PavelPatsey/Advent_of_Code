@@ -1,5 +1,6 @@
 import re
 from collections import deque
+from operator import add, mul
 
 INPUT = "test_input"
 ROUNDS_NUMBER = 20
@@ -27,8 +28,13 @@ def get_monkeys():
 
 
 def get_answer_1(monkeys):
-    def _get_item_after_operation(item: int, operation: str) -> int:
-        pass
+    def _get_item_after_operation(item: int, operation_str: str) -> int:
+        _, operation, b = operation_str.strip().split()
+        b = item if b == "old" else int(b)
+        if operation == "+":
+            return item + b
+        elif operation == "*":
+            return item * b
 
     for i in range(ROUNDS_NUMBER):
         for monkey in monkeys:
