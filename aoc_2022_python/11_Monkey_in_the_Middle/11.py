@@ -29,36 +29,22 @@ def get_monkeys():
     return monkeys
 
 
-def get_answer_1(monkeys):
-    for i in range(ROUNDS_NUMBER_1):
-        for monkey in monkeys:
-            while monkey["items"]:
-                item = monkey["items"].pop()
-                monkey["inspections_number"] += 1
-                old = item
-                item = eval(monkey["operation"])
-                item = item // 3
-                condition = item % monkey["divisible_by"] == 0
-                to_monkey = monkey["condition"][condition]
-                monkeys[to_monkey]["items"].append(item)
-
-    inspections_numbers = [monkey["inspections_number"] for monkey in monkeys]
-    inspections_numbers.sort()
-    return inspections_numbers[-1] * inspections_numbers[-2]
-
-
-def get_answer_2(monkeys):
+def get_answer(monkeys, part):
+    rounds_number = ROUNDS_NUMBER_1 if part == 1 else ROUNDS_NUMBER_2
     divs = [monkey["divisible_by"] for monkey in monkeys]
     mod = math.prod(divs)
 
-    for i in range(ROUNDS_NUMBER_2):
+    for i in range(rounds_number):
         for monkey in monkeys:
             while monkey["items"]:
                 item = monkey["items"].pop()
                 monkey["inspections_number"] += 1
                 old = item
                 item = eval(monkey["operation"])
-                item %= mod
+                if part == 1:
+                    item = item // 3
+                else:
+                    item = item % mod
                 condition = item % monkey["divisible_by"] == 0
                 to_monkey = monkey["condition"][condition]
                 monkeys[to_monkey]["items"].append(item)
@@ -70,8 +56,8 @@ def get_answer_2(monkeys):
 
 def main():
     monkeys = get_monkeys()
-    print(get_answer_1(deepcopy(monkeys)))
-    print(get_answer_2(deepcopy(monkeys)))
+    print(get_answer(deepcopy(monkeys), 1))
+    print(get_answer(deepcopy(monkeys), 2))
 
 
 if __name__ == "__main__":
