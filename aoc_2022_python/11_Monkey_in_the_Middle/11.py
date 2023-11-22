@@ -41,10 +41,7 @@ def get_answer(monkeys, part):
                 monkey["inspections_number"] += 1
                 old = item
                 item = eval(monkey["operation"])
-                if part == 1:
-                    item = item // 3
-                else:
-                    item = item % mod
+                item = item // 3 if part == 1 else item % mod
                 condition = item % monkey["divisible_by"] == 0
                 to_monkey = monkey["condition"][condition]
                 monkeys[to_monkey]["items"].append(item)
