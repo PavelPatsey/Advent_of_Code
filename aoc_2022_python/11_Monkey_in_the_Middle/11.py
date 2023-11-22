@@ -1,8 +1,7 @@
 import re
 from collections import deque
-from operator import add, mul
 
-INPUT = "test_input"
+INPUT = "input"
 ROUNDS_NUMBER = 20
 
 
@@ -28,24 +27,21 @@ def get_monkeys():
 
 
 def get_answer_1(monkeys):
-    def _get_item_after_operation(item: int, operation_str: str) -> int:
-        _, operation, b = operation_str.strip().split()
-        b = item if b == "old" else int(b)
-        if operation == "+":
-            return item + b
-        elif operation == "*":
-            return item * b
-
     for i in range(ROUNDS_NUMBER):
         for monkey in monkeys:
-            item = monkey["items"].pop()
-            item = _get_item_after_operation(item, monkey["operation"])
-            item = item // 3
-            condition = item % monkey["divisible_by"] == 0
-            to_monkey = monkey["condition"][condition]
-            monkeys[to_monkey]["items"].append(item)
-        for monkey in monkeys:
-            monkey["inspections_number"] += len(monkey["items"])
+            while monkey["items"]:
+                item = monkey["items"].pop()
+                monkey["inspections_number"] += 1
+                old = item
+                item = eval(monkey["operation"])
+                item = item // 3
+                condition = item % monkey["divisible_by"] == 0
+                to_monkey = monkey["condition"][condition]
+                monkeys[to_monkey]["items"].append(item)
+
+    inspections_numbers = [monkey["inspections_number"] for monkey in monkeys]
+    inspections_numbers.sort()
+    return inspections_numbers[-1] * inspections_numbers[-2]
 
 
 def main():
