@@ -1,8 +1,11 @@
+import math
 import re
 from collections import deque
+from copy import deepcopy
 
 INPUT = "input"
-ROUNDS_NUMBER = 20
+ROUNDS_NUMBER_1 = 20
+ROUNDS_NUMBER_2 = 10_000
 
 
 def get_monkeys():
@@ -27,7 +30,7 @@ def get_monkeys():
 
 
 def get_answer_1(monkeys):
-    for i in range(ROUNDS_NUMBER):
+    for i in range(ROUNDS_NUMBER_1):
         for monkey in monkeys:
             while monkey["items"]:
                 item = monkey["items"].pop()
@@ -44,9 +47,31 @@ def get_answer_1(monkeys):
     return inspections_numbers[-1] * inspections_numbers[-2]
 
 
+def get_answer_2(monkeys):
+    divs = [monkey["divisible_by"] for monkey in monkeys]
+    mod = math.prod(divs)
+
+    for i in range(ROUNDS_NUMBER_2):
+        for monkey in monkeys:
+            while monkey["items"]:
+                item = monkey["items"].pop()
+                monkey["inspections_number"] += 1
+                old = item
+                item = eval(monkey["operation"])
+                item %= mod
+                condition = item % monkey["divisible_by"] == 0
+                to_monkey = monkey["condition"][condition]
+                monkeys[to_monkey]["items"].append(item)
+
+    inspections_numbers = [monkey["inspections_number"] for monkey in monkeys]
+    inspections_numbers.sort()
+    return inspections_numbers[-1] * inspections_numbers[-2]
+
+
 def main():
     monkeys = get_monkeys()
-    print(get_answer_1(monkeys))
+    print(get_answer_1(deepcopy(monkeys)))
+    print(get_answer_2(deepcopy(monkeys)))
 
 
 if __name__ == "__main__":
