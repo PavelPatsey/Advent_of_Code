@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 INPUT = "input"
 
 
@@ -20,9 +18,9 @@ def is_list(x):
 
 def is_right_ordered(a, b) -> int:
     if is_list(a) and is_int(b):
-        return is_right_ordered(deepcopy(a), [b])
+        return is_right_ordered(a, [b])
     if is_int(a) and is_list(b):
-        return is_right_ordered([a], deepcopy(b))
+        return is_right_ordered([a], b)
     if is_int(a) and is_int(b):
         if a < b:
             return 1
