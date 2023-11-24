@@ -2,7 +2,10 @@ INPUT = "test_input"
 
 
 def get_packets():
-    pass
+    with open(INPUT) as file:
+        data = file.read().strip().split("\n\n")
+    packets = [tuple(map(eval, item.split("\n"))) for item in data]
+    return packets
 
 
 def main():
