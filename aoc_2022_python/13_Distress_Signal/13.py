@@ -62,10 +62,12 @@ if __name__ == "__main__":
     assert is_right_ordered([9], [[8, 7, 6]]) == -1
     assert is_right_ordered([[4, 4], 4, 4], [[4, 4], 4, 4, 4]) == 1
     assert is_right_ordered([7, 7, 7, 7], [7, 7, 7]) == -1
+    assert is_right_ordered([], [3]) == 1
     assert is_right_ordered([[[]]], [[]]) == -1
     assert (
         is_right_ordered(
-            [1, [2, [3, [4, [5, 6, 7]]]], 8, 9], [1, [2, [3, [4, [5, 6, 0]]]], 8, 9]
+            [1, [2, [3, [4, [5, 6, 7]]]], 8, 9],
+            [1, [2, [3, [4, [5, 6, 0]]]], 8, 9],
         )
         == -1
     )
