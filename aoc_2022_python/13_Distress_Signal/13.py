@@ -28,8 +28,6 @@ def is_right_ordered(a, b) -> int:
             return 0
         elif a > b:
             return -1
-        else:
-            print("error!")
 
     for new_a, new_b in zip(a, b):
         res = is_right_ordered(new_a, new_b)
@@ -37,14 +35,13 @@ def is_right_ordered(a, b) -> int:
             return 1
         elif res == -1:
             return -1
+
     if len(a) < len(b):
         return 1
     elif len(a) == len(b):
         return 0
     elif len(a) > len(b):
         return -1
-    else:
-        print("error_2!")
 
 
 def main():
