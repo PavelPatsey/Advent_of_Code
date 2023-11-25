@@ -1,11 +1,15 @@
+from functools import cmp_to_key
+
 INPUT = "input"
 
 
 def get_packets():
     with open(INPUT) as file:
-        data = file.read().strip().split("\n\n")
-    packets = [tuple(map(eval, item.split("\n"))) for item in data]
-    return packets
+        data = file.read().strip()
+    packets_1 = [tuple(map(eval, item.split("\n"))) for item in data.split("\n\n")]
+    packets_2 = [eval(x) for x in data.replace("\n\n", "\n").split("\n")]
+    packets_2 += [[[2]], [[6]]]
+    return packets_1, packets_2
 
 
 def is_int(x):
@@ -41,9 +45,19 @@ def get_answer_1(packets):
     return sum(mapped)
 
 
+def get_answer_2(packets):
+    sorted_packets = sorted(packets, key=cmp_to_key(compare_packets), reverse=True)
+    result = 1
+    for i in range(len(sorted_packets)):
+        if sorted_packets[i] in ([[2]], [[6]]):
+            result *= i + 1
+    return result
+
+
 def main():
-    packets = get_packets()
-    print(f"part 1: {get_answer_1(packets)}")
+    packets_1, packets_2 = get_packets()
+    print(f"part 1: {get_answer_1(packets_1)}")
+    print(f"part 2: {get_answer_2(packets_2)}")
 
 
 if __name__ == "__main__":
