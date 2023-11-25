@@ -30,8 +30,8 @@ def compare_packets(a, b) -> int:
             return 1
         elif res == -1:
             return -1
-
-    return (len(a) < len(b)) - (len(a) > len(b))
+    len_a, len_b = len(a), len(b)
+    return (len_a < len_b) - (len_a > len_b)
 
 
 def get_answer_1(packets):
