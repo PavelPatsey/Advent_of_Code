@@ -22,12 +22,7 @@ def compare_packets(a, b) -> int:
     if is_int(a) and is_list(b):
         return compare_packets([a], b)
     if is_int(a) and is_int(b):
-        if a < b:
-            return 1
-        elif a == b:
-            return 0
-        elif a > b:
-            return -1
+        return (a < b) - (a > b)
 
     for new_a, new_b in zip(a, b):
         res = compare_packets(new_a, new_b)
@@ -36,12 +31,7 @@ def compare_packets(a, b) -> int:
         elif res == -1:
             return -1
 
-    if len(a) < len(b):
-        return 1
-    elif len(a) == len(b):
-        return 0
-    elif len(a) > len(b):
-        return -1
+    return (len(a) < len(b)) - (len(a) > len(b))
 
 
 def get_answer_1(packets):
