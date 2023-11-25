@@ -75,5 +75,7 @@ if __name__ == "__main__":
         )
         == -1
     )
+    assert compare_packets([], []) == 0
+    assert compare_packets(1, 1) == 0
 
     main()
