@@ -44,13 +44,16 @@ def compare_packets(a, b) -> int:
         return -1
 
 
+def get_answer_1(packets):
+    compared = map(lambda x: compare_packets(x[0], x[1]), packets)
+    filtered = filter(lambda x: x[1] == 1, enumerate(compared))
+    mapped = map(lambda x: x[0] + 1, filtered)
+    return sum(mapped)
+
+
 def main():
     packets = get_packets()
-    lst = list(map(lambda x: compare_packets(*x), packets))
-    print(list(enumerate(lst)))
-    filtered = filter(lambda x: x[1] == 1, enumerate(lst))
-    mapped = map(lambda x: x[0] + 1, filtered)
-    print(sum(mapped))
+    print(f"part 1: {get_answer_1(packets)}")
 
 
 if __name__ == "__main__":
