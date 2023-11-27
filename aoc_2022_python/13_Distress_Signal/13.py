@@ -23,19 +23,19 @@ def is_list(x):
 def compare_packets(a, b) -> int:
     if is_list(a) and is_int(b):
         return compare_packets(a, [b])
-    if is_int(a) and is_list(b):
+    elif is_int(a) and is_list(b):
         return compare_packets([a], b)
-    if is_int(a) and is_int(b):
+    elif is_int(a) and is_int(b):
         return (a < b) - (a > b)
-
-    for new_a, new_b in zip(a, b):
-        res = compare_packets(new_a, new_b)
-        if res == 1:
-            return 1
-        elif res == -1:
-            return -1
-    len_a, len_b = len(a), len(b)
-    return (len_a < len_b) - (len_a > len_b)
+    else:
+        for new_a, new_b in zip(a, b):
+            res = compare_packets(new_a, new_b)
+            if res == 1:
+                return 1
+            elif res == -1:
+                return -1
+        len_a, len_b = len(a), len(b)
+        return (len_a < len_b) - (len_a > len_b)
 
 
 def get_answer_1(packets):
