@@ -2,27 +2,27 @@ INPUT = "test_input"
 MOVES_NUMBER = 1
 ROCKS = [
     [
-        "..####.",
+        "..@@@@.",
     ],
     [
-        "...#...",
-        "..###..",
-        "...#...",
+        "...@...",
+        "..@@@..",
+        "...@...",
     ],
     [
-        "..###..",
-        "....#..",
-        "....#..",
+        "..@@@..",
+        "....@..",
+        "....@..",
     ],
     [
-        "..#....",
-        "..#....",
-        "..#....",
-        "..#....",
+        "..@....",
+        "..@....",
+        "..@....",
+        "..@....",
     ],
     [
-        "..##...",
-        "..##...",
+        "..@@...",
+        "..@@...",
     ],
 ]
 
@@ -33,18 +33,30 @@ def get_jets():
     return jets
 
 
-def get_shifted_part(part, jet):
+def is_can_be_shifted(chamber, jet):
+    can_be_shifted = True
+    chamber_index = len(chamber) - 1
     if jet == ">":
-        condition = any(map(lambda x: x[-1] == "#", part))
-        n = -1
-    else:
-        condition = any(map(lambda x: x[0] == "#", part))
-        n = 1
-
-    if not condition:
-        for i in range(len(part)):
-            part[i] = part[i][n:] + part[i][:n]
-    return part
+        while chamber_index >= 0 and can_be_shifted:
+            string = chamber[chamber_index]
+            can_be_shifted = string[-1] != "@"
+            string_index = 0
+            while string_index < len(string) - 2 and can_be_shifted:
+                if (string[string_index], string[string_index + 1]) == ("@", "#"):
+                    can_be_shifted = False
+                string_index += 1
+            chamber_index -= 1
+    else:  # jet == "<"
+        while chamber_index >= 0 and can_be_shifted:
+            string = chamber[chamber_index]
+            can_be_shifted = string[0] != "@"
+            string_index = 0
+            while string_index < len(string) - 2 and can_be_shifted:
+                if (string[string_index], string[string_index + 1]) == ("#", "@"):
+                    can_be_shifted = False
+                string_index += 1
+            chamber_index -= 1
+    return can_be_shifted
 
 
 def get_answer_1(jets):
@@ -56,18 +68,19 @@ def get_answer_1(jets):
     n = 0
     while n < MOVES_NUMBER:
         rock_index = rock_index % len_rocks
-        chamber_part = [".......", ".......", "......."]
-        for rock_part in reversed(ROCKS[rock_index]):
-            chamber_part.append(rock_part)
+        chamber += ["......."] * 4
+        for rock_part in ROCKS[rock_index]:
+            chamber.append(rock_part)
 
-        for _ in range(3):
-            jet_index = jet_index % len_jets
-            jet = jets[jet_index]
-            chamber_part = get_shifted_part(chamber_part, jet)
-            del chamber_part[0]
-            jet_index += 1
+        # проверка, что можно сдвинуть
+        jet_index = jet_index % len_jets
+        jet = jets[jet_index]
+        can_be_shifted = is_can_be_shifted(chamber, jet)
 
-        chamber += chamber_part
+        # jet_index += 1
+
+        # падаем
+        # мб удаляем "......." такую последнюю строчку
         rock_index += 1
         n += 1
     return chamber
@@ -82,64 +95,70 @@ def main():
 
 
 if __name__ == "__main__":
-    part = [
-        "..###..",
-        "....#..",
-        "....#..",
+    chamber = [
+        "..####.",
         ".......",
         ".......",
+        ".......",
+        "...@...",
+        "..@@@..",
+        "...@...",
     ]
-    assert get_shifted_part(part, ">") == [
-        "...###.",
-        ".....#.",
-        ".....#.",
-        ".......",
-        ".......",
-    ]
+    assert is_can_be_shifted(chamber, ">") is True
 
-    part = [
-        "....###",
-        "......#",
-        "......#",
+    chamber = [
+        "..####.",
         ".......",
         ".......",
+        ".......",
+        ".....@.",
+        "....@@@",
+        ".....@.",
     ]
-    assert get_shifted_part(part, ">") == [
-        "....###",
-        "......#",
-        "......#",
-        ".......",
-        ".......",
-    ]
+    assert is_can_be_shifted(chamber, ">") is False
 
-    part = [
-        "...#...",
-        "..###..",
-        "...#...",
+    chamber = [
+        "..####.",
         ".......",
         ".......",
+        ".......",
+        "...@...",
+        "..@@@..",
+        "...@#..",
     ]
-    assert get_shifted_part(part, "<") == [
-        "..#....",
-        ".###...",
-        "..#....",
-        ".......",
-        ".......",
-    ]
+    assert is_can_be_shifted(chamber, ">") is False
 
-    part = [
-        ".#.....",
-        "###....",
-        ".#.....",
+    chamber = [
+        "..####.",
         ".......",
         ".......",
+        ".......",
+        "...@...",
+        "..@@@..",
+        "...@...",
     ]
-    assert get_shifted_part(part, "<") == [
-        ".#.....",
-        "###....",
-        ".#.....",
+    assert is_can_be_shifted(chamber, "<") is True
+
+    chamber = [
+        "..####.",
         ".......",
         ".......",
+        ".......",
+        ".@.....",
+        "@@@....",
+        ".@.....",
     ]
+    assert is_can_be_shifted(chamber, "<") is False
+
+    chamber = [
+        "..####.",
+        ".......",
+        ".......",
+        ".......",
+        "...@...",
+        "..@@@..",
+        "...#@..",
+    ]
+    assert is_can_be_shifted(chamber, "<") is False
 
     main()
