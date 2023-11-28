@@ -41,11 +41,9 @@ def get_shifted_part(part, jet):
         condition = any(map(lambda x: x[0] == "#", part))
         n = 1
 
-    if condition:
-        return part
-
-    for i in range(len(part)):
-        part[i] = part[i][n:] + part[i][:n]
+    if not condition:
+        for i in range(len(part)):
+            part[i] = part[i][n:] + part[i][:n]
     return part
 
 
