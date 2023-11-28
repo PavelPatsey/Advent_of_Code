@@ -34,15 +34,16 @@ def get_jets():
 
 
 def is_can_be_shifted(chamber, jet):
-    can_be_shifted = True
     chamber_index = len(chamber) - 1
+    keep_looking = "@" in chamber[chamber_index]
+    can_be_shifted = keep_looking
     if jet == ">":
         comparison_index = -1
         comparison_tuple = ("@", "#")
     else:
         comparison_index = 0
         comparison_tuple = ("#", "@")
-    while chamber_index >= 0 and can_be_shifted:
+    while chamber_index >= 0 and keep_looking and can_be_shifted:
         string = chamber[chamber_index]
         can_be_shifted = string[comparison_index] != "@"
         string_index = 0
@@ -51,6 +52,7 @@ def is_can_be_shifted(chamber, jet):
                 can_be_shifted = False
             string_index += 1
         chamber_index -= 1
+        keep_looking = "@" in chamber[chamber_index]
     return can_be_shifted
 
 
@@ -153,6 +155,13 @@ if __name__ == "__main__":
         "...@...",
         "..@@@..",
         "...#@..",
+    ]
+    assert is_can_be_shifted(chamber, "<") is False
+
+    chamber = [
+        "...#...",
+        "..###..",
+        "...#..",
     ]
     assert is_can_be_shifted(chamber, "<") is False
 
