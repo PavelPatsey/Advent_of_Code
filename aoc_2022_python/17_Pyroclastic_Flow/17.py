@@ -56,14 +56,14 @@ def is_can_be_shifted(chamber, jet):
     return can_be_shifted
 
 
-def get_shifted_chamber(old_chamber, jet):
-    chamber_index = old_chamber.copy()
-    chamber_index = len(chamber) - 1
-    keep_looking = "@" in chamber[chamber_index]
+def get_shifted_chamber(chamber, jet):
+    new_chamber = chamber.copy()
+    chamber_index = len(new_chamber) - 1
+    keep_looking = "@" in new_chamber[chamber_index]
 
     if jet == ">":
         while chamber_index >= 0 and keep_looking:
-            string = chamber[chamber_index]
+            string = new_chamber[chamber_index]
             len_string = len(string)
             string_index = len_string - 1
             new_string = ""
@@ -78,12 +78,12 @@ def get_shifted_chamber(old_chamber, jet):
                 string_index -= 1
             new_string = string[0] + new_string
 
-            chamber[chamber_index] = new_string
+            new_chamber[chamber_index] = new_string
             chamber_index -= 1
-            keep_looking = "@" in chamber[chamber_index]
+            keep_looking = "@" in new_chamber[chamber_index]
     else:
         while chamber_index >= 0 and keep_looking:
-            string = chamber[chamber_index]
+            string = new_chamber[chamber_index]
             len_string = len(string)
             string_index = 0
             new_string = ""
@@ -98,11 +98,11 @@ def get_shifted_chamber(old_chamber, jet):
                 string_index += 1
             new_string = new_string + string[len_string - 1]
 
-            chamber[chamber_index] = new_string
+            new_chamber[chamber_index] = new_string
             chamber_index -= 1
-            keep_looking = "@" in chamber[chamber_index]
+            keep_looking = "@" in new_chamber[chamber_index]
 
-    return chamber
+    return new_chamber
 
 
 def get_answer_1(jets):
@@ -221,8 +221,7 @@ if __name__ == "__main__":
         "....@..",
         "....@..",
     ]
-    shifted_chamber = get_shifted_chamber(chamber, ">")
-    assert shifted_chamber == [
+    assert get_shifted_chamber(chamber, ">") == [
         ".......",
         ".......",
         "...@@@.",
@@ -237,8 +236,7 @@ if __name__ == "__main__":
         "....@..",
         "....@..",
     ]
-    shifted_chamber = get_shifted_chamber(chamber, ">")
-    assert shifted_chamber == [
+    assert get_shifted_chamber(chamber, ">") == [
         "...#...",
         ".......",
         "##.@@@.",
@@ -249,8 +247,7 @@ if __name__ == "__main__":
     chamber = [
         "....@..",
     ]
-    shifted_chamber = get_shifted_chamber(chamber, "<")
-    assert shifted_chamber == [
+    assert get_shifted_chamber(chamber, "<") == [
         "...@...",
     ]
 
@@ -261,8 +258,7 @@ if __name__ == "__main__":
         "....@..",
         "....@..",
     ]
-    shifted_chamber = get_shifted_chamber(chamber, "<")
-    assert shifted_chamber == [
+    assert get_shifted_chamber(chamber, "<") == [
         ".......",
         ".......",
         ".@@@...",
@@ -277,8 +273,7 @@ if __name__ == "__main__":
         "....@.#",
         "....@.#",
     ]
-    shifted_chamber = get_shifted_chamber(chamber, "<")
-    assert shifted_chamber == [
+    assert get_shifted_chamber(chamber, "<") == [
         "...#...",
         "#######",
         ".@@@..#",
