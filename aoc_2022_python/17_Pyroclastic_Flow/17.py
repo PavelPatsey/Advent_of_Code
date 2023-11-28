@@ -56,6 +56,55 @@ def is_can_be_shifted(chamber, jet):
     return can_be_shifted
 
 
+def get_shifted_chamber(old_chamber, jet):
+    chamber_index = old_chamber.copy()
+    chamber_index = len(chamber) - 1
+    keep_looking = "@" in chamber[chamber_index]
+
+    if jet == ">":
+        while chamber_index >= 0 and keep_looking:
+            string = chamber[chamber_index]
+            len_string = len(string)
+            string_index = len_string - 1
+            new_string = ""
+            while string_index >= 1:
+                if string[string_index - 1] == "@":
+                    new_string = "@" + new_string
+                else:
+                    if string[string_index] == "@":
+                        new_string = "." + new_string
+                    else:
+                        new_string = string[string_index] + new_string
+                string_index -= 1
+            new_string = string[0] + new_string
+
+            chamber[chamber_index] = new_string
+            chamber_index -= 1
+            keep_looking = "@" in chamber[chamber_index]
+    else:
+        while chamber_index >= 0 and keep_looking:
+            string = chamber[chamber_index]
+            len_string = len(string)
+            string_index = 0
+            new_string = ""
+            while string_index <= len_string - 2:
+                if string[string_index + 1] == "@":
+                    new_string = new_string + "@"
+                else:
+                    if string[string_index] == "@":
+                        new_string = new_string + "."
+                    else:
+                        new_string = new_string + string[string_index]
+                string_index += 1
+            new_string = new_string + string[len_string - 1]
+
+            chamber[chamber_index] = new_string
+            chamber_index -= 1
+            keep_looking = "@" in chamber[chamber_index]
+
+    return chamber
+
+
 def get_answer_1(jets):
     len_rocks = len(ROCKS)
     rock_index = 0
@@ -164,5 +213,77 @@ if __name__ == "__main__":
         "...#..",
     ]
     assert is_can_be_shifted(chamber, "<") is False
+
+    chamber = [
+        ".......",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    shifted_chamber = get_shifted_chamber(chamber, ">")
+    assert shifted_chamber == [
+        ".......",
+        ".......",
+        "...@@@.",
+        ".....@.",
+        ".....@.",
+    ]
+
+    chamber = [
+        "...#...",
+        ".......",
+        "##@@@..",
+        "....@..",
+        "....@..",
+    ]
+    shifted_chamber = get_shifted_chamber(chamber, ">")
+    assert shifted_chamber == [
+        "...#...",
+        ".......",
+        "##.@@@.",
+        ".....@.",
+        ".....@.",
+    ]
+
+    chamber = [
+        "....@..",
+    ]
+    shifted_chamber = get_shifted_chamber(chamber, "<")
+    assert shifted_chamber == [
+        "...@...",
+    ]
+
+    chamber = [
+        ".......",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    shifted_chamber = get_shifted_chamber(chamber, "<")
+    assert shifted_chamber == [
+        ".......",
+        ".......",
+        ".@@@...",
+        "...@...",
+        "...@...",
+    ]
+
+    chamber = [
+        "...#...",
+        "#######",
+        "..@@@.#",
+        "....@.#",
+        "....@.#",
+    ]
+    shifted_chamber = get_shifted_chamber(chamber, "<")
+    assert shifted_chamber == [
+        "...#...",
+        "#######",
+        ".@@@..#",
+        "...@..#",
+        "...@..#",
+    ]
 
     main()
