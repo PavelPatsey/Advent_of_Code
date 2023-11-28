@@ -1,5 +1,14 @@
+INPUT = "test_input"
+
+
+def get_jets():
+    with open(INPUT) as file:
+        jets = file.read().strip()
+    return jets
+
+
 def main():
-    print("start")
+    jets = get_jets()
 
 
 if __name__ == "__main__":
