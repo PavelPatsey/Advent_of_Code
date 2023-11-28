@@ -37,25 +37,20 @@ def is_can_be_shifted(chamber, jet):
     can_be_shifted = True
     chamber_index = len(chamber) - 1
     if jet == ">":
-        while chamber_index >= 0 and can_be_shifted:
-            string = chamber[chamber_index]
-            can_be_shifted = string[-1] != "@"
-            string_index = 0
-            while string_index < len(string) - 2 and can_be_shifted:
-                if (string[string_index], string[string_index + 1]) == ("@", "#"):
-                    can_be_shifted = False
-                string_index += 1
-            chamber_index -= 1
-    else:  # jet == "<"
-        while chamber_index >= 0 and can_be_shifted:
-            string = chamber[chamber_index]
-            can_be_shifted = string[0] != "@"
-            string_index = 0
-            while string_index < len(string) - 2 and can_be_shifted:
-                if (string[string_index], string[string_index + 1]) == ("#", "@"):
-                    can_be_shifted = False
-                string_index += 1
-            chamber_index -= 1
+        comparison_index = -1
+        comparison_tuple = ("@", "#")
+    else:
+        comparison_index = 0
+        comparison_tuple = ("#", "@")
+    while chamber_index >= 0 and can_be_shifted:
+        string = chamber[chamber_index]
+        can_be_shifted = string[comparison_index] != "@"
+        string_index = 0
+        while string_index < len(string) - 2 and can_be_shifted:
+            if (string[string_index], string[string_index + 1]) == comparison_tuple:
+                can_be_shifted = False
+            string_index += 1
+        chamber_index -= 1
     return can_be_shifted
 
 
