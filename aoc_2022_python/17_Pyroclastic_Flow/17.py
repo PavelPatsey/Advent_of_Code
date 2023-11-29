@@ -1,5 +1,5 @@
 INPUT = "test_input"
-MOVES_NUMBER = 2
+MOVES_NUMBER = 10
 ROCKS = [
     [
         "..@@@@.",
@@ -183,19 +183,24 @@ def get_answer_1(jets):
     n = 0
     while n < MOVES_NUMBER:
         rock_index = rock_index % len_rocks
-        chamber += ["......."] * 4
+        chamber += ["......."] * 3
         for rock_part in ROCKS[rock_index]:
             chamber.append(rock_part)
 
+        jet_index = jet_index % len_jets
+        jet = jets[jet_index]
+        if is_can_be_shifted(chamber, jet):
+            chamber = get_shifted_chamber(chamber, jet)
+        jet_index += 1
+
         while is_can_be_moved_down(chamber):
-            jet_index += 1
+            chamber = get_moved_down_chamber(chamber)
+
             jet_index = jet_index % len_jets
             jet = jets[jet_index]
             if is_can_be_shifted(chamber, jet):
                 chamber = get_shifted_chamber(chamber, jet)
-
-            if is_can_be_moved_down(chamber):
-                chamber = get_moved_down_chamber(chamber)
+            jet_index += 1
 
         chamber = get_frozen_chamber(chamber)
         rock_index += 1
@@ -209,6 +214,8 @@ def main():
     answer_1 = get_answer_1(jets)
     for i in reversed(answer_1):
         print(i)
+
+    # print(len(get_answer_1(jets)))
 
 
 if __name__ == "__main__":
