@@ -166,14 +166,14 @@ def get_frozen_chamber(chamber):
     return new_chamber
 
 
-def get_answer_1(jets):
+def get_chamber_after_moves(jets, moves_number):
     len_rocks = len(ROCKS)
     rock_index = 0
     len_jets = len(jets)
     jet_index = 0
     chamber = []
     n = 0
-    while n < MOVES_NUMBER:
+    while n < moves_number:
         rock_index = rock_index % len_rocks
         chamber += ["......."] * 3
         for rock_part in ROCKS[rock_index]:
@@ -203,11 +203,11 @@ def get_answer_1(jets):
 def main():
     jets = get_jets()
 
-    answer_1 = get_answer_1(jets)
+    answer_1 = get_chamber_after_moves(jets, MOVES_NUMBER)
     for i in reversed(answer_1):
         print(i)
 
-    print(len(get_answer_1(jets)))
+    print(len(get_chamber_after_moves(jets, MOVES_NUMBER)))
 
 
 if __name__ == "__main__":
