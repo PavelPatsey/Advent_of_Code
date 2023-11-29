@@ -123,6 +123,35 @@ def is_can_be_moved_down(chamber):
     return can_be_moved_down
 
 
+def get_moved_down_chamber(chamber):
+    new_chamber = chamber.copy()
+    chamber_index = len(new_chamber) - 1
+    keep_looking = "@" in new_chamber[chamber_index]
+    len_string = len(new_chamber[0])
+    indexes = []
+    while chamber_index >= 0 and keep_looking:
+        string = new_chamber[chamber_index]
+        for i in range(len_string - 1):
+            if string[i] == "@":
+                indexes.append((chamber_index, i))
+        chamber_index -= 1
+        keep_looking = "@" in new_chamber[chamber_index]
+
+    for i, j in indexes:
+        lst = list(new_chamber[i])
+        lst[j] = "."
+        string = "".join(lst)
+        new_chamber[i] = string
+    for i, j in indexes:
+        lst = list(new_chamber[i - 1])
+        lst[j] = "@"
+        string = "".join(lst)
+        new_chamber[i - 1] = string
+    if new_chamber[-1] == ".......":
+        del new_chamber[-1]
+    return new_chamber
+
+
 def get_answer_1(jets):
     len_rocks = len(ROCKS)
     rock_index = 0
@@ -344,5 +373,34 @@ if __name__ == "__main__":
         "....@..",
     ]
     assert is_can_be_moved_down(chamber) is True
+
+    chamber = [
+        ".......",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    assert get_moved_down_chamber(chamber) == [
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+
+    chamber = [
+        ".......",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "#...@..",
+    ]
+    assert get_moved_down_chamber(chamber) == [
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+        "#......",
+    ]
 
     main()
