@@ -225,7 +225,7 @@ def main():
     for i in reversed(answer_1):
         print(i)
 
-    # print(len(get_answer_1(jets)))
+    print(len(get_answer_1(jets)))
 
 
 if __name__ == "__main__":
@@ -299,6 +299,16 @@ if __name__ == "__main__":
         "...#...",
         "..###..",
         "...#..",
+    ]
+    assert is_can_be_shifted(chamber, "<") is False
+
+    chamber = [
+        "#######",
+    ]
+    assert is_can_be_shifted(chamber, "<") is False
+
+    chamber = [
+        "@@@@@@@",
     ]
     assert is_can_be_shifted(chamber, "<") is False
 
