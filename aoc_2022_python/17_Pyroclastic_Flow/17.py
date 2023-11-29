@@ -152,6 +152,22 @@ def get_moved_down_chamber(chamber):
     return new_chamber
 
 
+def get_frozen_chamber(chamber):
+    new_chamber = chamber.copy()
+    chamber_index = len(new_chamber) - 1
+    keep_looking = "@" in new_chamber[chamber_index]
+    len_lst = len(new_chamber[0])
+    while chamber_index >= 0 and keep_looking:
+        lst = list(new_chamber[chamber_index])
+        for i in range(len_lst - 1):
+            if lst[i] == "@":
+                lst[i] = "#"
+        new_chamber[chamber_index] = "".join(lst)
+        chamber_index -= 1
+        keep_looking = "@" in new_chamber[chamber_index]
+    return new_chamber
+
+
 def get_answer_1(jets):
     len_rocks = len(ROCKS)
     rock_index = 0
@@ -165,18 +181,18 @@ def get_answer_1(jets):
         for rock_part in ROCKS[rock_index]:
             chamber.append(rock_part)
 
-        # проверка, что можно сдвинуть
-        jet_index = jet_index % len_jets
-        jet = jets[jet_index]
-        can_be_shifted = is_can_be_shifted(chamber, jet)
-        if can_be_shifted:
-            chamber = get_shifted_chamber(chamber, jet)
-        can_be_moved_down = is_can_be_moved_down(chamber)
+        while is_can_be_moved_down(chamber):
+            jet_index = jet_index % len_jets
+            jet = jets[jet_index]
+            if is_can_be_shifted(chamber, jet):
+                chamber = get_shifted_chamber(chamber, jet)
+            jet_index += 1
 
-        # jet_index += 1
+            if is_can_be_moved_down(chamber):
+                chamber = get_moved_down_chamber(chamber)
 
-        # падаем
-        # мб удаляем "......." такую последнюю строчку
+        chamber = get_frozen_chamber(chamber)
+
         rock_index += 1
         n += 1
     return chamber
@@ -401,6 +417,63 @@ if __name__ == "__main__":
         "....@..",
         "....@..",
         "#......",
+    ]
+
+    chamber = [
+        ".......",
+        ".......",
+        ".......",
+        ".......",
+        "..@@@@.",
+    ]
+    assert get_moved_down_chamber(chamber) == [
+        ".......",
+        ".......",
+        ".......",
+        "..@@@@.",
+    ]
+
+    chamber = [
+        ".......",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    assert get_frozen_chamber(chamber) == [
+        ".......",
+        ".......",
+        "..###..",
+        "....#..",
+        "....#..",
+    ]
+
+    chamber = [
+        ".......",
+        ".......",
+        ".......",
+        "..@@@@.",
+    ]
+    assert get_frozen_chamber(chamber) == [
+        ".......",
+        ".......",
+        ".......",
+        "..####.",
+    ]
+
+    chamber = [
+        ".......",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "#...@..",
+    ]
+    assert get_frozen_chamber(chamber) == [
+        ".......",
+        ".......",
+        "..###..",
+        "....#..",
+        "#...#..",
     ]
 
     main()
