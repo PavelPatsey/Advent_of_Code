@@ -313,6 +313,14 @@ if __name__ == "__main__":
     assert is_can_be_shifted(chamber, "<") is False
 
     chamber = [
+        "....#..",
+        "..@@#..",
+        "..@@#..",
+        "....#..",
+    ]
+    assert is_can_be_shifted(chamber, ">") is False
+
+    chamber = [
         ".......",
         ".......",
         "..@@@..",
