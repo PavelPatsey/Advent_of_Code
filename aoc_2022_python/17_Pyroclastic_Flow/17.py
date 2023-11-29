@@ -1,5 +1,5 @@
 INPUT = "test_input"
-MOVES_NUMBER = 1
+MOVES_NUMBER = 2
 ROCKS = [
     [
         "..@@@@.",
@@ -76,7 +76,10 @@ def get_shifted_chamber(chamber, jet):
                     else:
                         new_string = string[string_index] + new_string
                 string_index -= 1
-            new_string = string[0] + new_string
+            if string[0] == "@":
+                new_string = "." + new_string
+            else:
+                new_string = string[0] + new_string
 
             new_chamber[chamber_index] = new_string
             chamber_index -= 1
@@ -96,7 +99,10 @@ def get_shifted_chamber(chamber, jet):
                     else:
                         new_string = new_string + string[string_index]
                 string_index += 1
-            new_string = new_string + string[len_string - 1]
+            if string[-1] == "@":
+                new_string = new_string + "."
+            else:
+                new_string = new_string + string[-1]
 
             new_chamber[chamber_index] = new_string
             chamber_index -= 1
@@ -344,6 +350,20 @@ if __name__ == "__main__":
         ".@@@..#",
         "...@..#",
         "...@..#",
+    ]
+
+    chamber = [
+        "....@@@",
+    ]
+    assert get_shifted_chamber(chamber, "<") == [
+        "...@@@.",
+    ]
+
+    chamber = [
+        "@@@....",
+    ]
+    assert get_shifted_chamber(chamber, ">") == [
+        ".@@@...",
     ]
 
     chamber = [
