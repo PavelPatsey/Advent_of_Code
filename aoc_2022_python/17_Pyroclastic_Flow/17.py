@@ -131,7 +131,7 @@ def get_moved_down_chamber(chamber):
     indexes = []
     while chamber_index >= 0 and keep_looking:
         string = new_chamber[chamber_index]
-        for i in range(len_string - 1):
+        for i in range(len_string):
             if string[i] == "@":
                 indexes.append((chamber_index, i))
         chamber_index -= 1
@@ -182,17 +182,16 @@ def get_answer_1(jets):
             chamber.append(rock_part)
 
         while is_can_be_moved_down(chamber):
+            jet_index += 1
             jet_index = jet_index % len_jets
             jet = jets[jet_index]
             if is_can_be_shifted(chamber, jet):
                 chamber = get_shifted_chamber(chamber, jet)
-            jet_index += 1
 
             if is_can_be_moved_down(chamber):
                 chamber = get_moved_down_chamber(chamber)
 
         chamber = get_frozen_chamber(chamber)
-
         rock_index += 1
         n += 1
     return chamber
@@ -431,6 +430,20 @@ if __name__ == "__main__":
         ".......",
         ".......",
         "..@@@@.",
+    ]
+
+    chamber = [
+        ".......",
+        ".......",
+        ".......",
+        ".......",
+        "@@@@@@@",
+    ]
+    assert get_moved_down_chamber(chamber) == [
+        ".......",
+        ".......",
+        ".......",
+        "@@@@@@@",
     ]
 
     chamber = [
