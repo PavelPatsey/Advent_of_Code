@@ -1,5 +1,5 @@
 INPUT = "test_input"
-MOVES_NUMBER = 2022
+MOVES_NUMBER = 10
 ROCKS = [
     [
         "..@@@@.",
@@ -49,7 +49,7 @@ def is_can_be_shifted(chamber, jet):
         string = chamber[chamber_index]
         can_be_shifted = string[comparison_index] != "@"
         string_index = 0
-        while string_index < len(string) - 2 and can_be_shifted:
+        while string_index < len(string) - 1 and can_be_shifted:
             if (string[string_index], string[string_index + 1]) == comparison_tuple:
                 can_be_shifted = False
             string_index += 1
@@ -293,6 +293,21 @@ if __name__ == "__main__":
         "@@@@@@@",
     ]
     assert is_can_be_shifted(chamber, "<") is False
+
+    chamber = [
+        ".....@#",
+    ]
+    assert is_can_be_shifted(chamber, ">") is False
+
+    chamber = [
+        "#@.....",
+    ]
+    assert is_can_be_shifted(chamber, "<") is False
+
+    chamber = [
+        "#@.....",
+    ]
+    assert is_can_be_shifted(chamber, ">") is True
 
     chamber = [
         "....#..",
