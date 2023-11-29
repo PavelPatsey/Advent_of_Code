@@ -1,5 +1,5 @@
 INPUT = "test_input"
-MOVES_NUMBER = 10
+MOVES_NUMBER = 2022
 ROCKS = [
     [
         "..@@@@.",
@@ -107,7 +107,7 @@ def is_can_be_moved_down(chamber):
         string = chamber[chamber_index]
         next_string = chamber[chamber_index - 1]
         len_string = len(string)
-        for i in range(len_string - 1):
+        for i in range(len_string):
             if string[i] == "@" and next_string[i] not in (".", "@"):
                 can_be_moved_down = False
         chamber_index -= 1
@@ -469,6 +469,15 @@ if __name__ == "__main__":
         "....#..",
     ]
     assert is_can_be_moved_down(chamber) is True
+
+    chamber = [
+        "...####",
+        "......#",
+        "......#",
+        ".....@@",
+        ".....@@",
+    ]
+    assert is_can_be_moved_down(chamber) is False
 
     chamber = [
         ".......",
