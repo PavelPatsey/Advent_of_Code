@@ -105,6 +105,24 @@ def get_shifted_chamber(chamber, jet):
     return new_chamber
 
 
+def is_can_be_moved_down(chamber):
+    chamber_index = len(chamber) - 1
+    keep_looking = "@" in chamber[chamber_index]
+    can_be_moved_down = keep_looking
+    while chamber_index >= 1 and keep_looking and can_be_moved_down:
+        string = chamber[chamber_index]
+        next_string = chamber[chamber_index - 1]
+        len_string = len(string)
+        for i in range(len_string - 1):
+            if string[i] == "@" and next_string[i] not in (".", "@"):
+                can_be_moved_down = False
+        chamber_index -= 1
+        keep_looking = "@" in chamber[chamber_index]
+    if "@" in chamber[0]:
+        can_be_moved_down = False
+    return can_be_moved_down
+
+
 def get_answer_1(jets):
     len_rocks = len(ROCKS)
     rock_index = 0
@@ -122,6 +140,9 @@ def get_answer_1(jets):
         jet_index = jet_index % len_jets
         jet = jets[jet_index]
         can_be_shifted = is_can_be_shifted(chamber, jet)
+        if can_be_shifted:
+            chamber = get_shifted_chamber(chamber, jet)
+        can_be_moved_down = is_can_be_moved_down(chamber)
 
         # jet_index += 1
 
@@ -280,5 +301,48 @@ if __name__ == "__main__":
         "...@..#",
         "...@..#",
     ]
+
+    chamber = [
+        ".......",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    assert is_can_be_moved_down(chamber) is True
+
+    chamber = [
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    assert is_can_be_moved_down(chamber) is False
+
+    chamber = [
+        ".......",
+        "...#...",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    assert is_can_be_moved_down(chamber) is False
+
+    chamber = [
+        "...@...",
+        ".......",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    assert is_can_be_moved_down(chamber) is False
+
+    chamber = [
+        ".......",
+        "......#",
+        "..@@@..",
+        "....@..",
+        "....@..",
+    ]
+    assert is_can_be_moved_down(chamber) is True
 
     main()
