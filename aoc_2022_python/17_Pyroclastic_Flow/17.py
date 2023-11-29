@@ -1,4 +1,4 @@
-INPUT = "test_input"
+INPUT = "input"
 MOVES_NUMBER = 2022
 ROCKS = [
     [
