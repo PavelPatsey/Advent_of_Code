@@ -1,5 +1,5 @@
 INPUT = "test_input"
-MOVES_NUMBER = 10
+MOVES_NUMBER = 2022
 ROCKS = [
     [
         "..@@@@.",
@@ -65,52 +65,34 @@ def get_shifted_chamber(chamber, jet):
         chamber_index -= 1
     keep_looking = "@" in new_chamber[chamber_index]
 
-    if jet == ">":
-        while chamber_index >= 0 and keep_looking:
+    while chamber_index >= 0 and keep_looking:
+        if jet == ">":
             string = new_chamber[chamber_index]
-            len_string = len(string)
-            string_index = len_string - 1
-            new_string = ""
-            while string_index >= 1:
-                if string[string_index - 1] == "@":
-                    new_string = "@" + new_string
-                else:
-                    if string[string_index] == "@":
-                        new_string = "." + new_string
-                    else:
-                        new_string = string[string_index] + new_string
-                string_index -= 1
-            if string[0] == "@":
-                new_string = "." + new_string
+        else:
+            string = "".join(list(reversed(new_chamber[chamber_index])))
+        len_string = len(string)
+        string_index = len_string - 1
+        new_string = ""
+        while string_index >= 1:
+            if string[string_index - 1] == "@":
+                new_string = "@" + new_string
             else:
-                new_string = string[0] + new_string
-
-            new_chamber[chamber_index] = new_string
-            chamber_index -= 1
-            keep_looking = "@" in new_chamber[chamber_index]
-    else:
-        while chamber_index >= 0 and keep_looking:
-            string = new_chamber[chamber_index]
-            len_string = len(string)
-            string_index = 0
-            new_string = ""
-            while string_index <= len_string - 2:
-                if string[string_index + 1] == "@":
-                    new_string = new_string + "@"
+                if string[string_index] == "@":
+                    new_string = "." + new_string
                 else:
-                    if string[string_index] == "@":
-                        new_string = new_string + "."
-                    else:
-                        new_string = new_string + string[string_index]
-                string_index += 1
-            if string[-1] == "@":
-                new_string = new_string + "."
-            else:
-                new_string = new_string + string[-1]
+                    new_string = string[string_index] + new_string
+            string_index -= 1
+        if string[0] == "@":
+            new_string = "." + new_string
+        else:
+            new_string = string[0] + new_string
 
+        if jet == ">":
             new_chamber[chamber_index] = new_string
-            chamber_index -= 1
-            keep_looking = "@" in new_chamber[chamber_index]
+        else:
+            new_chamber[chamber_index] = "".join(list(reversed(new_string)))
+        chamber_index -= 1
+        keep_looking = "@" in new_chamber[chamber_index]
 
     return new_chamber
 
