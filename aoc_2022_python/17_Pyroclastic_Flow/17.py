@@ -35,6 +35,8 @@ def get_jets():
 
 def is_can_be_shifted(chamber, jet):
     chamber_index = len(chamber) - 1
+    while "@" not in chamber[chamber_index] and chamber_index >= 0:
+        chamber_index -= 1
     keep_looking = "@" in chamber[chamber_index]
     can_be_shifted = keep_looking
     if jet == ">":
@@ -59,6 +61,8 @@ def is_can_be_shifted(chamber, jet):
 def get_shifted_chamber(chamber, jet):
     new_chamber = chamber.copy()
     chamber_index = len(new_chamber) - 1
+    while "@" not in chamber[chamber_index] and chamber_index >= 0:
+        chamber_index -= 1
     keep_looking = "@" in new_chamber[chamber_index]
 
     if jet == ">":
@@ -113,6 +117,8 @@ def get_shifted_chamber(chamber, jet):
 
 def is_can_be_moved_down(chamber):
     chamber_index = len(chamber) - 1
+    while "@" not in chamber[chamber_index] and chamber_index >= 0:
+        chamber_index -= 1
     keep_looking = "@" in chamber[chamber_index]
     can_be_moved_down = keep_looking
     while chamber_index >= 1 and keep_looking and can_be_moved_down:
@@ -132,6 +138,8 @@ def is_can_be_moved_down(chamber):
 def get_moved_down_chamber(chamber):
     new_chamber = chamber.copy()
     chamber_index = len(new_chamber) - 1
+    while "@" not in chamber[chamber_index] and chamber_index >= 0:
+        chamber_index -= 1
     keep_looking = "@" in new_chamber[chamber_index]
     len_string = len(new_chamber[0])
     indexes = []
@@ -161,6 +169,8 @@ def get_moved_down_chamber(chamber):
 def get_frozen_chamber(chamber):
     new_chamber = chamber.copy()
     chamber_index = len(new_chamber) - 1
+    while "@" not in chamber[chamber_index]:
+        chamber_index -= 1
     keep_looking = "@" in new_chamber[chamber_index]
     len_lst = len(new_chamber[0])
     while chamber_index >= 0 and keep_looking:
@@ -417,6 +427,35 @@ if __name__ == "__main__":
     assert is_can_be_moved_down(chamber) is True
 
     chamber = [
+        "....#..",
+        "..@@#..",
+        "..@@#..",
+        "....#..",
+    ]
+    assert is_can_be_moved_down(chamber) is True
+
+    chamber = [
+        "..####.",
+        "...#...",
+        "..###..",
+        "#####..",
+        "..#.#..",
+        "..#.#..",
+        "....#..",
+        "....##.",
+        "....##.",
+        ".####..",
+        "..#....",
+        ".###...",
+        "..####.",
+        "....##.",
+        "..@@##.",
+        "..@@#..",
+        "....#..",
+    ]
+    assert is_can_be_moved_down(chamber) is True
+
+    chamber = [
         ".......",
         ".......",
         "..@@@..",
@@ -471,6 +510,45 @@ if __name__ == "__main__":
         ".......",
         ".......",
         "@@@@@@@",
+    ]
+
+    chamber = [
+        "..####.",
+        "...#...",
+        "..###..",
+        "#####..",
+        "..#.#..",
+        "..#.#..",
+        "....#..",
+        "....##.",
+        "....##.",
+        ".####..",
+        "..#....",
+        ".###...",
+        "..####.",
+        "....##.",
+        "..@@##.",
+        "..@@#..",
+        "....#..",
+    ]
+    assert get_moved_down_chamber(chamber) == [
+        "..####.",
+        "...#...",
+        "..###..",
+        "#####..",
+        "..#.#..",
+        "..#.#..",
+        "....#..",
+        "....##.",
+        "....##.",
+        ".####..",
+        "..#....",
+        ".###...",
+        "..####.",
+        "..@@##.",
+        "..@@##.",
+        "....#..",
+        "....#..",
     ]
 
     chamber = [
