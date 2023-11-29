@@ -159,7 +159,7 @@ def get_frozen_chamber(chamber):
     len_lst = len(new_chamber[0])
     while chamber_index >= 0 and keep_looking:
         lst = list(new_chamber[chamber_index])
-        for i in range(len_lst - 1):
+        for i in range(len_lst):
             if lst[i] == "@":
                 lst[i] = "#"
         new_chamber[chamber_index] = "".join(lst)
@@ -487,6 +487,15 @@ if __name__ == "__main__":
         "..###..",
         "....#..",
         "#...#..",
+    ]
+
+    chamber = [
+        ".......",
+        "@@@@@@@",
+    ]
+    assert get_frozen_chamber(chamber) == [
+        ".......",
+        "#######",
     ]
 
     main()
