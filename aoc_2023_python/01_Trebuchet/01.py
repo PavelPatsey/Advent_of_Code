@@ -20,28 +20,26 @@ def get_document():
 
 
 def get_answer_1(document):
-    result = []
+    numbers = []
     for line in document:
-        filtered = filter(lambda x: x.isnumeric(), line)
-        lst = list(filtered)
-        lst = lst[0] + lst[-1]
-        result.append(int("".join(lst)))
-    return sum(result)
+        filtered = list(filter(lambda x: x.isnumeric(), line))
+        numbers.append(int("".join(filtered[0] + filtered[-1])))
+    return sum(numbers)
 
 
 def get_answer_2(document):
-    digits = []
+    numbers = []
     for line in document:
-        digits_from_line = []
+        digits = []
         for index, char in enumerate(line):
             if char.isnumeric():
-                digits_from_line.append(char)
+                digits.append(char)
             for key, value in NUMERIC_DICT.items():
                 if line[index:].startswith(key):
-                    digits_from_line.append(NUMERIC_DICT[key])
-        digits.append(digits_from_line)
-    digits = [int(digit[0] + digit[-1]) for digit in digits]
-    return sum(digits)
+                    digits.append(NUMERIC_DICT[key])
+        numbers.append(digits)
+    numbers = [int(digit[0] + digit[-1]) for digit in numbers]
+    return sum(numbers)
 
 
 def main():
