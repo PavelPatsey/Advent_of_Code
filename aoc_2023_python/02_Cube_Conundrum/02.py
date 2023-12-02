@@ -10,9 +10,9 @@ def get_games():
     def _get_rounds(string: str) -> List:
         str_rounds = string.split(":")[-1].split(";")
         rounds = []
-        for cubes_set in str_rounds:
+        for round_str in str_rounds:
             round_dict = {}
-            cubes = cubes_set.strip().split(",")
+            cubes = round_str.strip().split(",")
             for cube in cubes:
                 c = cube.strip().split()
                 round_dict[c[1]] = int(c[0])
@@ -27,8 +27,8 @@ def get_games():
 
 def is_game_possible(game: List[Dict]) -> bool:
     is_possible_game = True
-    for cubes_set in game:
-        for key, value in cubes_set.items():
+    for cubes_dict in game:
+        for key, value in cubes_dict.items():
             if key == "red" and value > MAX_RED_CUBES:
                 is_possible_game = False
                 break
@@ -58,14 +58,14 @@ def main():
 
 
 if __name__ == "__main__":
-    # game = [{"blue": 3, "red": 4}, {"red": 1, "green": 2, "blue": 6}, {"green": 2}]
-    # assert is_game_possible(game) is True
-    #
-    # game = [
-    #     {"green": 8, "blue": 6, "red": 20},
-    #     {"blue": 5, "red": 4, "green": 13},
-    #     {"green": 5, "red": 1},
-    # ]
-    # assert is_game_possible(game) is False
+    game = [{"blue": 3, "red": 4}, {"red": 1, "green": 2, "blue": 6}, {"green": 2}]
+    assert is_game_possible(game) is True
+
+    game = [
+        {"green": 8, "blue": 6, "red": 20},
+        {"blue": 5, "red": 4, "green": 13},
+        {"green": 5, "red": 1},
+    ]
+    assert is_game_possible(game) is False
 
     main()
