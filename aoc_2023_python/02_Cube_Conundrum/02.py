@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict, List
 
 INPUT = "input"
 MAX_RED_CUBES = 12
@@ -43,6 +43,19 @@ def is_game_possible(game: List[Dict]) -> bool:
     return is_possible_game
 
 
+def get_fewest_cubes_number(game):
+    red, blue, green = 0, 0, 0
+    for cubes_dict in game:
+        for key, value in cubes_dict.items():
+            if key == "red" and value > red:
+                red = value
+            elif key == "blue" and value > blue:
+                blue = value
+            elif key == "green" and value > green:
+                green = value
+    return red * blue * green
+
+
 def get_answer_1(games):
     indexes = []
     for index, game in enumerate(games):
@@ -52,9 +65,14 @@ def get_answer_1(games):
     return sum(map(lambda x: x + 1, indexes))
 
 
+def get_answer_2(games):
+    return sum([get_fewest_cubes_number(game) for game in games])
+
+
 def main():
     games = get_games()
     print(get_answer_1(games))
+    print(get_answer_2(games))
 
 
 if __name__ == "__main__":
@@ -67,5 +85,15 @@ if __name__ == "__main__":
         {"green": 5, "red": 1},
     ]
     assert is_game_possible(game) is False
+
+    game = [{"blue": 3, "red": 4}, {"red": 1, "green": 2, "blue": 6}, {"green": 2}]
+    assert get_fewest_cubes_number(game) == 48
+
+    game = [
+        {"green": 8, "blue": 6, "red": 20},
+        {"blue": 5, "red": 4, "green": 13},
+        {"green": 5, "red": 1},
+    ]
+    assert get_fewest_cubes_number(game) == 1560
 
     main()
