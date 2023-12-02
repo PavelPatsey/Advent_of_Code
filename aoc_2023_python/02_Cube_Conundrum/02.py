@@ -57,12 +57,9 @@ def get_fewest_cubes_number(game):
 
 
 def get_answer_1(games):
-    indexes = []
-    for index, game in enumerate(games):
-        if is_game_possible(game):
-            indexes.append(index)
-
-    return sum(map(lambda x: x + 1, indexes))
+    return sum(
+        [index + 1 for index, game in enumerate(games) if is_game_possible(game)]
+    )
 
 
 def get_answer_2(games):
