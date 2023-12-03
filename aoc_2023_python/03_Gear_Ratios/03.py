@@ -1,4 +1,4 @@
-INPUT = "test_input"
+INPUT = "input"
 
 
 def get_schemas():
@@ -32,7 +32,7 @@ def get_answer_1(schemas):
     len_string = len(schemas[0])
     i = 1
     while i <= len(schemas) - 2:
-        j = 0
+        j = 1
         number_indexes = []
         while j <= len_string - 1:
             if schemas[i][j].isdigit():
@@ -50,7 +50,7 @@ def get_answer_1(schemas):
 
 
 def get_adjacent_gears_coordinates(schemas, i, j):
-    indexes = [(0, 1), (0, -1), (1, 1), (1, -1), (-1, -1), (-1, 1)]
+    indexes = [(x, y) for y in [-1, 0, 1] for x in [-1, 0, 1]]
     return [(i + di, j + dj) for di, dj in indexes if schemas[i + di][j + dj] == "*"]
 
 
@@ -59,7 +59,7 @@ def get_answer_2(schemas):
     len_string = len(schemas[0])
     i = 1
     while i <= len(schemas) - 2:
-        j = 0
+        j = 1
         number_indexes = []
         while j <= len_string - 1:
             if schemas[i][j].isdigit():
@@ -82,16 +82,10 @@ def get_answer_2(schemas):
             j += 1
         i += 1
 
-    result_list = []
     result = 0
-    from pprint import pprint
-
-    pprint(len(gear_dict))
     for value in gear_dict.values():
         if len(value) == 2:
             result = result + value[0] * value[1]
-            result_list.append(value[0] * value[1])
-    print(sorted(result_list))
     return result
 
 
