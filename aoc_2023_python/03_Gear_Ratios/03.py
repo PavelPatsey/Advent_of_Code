@@ -89,13 +89,25 @@ def main():
 
 
 if __name__ == "__main__":
-    schemas = [".....", "..1..", "....."]
+    schemas = [
+        ".....",
+        "..1..",
+        ".....",
+    ]
     assert is_adjacent_to_symbol(schemas, 1, 2) is False
 
-    schemas = [".....", "..1@.", "....."]
+    schemas = [
+        ".....",
+        "..1@.",
+        ".....",
+    ]
     assert is_adjacent_to_symbol(schemas, 1, 2) is True
 
-    schemas = [".....", "..1..", ".%..."]
+    schemas = [
+        ".....",
+        "..1..",
+        ".%...",
+    ]
     assert is_adjacent_to_symbol(schemas, 1, 2) is True
 
     main()
