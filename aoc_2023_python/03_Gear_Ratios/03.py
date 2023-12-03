@@ -75,11 +75,7 @@ def get_answer_2(schemas):
             j += 1
         i += 1
 
-    result = 0
-    for value in gear_dict.values():
-        if len(value) == 2:
-            result = result + value[0] * value[1]
-    return result
+    return sum([value[0] * value[1] for value in gear_dict.values() if len(value) == 2])
 
 
 def main():
