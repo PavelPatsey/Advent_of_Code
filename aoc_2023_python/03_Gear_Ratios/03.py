@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 INPUT = "input"
 
 
@@ -46,7 +48,7 @@ def get_answer_1(schemas):
 
 
 def get_answer_2(schemas):
-    gear_dict = dict()
+    gear_dict = defaultdict(list)
     len_string = len(schemas[0])
     i = 1
     while i <= len(schemas) - 2:
@@ -65,10 +67,7 @@ def get_answer_2(schemas):
                 if gears_coordinates:
                     number_int = int("".join([schemas[i][n] for n in number_indexes]))
                     for coordinate in gears_coordinates:
-                        if coordinate in gear_dict.keys():
-                            gear_dict[coordinate].append(number_int)
-                        else:
-                            gear_dict[coordinate] = [number_int]
+                        gear_dict[coordinate].append(number_int)
                 number_indexes = []
             j += 1
         i += 1
