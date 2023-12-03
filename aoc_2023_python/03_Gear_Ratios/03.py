@@ -31,12 +31,12 @@ def get_answer_1(schemas):
         while j <= len_string - 1:
             if schemas[i][j].isdigit():
                 number_indexes.append(j)
-            else:
+            elif number_indexes:
                 if any(
                     map(lambda x: is_adjacent_to_symbol(schemas, i, x), number_indexes)
                 ):
-                    lst = [schemas[i][n] for n in number_indexes]
-                    adjacent_numbers.append(int("".join(lst)))
+                    number_int = int("".join([schemas[i][n] for n in number_indexes]))
+                    adjacent_numbers.append(number_int)
                 number_indexes = []
             j += 1
         i += 1
@@ -58,7 +58,7 @@ def get_answer_2(schemas):
         while j <= len_string - 1:
             if schemas[i][j].isdigit():
                 number_indexes.append(j)
-            else:
+            elif number_indexes:
                 gears_coordinates = []
                 for n in number_indexes:
                     coordinates = get_adjacent_gears_coordinates(schemas, i, n)
