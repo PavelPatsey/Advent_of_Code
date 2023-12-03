@@ -14,16 +14,10 @@ def get_schemas():
 
 
 def is_adjacent_to_symbol(schemas, i, j):
-    lst = [
-        schemas[i + 1][j],
-        schemas[i + 1][j + 1],
-        schemas[i][j + 1],
-        schemas[i - 1][j + 1],
-        schemas[i - 1][j],
-        schemas[i - 1][j - 1],
-        schemas[i][j - 1],
-        schemas[i + 1][j - 1],
+    indexes = [
+        (i + x, j + y) for y in [-1, 0, 1] for x in [-1, 0, 1] if (x, y) != (0, 0)
     ]
+    lst = [schemas[x][y] for x, y in indexes]
     return any(map(lambda x: not x.isdigit() and x != ".", lst))
 
 
@@ -50,7 +44,7 @@ def get_answer_1(schemas):
 
 
 def get_adjacent_gears_coordinates(schemas, i, j):
-    indexes = [(x, y) for y in [-1, 0, 1] for x in [-1, 0, 1]]
+    indexes = [(x, y) for y in [-1, 0, 1] for x in [-1, 0, 1] if (x, y) != (0, 0)]
     return [(i + di, j + dj) for di, dj in indexes if schemas[i + di][j + dj] == "*"]
 
 
