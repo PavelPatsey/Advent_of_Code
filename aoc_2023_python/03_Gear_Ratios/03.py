@@ -18,11 +18,9 @@ def get_adjacent_coordinates(i, j):
 
 
 def is_adjacent_to_symbol(schemas, i, j):
-    indexes = [
-        (i + x, j + y) for y in [-1, 0, 1] for x in [-1, 0, 1] if (x, y) != (0, 0)
-    ]
-    lst = [schemas[x][y] for x, y in indexes]
-    return any(map(lambda x: not x.isdigit() and x != ".", lst))
+    indexes = get_adjacent_coordinates(i, j)
+    adjacent_items = [schemas[x][y] for x, y in indexes]
+    return any(map(lambda x: not x.isdigit() and x != ".", adjacent_items))
 
 
 def get_answer_1(schemas):
