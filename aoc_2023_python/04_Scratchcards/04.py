@@ -41,7 +41,6 @@ def get_answer_2(cards):
     for i in range(len_cards):
         for x in range(get_card_cost(cards[i])):
             number_of_cards[i + 1 + x] += number_of_cards[i]
-
     return sum(number_of_cards)
 
 
