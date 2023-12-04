@@ -1,7 +1,7 @@
 import re
 from typing import List
 
-INPUT = "test_input"
+INPUT = "input"
 
 
 def get_cards():
@@ -18,9 +18,21 @@ def get_cards():
     return cards
 
 
+def get_answer_1(cards):
+    result = 0
+    for card in cards:
+        counter = 0
+        for number in card[0]:
+            if number in card[1]:
+                counter += 1
+        if counter != 0:
+            result += 2 ** (counter - 1)
+    return result
+
+
 def main():
     cards = get_cards()
-    print(cards)
+    print(get_answer_1(cards))
 
 
 if __name__ == "__main__":
