@@ -37,17 +37,10 @@ def get_answer_1(cards):
 
 def get_answer_2(cards):
     len_cards = len(cards)
-    counters_list = []
-    for card in cards:
-        counter = 0
-        for number in card[0]:
-            if number in card[1]:
-                counter += 1
-        counters_list.append(counter)
     number_of_cards = [1] * len_cards
     for i in range(len_cards):
         for _ in range(number_of_cards[i]):
-            for x in range(counters_list[i]):
+            for x in range(get_card_cost(cards[i])):
                 number_of_cards[i + 1 + x] += 1
 
     return sum(number_of_cards)
