@@ -18,15 +18,20 @@ def get_cards():
     return cards
 
 
+def get_card_cost(card):
+    cost = 0
+    for number in card[0]:
+        if number in card[1]:
+            cost += 1
+    return cost
+
+
 def get_answer_1(cards):
     result = 0
     for card in cards:
-        counter = 0
-        for number in card[0]:
-            if number in card[1]:
-                counter += 1
-        if counter != 0:
-            result += 2 ** (counter - 1)
+        cost = get_card_cost(card)
+        if cost != 0:
+            result += 2 ** (cost - 1)
     return result
 
 
