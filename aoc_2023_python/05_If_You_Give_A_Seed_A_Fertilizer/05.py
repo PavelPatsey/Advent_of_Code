@@ -20,22 +20,16 @@ def get_seed_almanac():
 def get_answer_1(seeds, almanac):
     min_location = None
     for i in range(len(seeds)):
-        match_list = [seeds[i]]
+        match = seeds[i]
         for almanac_value in almanac.values():
-            is_found = False
             for destination, source, range_length in almanac_value:
-                if source <= match_list[-1] <= source + range_length - 1:
-                    match_list.append(match_list[-1] + destination - source)
-                    del match_list[0]
-                    is_found = True
+                if source <= match <= source + range_length - 1:
+                    match = match + destination - source
                     break
-            if not is_found:
-                match_list.append(match_list[-1])
-                del match_list[0]
         if not min_location:
-            min_location = match_list[-1]
+            min_location = match
         else:
-            min_location = min(match_list[-1], min_location)
+            min_location = min(match, min_location)
     return min_location
 
 
@@ -49,22 +43,16 @@ def get_answer_2(seeds, almanac):
     min_location = None
     ranges = get_ranges(seeds)
     for seed in itertools.chain(*ranges):
-        match_list = [seed]
+        match = seed
         for almanac_value in almanac.values():
-            is_found = False
             for destination, source, range_length in almanac_value:
-                if source <= match_list[-1] <= source + range_length - 1:
-                    match_list.append(match_list[-1] + destination - source)
-                    del match_list[0]
-                    is_found = True
+                if source <= match <= source + range_length - 1:
+                    match = match + destination - source
                     break
-            if not is_found:
-                match_list.append(match_list[-1])
-                del match_list[0]
         if not min_location:
-            min_location = match_list[-1]
+            min_location = match
         else:
-            min_location = min(match_list[-1], min_location)
+            min_location = min(match, min_location)
     return min_location
 
 
