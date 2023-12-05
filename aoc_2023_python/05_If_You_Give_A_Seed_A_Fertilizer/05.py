@@ -67,7 +67,7 @@ def get_non_range_intersections(tuple_1, tuple_2):
 
     if a1 == a2:
         if b1 == b2:
-            return [(a1, b1)]
+            return None
         else:
             return [(b2, b1)]
     else:
@@ -79,11 +79,14 @@ def get_non_range_intersections(tuple_1, tuple_2):
 
 def get_mapped_ranges(range_tuple: Tuple, map_list: List) -> List[Tuple]:
     mapped_ranges = []
+    none_list = []
+    inter_list = []
     for destination, source, length in map_list:
         range_intersection = get_range_intersection(
             range_tuple, (source, source + length)
         )
         if range_intersection:
+            inter_list.append(range_intersection)
             dx = destination - source
             new_start = range_intersection[0] + dx
             new_end = range_intersection[1] + dx
@@ -93,32 +96,23 @@ def get_mapped_ranges(range_tuple: Tuple, map_list: List) -> List[Tuple]:
                     new_end,
                 )
             )
+            non_range_intersections = get_non_range_intersections(
+                range_tuple, range_intersection
+            )
+            if non_range_intersections:
+                none_list.extend(non_range_intersections)
+
+    if mapped_ranges:
+        for n in none_list:
+            if n not in inter_list:
+                mapped_ranges.append(n)
+
     if not mapped_ranges:
-        result = [range_tuple]
-    else:
-        result = mapped_ranges
-
-    if range_intersection:
-        non_range_intersections = get_non_range_intersections(
-            range_tuple, get_range_intersection
-        )
-
-    return result
+        mapped_ranges = [range_tuple]
+    return mapped_ranges
 
 
 def get_min_location(range_tuple, almanac):
-    """
-    range_tuple = (79, 93)
-    map_list = [[50, 98, 2], [52, 50, 48]]
-    assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
-
-    range_tuple = (8, 20)
-    map_list = [[0, 15, 37], [37, 52, 2], [39, 0, 15]]
-    assert get_mapped_ranges(range_tuple, map_list) == [(0, 5), (47, 54)]
-    :param range_tuple:
-    :param almanac:
-    :return:
-    """
     range_list = [range_tuple]
     for almanac_value in almanac.values():
         new_range_list = []
@@ -153,72 +147,72 @@ def main():
 
 
 if __name__ == "__main__":
-    assert get_range_intersection((1, 4), (6, 7)) == None
-    assert get_range_intersection((1, 4), (4, 5)) == None
+    assert get_range_intersection((1, 4), (6, 7)) is None
+    assert get_range_intersection((1, 4), (4, 5)) is None
     assert get_range_intersection((1, 4), (3, 5)) == (3, 4)
     assert get_range_intersection((1, 5), (2, 3)) == (2, 3)
     assert get_range_intersection((2, 6), (1, 5)) == (2, 5)
-    assert get_range_intersection((2, 6), (6, 7)) == None
-    assert get_range_intersection((2, 4), (6, 7)) == None
+    assert get_range_intersection((2, 6), (6, 7)) is None
+    assert get_range_intersection((2, 4), (6, 7)) is None
 
     assert get_non_range_intersections((1, 7), (1, 3)) == [(3, 7)]
     assert get_non_range_intersections((1, 7), (3, 4)) == [(1, 3), (4, 7)]
     assert get_non_range_intersections((1, 7), (4, 7)) == [(1, 4)]
-    assert get_non_range_intersections((1, 7), (1, 7)) == [(1, 7)]
+    assert get_non_range_intersections((1, 7), (1, 7)) is None
 
-    # range_tuple = (79, 93)
-    # map_list = [
-    #     [50, 98, 2],
-    #     [52, 50, 48],
-    # ]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
-    #
-    # range_tuple = (8, 20)
-    # map_list = [
-    #     [0, 15, 37],
-    #     [37, 52, 2],
-    #     [39, 0, 15],
-    # ]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(0, 5), (47, 54)]
-    #
-    # range_tuple = (81, 95)
-    # map_list = [
-    #     [0, 15, 37],
-    #     [37, 52, 2],
-    #     [39, 0, 15],
-    # ]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
-    #
-    # range_tuple = (81, 95)
-    # map_list = [
-    #     [49, 53, 8],
-    #     [0, 11, 42],
-    #     [42, 0, 7],
-    #     [57, 7, 4],
-    # ]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
-    #
-    # range_tuple = (81, 95)
-    # map_list = [
-    #     [88, 18, 7],
-    #     [18, 25, 70],
-    # ]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(74, 88)]
-    #
-    # range_tuple = (74, 88)
-    # map_list = [
-    #     [45, 77, 23],
-    #     [81, 45, 19],
-    #     [68, 64, 13],
-    # ]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(45, 56), (78, 81)]
-    #
-    # range_tuple = (45, 56)
-    # map_list = [
-    #     [0, 69, 1],
-    #     [1, 0, 69],
-    # ]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(46, 57)]
+    range_tuple = (79, 93)
+    map_list = [
+        [50, 98, 2],
+        [52, 50, 48],
+    ]
+    assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
+
+    range_tuple = (8, 20)
+    map_list = [
+        [0, 15, 37],
+        [37, 52, 2],
+        [39, 0, 15],
+    ]
+    assert get_mapped_ranges(range_tuple, map_list) == [(0, 5), (47, 54)]
+
+    range_tuple = (81, 95)
+    map_list = [
+        [0, 15, 37],
+        [37, 52, 2],
+        [39, 0, 15],
+    ]
+    assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
+
+    range_tuple = (81, 95)
+    map_list = [
+        [49, 53, 8],
+        [0, 11, 42],
+        [42, 0, 7],
+        [57, 7, 4],
+    ]
+    assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
+
+    range_tuple = (81, 95)
+    map_list = [
+        [88, 18, 7],
+        [18, 25, 70],
+    ]
+    assert get_mapped_ranges(range_tuple, map_list) == [(74, 88)]
+
+    range_tuple = (74, 88)
+    map_list = [
+        [45, 77, 23],
+        [81, 45, 19],
+        [68, 64, 13],
+    ]
+    assert get_mapped_ranges(range_tuple, map_list) == [(45, 56), (78, 81)]
+
+    range_tuple = (45, 56)
+    map_list = [
+        [0, 69, 1],
+        [1, 0, 69],
+    ]
+    assert get_mapped_ranges(range_tuple, map_list) == [(46, 57)]
 
     range_tuple = (46, 57)
     map_list = [
@@ -226,6 +220,6 @@ if __name__ == "__main__":
         [56, 93, 4],
     ]
     print(get_mapped_ranges(range_tuple, map_list))
-    assert get_mapped_ranges(range_tuple, map_list) == [(45, 56), (60, 61)]
+    assert get_mapped_ranges(range_tuple, map_list) == [(60, 61), (46, 56)]
 
     main()
