@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 INPUT = "test_input"
 
 
@@ -37,6 +39,37 @@ def get_ranges(seeds):
     return ranges
 
 
+def get_range_intersection(tuple_1, tuple_2):
+    a1, b1 = tuple_1
+    a2, b2 = tuple_2
+
+    if a1 <= a2:
+        if b1 <= a2:
+            return
+        else:
+            return a2, min(b1, b2)
+    else:
+        if b2 <= a1:
+            return
+        else:
+            return a1, min(b1, b2)
+
+
+def get_mapped_ranges(range_tuple: Tuple, map_list: List) -> List[Tuple]:
+    """
+    (79,14)
+    [[50, 98, 2], [52, 50, 48]]
+    """
+    start, end = range_tuple
+    mappes = [(x[1], x[1] + x[2], x[0], x[0] + x[2]) for x in map_list]
+    for destination, source, length in map_list:
+        range_intersection = get_range_intersection(
+            range_tuple, (source, source + length)
+        )
+
+    return [(1, 1), (2, 2)]
+
+
 def get_answer_2(seeds, almanac):
     min_location = None
     ranges = get_ranges(seeds)
@@ -51,10 +84,26 @@ def get_answer_2(seeds, almanac):
 
 def main():
     seeds, almanac = get_seed_almanac()
-
+    print(seeds)
+    print(almanac)
     print(get_answer_1(seeds, almanac))
     print(get_answer_2(seeds, almanac))
 
 
 if __name__ == "__main__":
-    main()
+    assert get_range_intersection((1, 4), (6, 7)) == None
+    assert get_range_intersection((1, 4), (4, 5)) == None
+    assert get_range_intersection((1, 4), (3, 5)) == (3, 4)
+    assert get_range_intersection((1, 5), (2, 3)) == (2, 3)
+    assert get_range_intersection((2, 6), (1, 5)) == (2, 5)
+    assert get_range_intersection((2, 6), (6, 7)) == None
+    assert get_range_intersection((2, 4), (6, 7)) == None
+
+    # range_tuple = (79, 94)
+    # map_list = [[50, 98, 2], [52, 50, 48]]
+    # assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
+    #
+    # range_tuple = (8, 20)
+    # map_list = [[0, 15, 37], [37, 52, 2], [39, 0, 15]]
+    # assert get_mapped_ranges(range_tuple, map_list) == [(0, 5), (47, 54)]
+    # main()
