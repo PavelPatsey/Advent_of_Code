@@ -56,18 +56,24 @@ def get_range_intersection(tuple_1, tuple_2):
 
 
 def get_mapped_ranges(range_tuple: Tuple, map_list: List) -> List[Tuple]:
-    """
-    (79,14)
-    [[50, 98, 2], [52, 50, 48]]
-    """
-    start, end = range_tuple
-    mappes = [(x[1], x[1] + x[2], x[0], x[0] + x[2]) for x in map_list]
+    mapped_ranges = []
     for destination, source, length in map_list:
         range_intersection = get_range_intersection(
             range_tuple, (source, source + length)
         )
-
-    return [(1, 1), (2, 2)]
+        if range_intersection:
+            dx = destination - source
+            new_start = range_intersection[0] + dx
+            new_end = range_intersection[1] + dx
+            mapped_ranges.append(
+                (
+                    new_start,
+                    new_end,
+                )
+            )
+    if not mapped_ranges:
+        mapped_ranges = [range_tuple]
+    return mapped_ranges
 
 
 def get_answer_2(seeds, almanac):
@@ -99,11 +105,11 @@ if __name__ == "__main__":
     assert get_range_intersection((2, 6), (6, 7)) == None
     assert get_range_intersection((2, 4), (6, 7)) == None
 
-    # range_tuple = (79, 94)
-    # map_list = [[50, 98, 2], [52, 50, 48]]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
-    #
-    # range_tuple = (8, 20)
-    # map_list = [[0, 15, 37], [37, 52, 2], [39, 0, 15]]
-    # assert get_mapped_ranges(range_tuple, map_list) == [(0, 5), (47, 54)]
-    # main()
+    range_tuple = (79, 93)
+    map_list = [[50, 98, 2], [52, 50, 48]]
+    assert get_mapped_ranges(range_tuple, map_list) == [(81, 95)]
+
+    range_tuple = (8, 20)
+    map_list = [[0, 15, 37], [37, 52, 2], [39, 0, 15]]
+    assert get_mapped_ranges(range_tuple, map_list) == [(0, 5), (47, 54)]
+    main()
