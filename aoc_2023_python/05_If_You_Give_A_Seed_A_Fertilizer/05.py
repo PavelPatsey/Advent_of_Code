@@ -42,24 +42,18 @@ def get_ranges(seeds):
 def get_answer_2(seeds, almanac):
     min_location = None
     ranges = get_ranges(seeds)
-    for seed in itertools.chain(*ranges):
-        match = seed
-        for almanac_value in almanac.values():
-            for destination, source, range_length in almanac_value:
-                if source <= match <= source + range_length - 1:
-                    match = match + destination - source
-                    break
+    for r in ranges:
+        lst = list(r)
         if not min_location:
-            min_location = match
+            min_location = get_answer_1(lst, almanac)
         else:
-            min_location = min(match, min_location)
+            min_location = min(get_answer_1(lst, almanac), min_location)
     return min_location
 
 
 def main():
     seeds, almanac = get_seed_almanac()
-    print(seeds)
-    print(almanac)
+
     print(get_answer_1(seeds, almanac))
     print(get_answer_2(seeds, almanac))
 
