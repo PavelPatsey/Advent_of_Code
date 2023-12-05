@@ -39,10 +39,16 @@ def get_answer_1(seeds, almanac):
     return min_location
 
 
+def get_ranges(seeds):
+    pairs = zip(seeds[::2], seeds[1::2])
+    ranges = map(lambda x: range(x[0], x[0] + x[1]), pairs)
+    return ranges
+
+
 def get_answer_2(seeds, almanac):
     min_location = None
-    a, b, c, d = seeds
-    for seed in itertools.chain(range(a, a + b), range(c, c + d)):
+    ranges = get_ranges(seeds)
+    for seed in itertools.chain(*ranges):
         match_list = [seed]
         for almanac_value in almanac.values():
             is_found = False
