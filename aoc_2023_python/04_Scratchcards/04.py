@@ -30,7 +30,7 @@ def get_answer_1(cards):
     result = 0
     for card in cards:
         cost = get_card_cost(card)
-        if cost != 0:
+        if cost:
             result += 2 ** (cost - 1)
     return result
 
