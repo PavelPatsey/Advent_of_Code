@@ -112,7 +112,7 @@ def get_mapped_ranges(range_tuple: Tuple, map_list: List) -> List[Tuple]:
     return mapped_ranges
 
 
-def get_min_location(range_tuple, almanac):
+def get_transformed_range(range_tuple, almanac):
     range_list = [range_tuple]
     for almanac_value in almanac.values():
         new_range_list = []
@@ -120,35 +120,34 @@ def get_min_location(range_tuple, almanac):
             now_range = range_list.pop()
             mapped_ranges = get_mapped_ranges(now_range, almanac_value)
             new_range_list.extend(mapped_ranges)
-        range_list = [x for x in new_range_list]
+        range_list = new_range_list.copy()
 
-    r = range_list
-    lst = [x[0] for x in range_list]
-    min_location = min(lst)
-    return min_location
+    return range_list
 
 
 def get_answer_2(seeds, almanac):
     min_location = None
     ranges = get_ranges(seeds)
+    transformed_ranges = []
     for range_tuple in ranges:
-        if not min_location:
-            min_location = get_min_location(range_tuple, almanac)
-        min_location = min(get_min_location(range_tuple, almanac), min_location)
-    return min_location
+        transformed_ranges.extend(get_transformed_range(range_tuple, almanac))
+    print(transformed_ranges)
+    print([(82, 85), (60, 61), (46, 56), (86, 90), (94, 97), (56, 60), (97, 99)])
+    return min([r[0] for r in transformed_ranges])
 
 
 def main():
     seeds, almanac = get_seed_almanac()
     print(seeds)
     print(almanac)
-    print(get_answer_1(seeds, almanac))
-    print(get_answer_2(seeds, almanac))
+    print("pat_1:", get_answer_1(seeds, almanac))
+    print("pat_2:", get_answer_2(seeds, almanac))
 
 
 if __name__ == "__main__":
     assert get_range_intersection((1, 4), (6, 7)) is None
     assert get_range_intersection((1, 4), (4, 5)) is None
+    assert get_range_intersection((4, 5), (1, 4)) is None
     assert get_range_intersection((1, 4), (3, 5)) == (3, 4)
     assert get_range_intersection((1, 5), (2, 3)) == (2, 3)
     assert get_range_intersection((2, 6), (1, 5)) == (2, 5)
@@ -173,6 +172,7 @@ if __name__ == "__main__":
         [37, 52, 2],
         [39, 0, 15],
     ]
+    print(get_mapped_ranges(range_tuple, map_list))
     assert get_mapped_ranges(range_tuple, map_list) == [(0, 5), (47, 54)]
 
     range_tuple = (81, 95)
