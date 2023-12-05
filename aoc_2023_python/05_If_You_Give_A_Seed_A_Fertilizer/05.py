@@ -1,5 +1,3 @@
-import itertools
-
 INPUT = "test_input"
 
 
@@ -19,8 +17,8 @@ def get_seed_almanac():
 
 def get_answer_1(seeds, almanac):
     min_location = None
-    for i in range(len(seeds)):
-        match = seeds[i]
+    for seed in seeds:
+        match = seed
         for almanac_value in almanac.values():
             for destination, source, range_length in almanac_value:
                 if source <= match <= source + range_length - 1:
