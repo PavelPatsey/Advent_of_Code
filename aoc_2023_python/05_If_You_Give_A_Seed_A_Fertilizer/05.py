@@ -1,3 +1,5 @@
+import itertools
+
 INPUT = "test_input"
 
 
@@ -37,11 +39,35 @@ def get_answer_1(seeds, almanac):
     return min_location
 
 
+def get_answer_2(seeds, almanac):
+    min_location = None
+    a, b, c, d = seeds
+    for seed in itertools.chain(range(a, a + b), range(c, c + d)):
+        match_list = [seed]
+        for almanac_value in almanac.values():
+            is_found = False
+            for destination, source, range_length in almanac_value:
+                if source <= match_list[-1] <= source + range_length - 1:
+                    match_list.append(match_list[-1] + destination - source)
+                    del match_list[0]
+                    is_found = True
+                    break
+            if not is_found:
+                match_list.append(match_list[-1])
+                del match_list[0]
+        if not min_location:
+            min_location = match_list[-1]
+        else:
+            min_location = min(match_list[-1], min_location)
+    return min_location
+
+
 def main():
     seeds, almanac = get_seed_almanac()
     print(seeds)
     print(almanac)
     print(get_answer_1(seeds, almanac))
+    print(get_answer_2(seeds, almanac))
 
 
 if __name__ == "__main__":
