@@ -1,4 +1,4 @@
-INPUT = "test_input"
+INPUT = "input"
 
 
 def get_seed_almanac():
@@ -18,16 +18,17 @@ def get_seed_almanac():
 def get_answer_1(seeds, almanac):
     match_list = [[seed] for seed in seeds]
     for i in range(len(seeds)):
-        is_found = False
-        for x in almanac["seed-to-soil"]:
-            destination, source, r = x
-            if seeds[i] in range(source, source + r):
-                match_list[i].append(seeds[i] + destination - source)
-                is_found = True
-        if not is_found:
-            match_list[i].append(seeds[i])
+        for almanac_value in almanac.values():
+            is_found = False
+            for destination, source, range_length in almanac_value:
+                if match_list[i][-1] in range(source, source + range_length):
+                    match_list[i].append(match_list[i][-1] + destination - source)
+                    is_found = True
+                    break
+            if not is_found:
+                match_list[i].append(match_list[i][-1])
 
-    return match_list
+    return min([x[-1] for x in match_list])
 
 
 def main():
