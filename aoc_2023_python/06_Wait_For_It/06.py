@@ -1,6 +1,6 @@
 from functools import reduce
 
-INPUT = "test_input"
+INPUT = "input"
 
 
 def get_races():
@@ -37,15 +37,13 @@ def get_answer_1(races):
 
 
 def get_answer_2(race):
-    time, max_distance = race
-    pass
+    return len(get_farther_distances(race))
 
 
 def main():
     races = get_races()
     print(get_answer_1(races))
     race = get_race()
-    print(race)
     print(get_answer_2(race))
 
 
