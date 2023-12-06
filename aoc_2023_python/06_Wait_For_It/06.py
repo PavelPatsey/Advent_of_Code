@@ -1,4 +1,5 @@
 from functools import reduce
+from operator import mul
 
 INPUT = "input"
 
@@ -32,7 +33,7 @@ def get_winning_distances_number(race):
 
 def get_answer_1(races):
     farther_distances = map(get_winning_distances_number, races)
-    return reduce((lambda x, y: x * y), farther_distances, 1)
+    return reduce(mul, farther_distances, 1)
 
 
 def get_answer_2(race):
