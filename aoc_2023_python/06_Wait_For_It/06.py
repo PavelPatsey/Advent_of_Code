@@ -20,11 +20,11 @@ def get_race():
 
 
 def get_winning_distances_number(race):
-    time, max_distance = race
+    max_time, max_distance = race
     counter = 0
-    for t in range(time + 1):
+    for t in range(max_time + 1):
         v = t
-        distance = v * (time - t)
+        distance = v * (max_time - t)
         if distance > max_distance:
             counter += 1
     return counter
