@@ -19,25 +19,24 @@ def get_race():
     return race
 
 
-def get_farther_distances(race):
+def get_winning_distances_number(race):
     time, max_distance = race
-    farther_distances = []
+    counter = 0
     for t in range(time + 1):
         v = t
         distance = v * (time - t)
         if distance > max_distance:
-            farther_distances.append(distance)
-    return farther_distances
+            counter += 1
+    return counter
 
 
 def get_answer_1(races):
-    farther_distances = map(get_farther_distances, races)
-    lens = map(len, farther_distances)
-    return reduce((lambda x, y: x * y), lens, 1)
+    farther_distances = map(get_winning_distances_number, races)
+    return reduce((lambda x, y: x * y), farther_distances, 1)
 
 
 def get_answer_2(race):
-    return len(get_farther_distances(race))
+    return get_winning_distances_number(race)
 
 
 def main():
