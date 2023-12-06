@@ -1,6 +1,6 @@
 from functools import reduce
 
-INPUT = "input"
+INPUT = "test_input"
 
 
 def get_races():
@@ -9,6 +9,14 @@ def get_races():
     races = [[int(y) for y in x.split(":")[1].strip().split()] for x in data]
     races = list(zip(races[0], races[1]))
     return races
+
+
+def get_race():
+    with open(INPUT, "r") as file:
+        data = file.readlines()
+    race = [x.split(":")[1].strip().split() for x in data]
+    race = [int("".join(x)) for x in race]
+    return race
 
 
 def get_farther_distances(race):
@@ -28,9 +36,17 @@ def get_answer_1(races):
     return reduce((lambda x, y: x * y), lens, 1)
 
 
+def get_answer_2(race):
+    time, max_distance = race
+    pass
+
+
 def main():
     races = get_races()
     print(get_answer_1(races))
+    race = get_race()
+    print(race)
+    print(get_answer_2(race))
 
 
 if __name__ == "__main__":
