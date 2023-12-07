@@ -1,7 +1,7 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 from functools import cmp_to_key
 
-INPUT = "test_input"
+INPUT = "input"
 
 J = 1
 
@@ -57,31 +57,6 @@ def get_converted_hand(hand):
     return [h for h in hand if d[h] >= 2]
 
 
-def get_jokered_hands(hand_list):
-    jokered_hands = [hand_list]
-    all_jokered_hands = []
-    len_hand = len(hand_list)
-    replacements_list = [card for card in set(hand_list) if card != 1]
-    while jokered_hands:
-        hand = jokered_hands.pop()
-        if 1 in hand:
-            for i in range(len_hand):
-                if 1 == hand[i]:
-                    for card in replacements_list:
-                        jokered_hands.append(hand[:i] + [card] + hand[i + 1 :])
-        else:
-            if hand not in all_jokered_hands:
-                all_jokered_hands.append(hand)
-    return all_jokered_hands
-
-
-def get_max_hand(hand):
-    if hand == [J, J, J, J, J]:
-        return [CARDS_DICT_2["A"]] * 5
-    jokered_hands = get_jokered_hands(hand)
-    return max(jokered_hands, key=cmp_to_key(compare_hands))
-
-
 def compare_hands(hand_1, hand_2) -> int:
     if len(set(hand_1)) < len(set(hand_2)):
         return 1
@@ -107,8 +82,68 @@ def compare_hands_bids(h_b_1, h_b_2) -> int:
     return compare_hands(h_b_1[0], h_b_2[0])
 
 
+def get_max_hand(hand):
+    counter_dict = Counter(hand)
+
+    max_key, max_value = 0, 0
+    for key, value in counter_dict.items():
+        if key != 1 and value >= max_value:
+            max_key, max_value = key, value
+
+    if max_key == 0:
+        max_key = 13
+
+    lst = [x if x != 1 else max_key for x in hand]
+    return lst
+
+
+def get_hand_cost(hand):
+    counter_dict = Counter(hand)
+    sorted_values = sorted(counter_dict.values())
+
+    if sorted_values == [5]:
+        cost = 7
+    elif sorted_values == [1, 4]:
+        cost = 6
+    elif sorted_values == [2, 3]:
+        cost = 5
+    elif sorted_values == [1, 1, 3]:
+        cost = 4
+    elif sorted_values == [1, 2, 2]:
+        cost = 3
+    elif sorted_values == [1, 1, 1, 2]:
+        cost = 2
+    elif sorted_values == [1, 1, 1, 1, 1]:
+        cost = 1
+    else:
+        print("Error!")
+        assert False
+    return cost
+
+
+def compare_hands_2(hand_1, hand_2) -> int:
+    max_hand_1 = get_max_hand(hand_1)
+    max_hand_2 = get_max_hand(hand_2)
+    cost_hand_1 = get_hand_cost(max_hand_1)
+    cost_hand_2 = get_hand_cost(max_hand_2)
+    if cost_hand_1 > cost_hand_2:
+        return 1
+    elif cost_hand_1 < cost_hand_2:
+        return -1
+    else:
+        if hand_1 > hand_2:
+            return 1
+        elif hand_1 == hand_2:
+            return 0
+        else:
+            return -1
+
+
+def compare_hands_bids_2(h_b_1, h_b_2) -> int:
+    return compare_hands_2(h_b_1[0], h_b_2[0])
+
+
 def get_answer_1(hands_bids):
-    print(hands_bids)
     sorted_hands_bids = sorted(
         hands_bids, key=cmp_to_key(compare_hands_bids), reverse=False
     )
@@ -117,17 +152,8 @@ def get_answer_1(hands_bids):
 
 
 def get_answer_2(hands_bids):
-    print(hands_bids)
-    jokered_hands_binds = []
-    for hand, bind in hands_bids:
-        if J in hand:
-            hand = get_max_hand(hand)
-        jokered_hands_binds.append((hand, bind))
-
-    print(jokered_hands_binds)
-
     sorted_hands_bids = sorted(
-        jokered_hands_binds, key=cmp_to_key(compare_hands_bids), reverse=False
+        hands_bids, key=cmp_to_key(compare_hands_bids_2), reverse=False
     )
     sorted_binds = [x[1] for x in sorted_hands_bids]
     return sum(map(lambda x: (x[0] + 1) * x[1], enumerate(sorted_binds)))
@@ -148,15 +174,14 @@ if __name__ == "__main__":
     assert compare_hands_bids(([2, 2, 2, 2, 2], 765), ([2, 2, 2, 2, 1], 684)) == 1
     assert compare_hands_bids(([13, 13, 6, 7, 7], 28), ([13, 10, 11, 11, 10], 220)) == 1
 
-    assert get_jokered_hands([13, 13, 1, 7, 7]) == [
-        [13, 13, 7, 7, 7],
-        [13, 13, 13, 7, 7],
-    ]
-
-    assert get_jokered_hands([1, 13, 1, 1, 1]) == [
-        [13, 13, 13, 13, 13],
-    ]
-
-    assert get_max_hand([13, 13, 1, 7, 7]) == [13, 13, 13, 7, 7]
+    assert get_max_hand([13, 13, 1, 7, 7]) == [13, 13, 7, 7, 7]
+    assert get_max_hand([1, 2, 2, 4, 5]) == [2, 2, 2, 4, 5]
     assert get_max_hand([1, 1, 1, 1, 1]) == [13, 13, 13, 13, 13]
+    assert get_max_hand([7, 9, 9, 7, 1]) == [7, 9, 9, 7, 9]
+    assert get_max_hand([1, 1, 1, 1, 2]) == [2, 2, 2, 2, 2]
+    assert get_max_hand([2, 2, 2, 2, 2]) == [2, 2, 2, 2, 2]
+    assert get_max_hand([10, 5, 5, 1, 5]) == [10, 5, 5, 5, 5]
+    assert get_max_hand([10, 5, 5, 2, 5]) == [10, 5, 5, 2, 5]
+    assert get_max_hand([12, 10, 1, 1, 10]) == [12, 10, 10, 10, 10]
+
     main()
