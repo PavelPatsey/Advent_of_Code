@@ -89,9 +89,7 @@ def compare_hands(hand_1, hand_2) -> int:
 
 
 def compare_hands_bids(h_b_1, h_b_2) -> int:
-    hand_1 = h_b_1[0]
-    hand_2 = h_b_2[0]
-    return compare_hands(hand_1, hand_2)
+    return compare_hands(h_b_1[0], h_b_2[0])
 
 
 def get_jokered_hands(hand_list):
