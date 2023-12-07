@@ -88,27 +88,16 @@ def get_hand_cost(hand):
     return cost
 
 
-def compare_hands(hand_1, hand_2) -> int:
-    cost_hand_1 = get_hand_cost(hand_1)
-    cost_hand_2 = get_hand_cost(hand_2)
-    if cost_hand_1 > cost_hand_2:
-        return 1
-    elif cost_hand_1 < cost_hand_2:
-        return -1
+def compare_hands(hand_1, hand_2, part) -> int:
+    if part == 1:
+        cost_hand_1 = get_hand_cost(hand_1)
+        cost_hand_2 = get_hand_cost(hand_2)
     else:
-        if hand_1 > hand_2:
-            return 1
-        elif hand_1 == hand_2:
-            return 0
-        else:
-            return -1
+        max_hand_1 = get_max_hand(hand_1)
+        max_hand_2 = get_max_hand(hand_2)
+        cost_hand_1 = get_hand_cost(max_hand_1)
+        cost_hand_2 = get_hand_cost(max_hand_2)
 
-
-def compare_hands_2(hand_1, hand_2) -> int:
-    max_hand_1 = get_max_hand(hand_1)
-    max_hand_2 = get_max_hand(hand_2)
-    cost_hand_1 = get_hand_cost(max_hand_1)
-    cost_hand_2 = get_hand_cost(max_hand_2)
     if cost_hand_1 > cost_hand_2:
         return 1
     elif cost_hand_1 < cost_hand_2:
@@ -123,11 +112,11 @@ def compare_hands_2(hand_1, hand_2) -> int:
 
 
 def compare_hands_bids(h_b_1, h_b_2) -> int:
-    return compare_hands(h_b_1[0], h_b_2[0])
+    return compare_hands(h_b_1[0], h_b_2[0], 1)
 
 
 def compare_hands_bids_2(h_b_1, h_b_2) -> int:
-    return compare_hands_2(h_b_1[0], h_b_2[0])
+    return compare_hands(h_b_1[0], h_b_2[0], 2)
 
 
 def get_answer(hands_bids, compare_hands_bids_function):
@@ -136,7 +125,6 @@ def get_answer(hands_bids, compare_hands_bids_function):
     )
     sorted_binds = [x[1] for x in sorted_hands_bids]
     return sum(map(lambda x: (x[0] + 1) * x[1], enumerate(sorted_binds)))
-
 
 
 def main():
