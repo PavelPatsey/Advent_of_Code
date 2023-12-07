@@ -1,9 +1,8 @@
-from collections import defaultdict, Counter
+from collections import Counter
 from functools import cmp_to_key
 
 INPUT = "input"
 
-J = 1
 
 CARDS_DICT = {
     "A": 14,
