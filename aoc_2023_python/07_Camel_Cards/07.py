@@ -1,6 +1,8 @@
 from collections import defaultdict
 from functools import cmp_to_key
 
+INPUT = "input"
+
 CARDS_DICT = {
     "A": 14,
     "K": 13,
@@ -32,8 +34,6 @@ CARDS_DICT_2 = {
     "2": 2,
     "J": 1,
 }
-
-INPUT = "test_input"
 
 
 def get_hands_bids():
@@ -67,9 +67,7 @@ def get_converted_hand(hand):
     return [h for h in hand if d[h] >= 2]
 
 
-def compare_hands_bids(h_b_1, h_b_2) -> int:
-    hand_1 = h_b_1[0]
-    hand_2 = h_b_2[0]
+def compare_hands(hand_1, hand_2) -> int:
     if len(set(hand_1)) < len(set(hand_2)):
         return 1
     elif len(set(hand_1)) > len(set(hand_2)):
@@ -88,6 +86,12 @@ def compare_hands_bids(h_b_1, h_b_2) -> int:
                 return 0
             else:
                 return -1
+
+
+def compare_hands_bids(h_b_1, h_b_2) -> int:
+    hand_1 = h_b_1[0]
+    hand_2 = h_b_2[0]
+    return compare_hands(hand_1, hand_2)
 
 
 def get_jokered_hands(hand_list):
