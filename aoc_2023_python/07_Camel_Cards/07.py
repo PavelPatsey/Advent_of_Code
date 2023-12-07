@@ -112,19 +112,20 @@ def compare_hands(hand_1, hand_2, part) -> int:
 
 
 def compare_hands_bids(h_b_1, h_b_2) -> int:
-    return compare_hands(h_b_1[0], h_b_2[0], 1)
+    return compare_hands(h_b_1[0], h_b_2[0], part=1)
 
 
 def compare_hands_bids_2(h_b_1, h_b_2) -> int:
-    return compare_hands(h_b_1[0], h_b_2[0], 2)
+    return compare_hands(h_b_1[0], h_b_2[0], part=2)
 
 
 def get_answer(hands_bids, compare_hands_bids_function):
     sorted_hands_bids = sorted(
-        hands_bids, key=cmp_to_key(compare_hands_bids_function), reverse=False
+        hands_bids,
+        key=cmp_to_key(compare_hands_bids_function),
+        reverse=False,
     )
-    sorted_binds = [x[1] for x in sorted_hands_bids]
-    return sum(map(lambda x: (x[0] + 1) * x[1], enumerate(sorted_binds)))
+    return sum(map(lambda x: (x[0] + 1) * x[1][1], enumerate(sorted_hands_bids)))
 
 
 def main():
