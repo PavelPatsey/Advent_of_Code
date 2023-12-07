@@ -77,7 +77,7 @@ def get_jokered_hands(hand_list):
 
 def get_max_hand(hand):
     if hand == [J, J, J, J, J]:
-        return [13, 13, 13, 13, 13]
+        return [CARDS_DICT_2["A"]] * 5
     all_jokered_hands = get_jokered_hands(hand)
     return max(all_jokered_hands, key=cmp_to_key(compare_hands))
 
