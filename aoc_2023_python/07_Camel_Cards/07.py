@@ -50,38 +50,6 @@ def get_hands_bids(cards_dict):
     return hands_bids
 
 
-def get_converted_hand(hand):
-    d = defaultdict(int)
-    for h in hand:
-        d[h] += 1
-    return [h for h in hand if d[h] >= 2]
-
-
-def compare_hands(hand_1, hand_2) -> int:
-    if len(set(hand_1)) < len(set(hand_2)):
-        return 1
-    elif len(set(hand_1)) > len(set(hand_2)):
-        return -1
-    else:
-        converted_hand_1 = get_converted_hand(hand_1)
-        converted_hand_2 = get_converted_hand(hand_2)
-        if len(set(converted_hand_1)) < len(set(converted_hand_2)):
-            return 1
-        elif len(set(converted_hand_1)) > len(set(converted_hand_2)):
-            return -1
-        else:
-            if hand_1 > hand_2:
-                return 1
-            elif hand_1 == hand_2:
-                return 0
-            else:
-                return -1
-
-
-def compare_hands_bids(h_b_1, h_b_2) -> int:
-    return compare_hands(h_b_1[0], h_b_2[0])
-
-
 def get_max_hand(hand):
     counter_dict = Counter(hand)
 
@@ -121,6 +89,22 @@ def get_hand_cost(hand):
     return cost
 
 
+def compare_hands(hand_1, hand_2) -> int:
+    cost_hand_1 = get_hand_cost(hand_1)
+    cost_hand_2 = get_hand_cost(hand_2)
+    if cost_hand_1 > cost_hand_2:
+        return 1
+    elif cost_hand_1 < cost_hand_2:
+        return -1
+    else:
+        if hand_1 > hand_2:
+            return 1
+        elif hand_1 == hand_2:
+            return 0
+        else:
+            return -1
+
+
 def compare_hands_2(hand_1, hand_2) -> int:
     max_hand_1 = get_max_hand(hand_1)
     max_hand_2 = get_max_hand(hand_2)
@@ -137,6 +121,10 @@ def compare_hands_2(hand_1, hand_2) -> int:
             return 0
         else:
             return -1
+
+
+def compare_hands_bids(h_b_1, h_b_2) -> int:
+    return compare_hands(h_b_1[0], h_b_2[0])
 
 
 def compare_hands_bids_2(h_b_1, h_b_2) -> int:
@@ -167,9 +155,6 @@ def main():
 
 
 if __name__ == "__main__":
-    assert get_converted_hand([2, 3, 3, 10, 13]) == [3, 3]
-    assert get_converted_hand([5, 5, 5, 10, 11]) == [5, 5, 5]
-
     assert compare_hands_bids(([2, 3, 3, 10, 13], 765), ([5, 5, 5, 10, 11], 684)) == -1
     assert compare_hands_bids(([2, 2, 2, 2, 2], 765), ([2, 2, 2, 2, 1], 684)) == 1
     assert compare_hands_bids(([13, 13, 6, 7, 7], 28), ([13, 10, 11, 11, 10], 220)) == 1
