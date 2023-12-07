@@ -50,6 +50,9 @@ def get_hands_bids(cards_dict):
 
 
 def get_max_hand(hand):
+    if 1 not in hand:
+        return hand
+
     counter_dict = Counter(hand)
 
     max_key, max_value = 0, 0
@@ -60,8 +63,7 @@ def get_max_hand(hand):
     if max_key == 0:
         max_key = 13
 
-    lst = [x if x != 1 else max_key for x in hand]
-    return lst
+    return [x if x != 1 else max_key for x in hand]
 
 
 def get_hand_cost(hand):
@@ -93,10 +95,8 @@ def compare_hands(hand_1, hand_2, part) -> int:
         cost_hand_1 = get_hand_cost(hand_1)
         cost_hand_2 = get_hand_cost(hand_2)
     else:
-        max_hand_1 = get_max_hand(hand_1)
-        max_hand_2 = get_max_hand(hand_2)
-        cost_hand_1 = get_hand_cost(max_hand_1)
-        cost_hand_2 = get_hand_cost(max_hand_2)
+        cost_hand_1 = get_hand_cost(get_max_hand(hand_1))
+        cost_hand_2 = get_hand_cost(get_max_hand(hand_2))
 
     if cost_hand_1 > cost_hand_2:
         return 1
