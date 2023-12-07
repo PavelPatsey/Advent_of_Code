@@ -78,8 +78,8 @@ def get_jokered_hands(hand_list):
 def get_max_hand(hand):
     if hand == [J, J, J, J, J]:
         return [CARDS_DICT_2["A"]] * 5
-    all_jokered_hands = get_jokered_hands(hand)
-    return max(all_jokered_hands, key=cmp_to_key(compare_hands))
+    jokered_hands = get_jokered_hands(hand)
+    return max(jokered_hands, key=cmp_to_key(compare_hands))
 
 
 def compare_hands(hand_1, hand_2) -> int:
