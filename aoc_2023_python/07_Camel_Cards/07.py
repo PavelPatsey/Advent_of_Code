@@ -1,7 +1,9 @@
 from collections import defaultdict
 from functools import cmp_to_key
 
-INPUT = "input"
+INPUT = "test_input"
+
+J = 1
 
 CARDS_DICT = {
     "A": 14,
@@ -67,6 +69,30 @@ def get_converted_hand(hand):
     return [h for h in hand if d[h] >= 2]
 
 
+def get_jokered_hands(hand_list):
+    jokered_hands = [hand_list]
+    all_jokered_hands = []
+    len_hand = len(hand_list)
+    replacements_list = [card for card in set(hand_list) if card != 1]
+    # (lst[:i] + ["j"] + lst[i + 1:])
+    while jokered_hands:
+        hand = jokered_hands.pop()
+        if 1 in hand:
+            for i in range(len_hand):
+                if 1 == hand[i]:
+                    for card in replacements_list:
+                        jokered_hands.append(hand[:i] + [card] + hand[i + 1 :])
+        else:
+            if hand not in all_jokered_hands:
+                all_jokered_hands.append(hand)
+    return all_jokered_hands
+
+
+def get_max_hand(hand):
+    all_jokered_hands = get_jokered_hands(hand)
+    return max(all_jokered_hands, key=cmp_to_key(compare_hands))
+
+
 def compare_hands(hand_1, hand_2) -> int:
     if len(set(hand_1)) < len(set(hand_2)):
         return 1
@@ -92,41 +118,18 @@ def compare_hands_bids(h_b_1, h_b_2) -> int:
     return compare_hands(h_b_1[0], h_b_2[0])
 
 
-def get_jokered_hands(hand_list):
-    jokered_hands = [hand_list]
-    all_jokered_hands = []
-    len_hand = len(hand_list)
-    replacements_list = [card for card in set(hand_list) if card != 1]
-    # (lst[:i] + ["j"] + lst[i + 1:])
-    while jokered_hands:
-        hand = jokered_hands.pop()
-        if 1 in hand:
-            for i in range(len_hand):
-                if 1 == hand[i]:
-                    for card in replacements_list:
-                        jokered_hands.append(hand[:i] + [card] + hand[i + 1 :])
-        else:
-            if hand not in all_jokered_hands:
-                all_jokered_hands.append(hand)
-    return all_jokered_hands
-
-
-def get_max_hand(hand):
-    all_jokered_hands = get_jokered_hands(hand)
-    return
-
-
-def compare_hands_bids_2(h_b_1, h_b_2) -> int:
-    hand_1 = h_b_1[0]
-    hand_2 = h_b_2[0]
-    if 1 in hand_1:
-        max_hand_1 = get_max_hand(hand_1)
-    if 1 in hand_2:
-        max_hand_2 = get_max_hand(hand_2)
-    return
+# def compare_hands_bids_2(h_b_1, h_b_2) -> int:
+#     hand_1 = h_b_1[0]
+#     hand_2 = h_b_2[0]
+#     if J in hand_1 and hand_1 != [J, J, J, J, J]:
+#         hand_1 = get_max_hand(hand_1)
+#     if 1 in hand_2 and hand_2 != [J, J, J, J, J]:
+#         hand_2 = get_max_hand(hand_2)
+#     return compare_hands(hand_1, hand_2)
 
 
 def get_answer_1(hands_bids):
+    print(hands_bids)
     sorted_hands_bids = sorted(
         hands_bids, key=cmp_to_key(compare_hands_bids), reverse=False
     )
@@ -135,8 +138,16 @@ def get_answer_1(hands_bids):
 
 
 def get_answer_2(hands_bids):
+    jokered_hands_binds = []
+    for hand, bind in hands_bids:
+        if J in hand and hand != [J, J, J, J, J]:
+            hand = get_max_hand(hand)
+        jokered_hands_binds.append((hand, bind))
+
+    print(jokered_hands_binds)
+
     sorted_hands_bids = sorted(
-        hands_bids, key=cmp_to_key(compare_hands_bids_2), reverse=False
+        jokered_hands_binds, key=cmp_to_key(compare_hands_bids), reverse=False
     )
     sorted_binds = [x[1] for x in sorted_hands_bids]
     return sum(map(lambda x: (x[0] + 1) * x[1], enumerate(sorted_binds)))
@@ -145,8 +156,8 @@ def get_answer_2(hands_bids):
 def main():
     hands_bids = get_hands_bids()
     print(get_answer_1(hands_bids))
-    # hands_bids_2 = get_hands_bids()
-    # print(get_answer_1(hands_bids_2))
+    hands_bids_2 = get_hands_bids_2()
+    print(get_answer_2(hands_bids_2))
 
 
 if __name__ == "__main__":
@@ -165,4 +176,6 @@ if __name__ == "__main__":
     assert get_jokered_hands([1, 13, 1, 1, 1]) == [
         [13, 13, 13, 13, 13],
     ]
+
+    assert get_max_hand([13, 13, 1, 7, 7]) == [13, 13, 13, 7, 7]
     main()
