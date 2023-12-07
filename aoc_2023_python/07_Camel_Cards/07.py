@@ -107,16 +107,6 @@ def compare_hands_bids(h_b_1, h_b_2) -> int:
     return compare_hands(h_b_1[0], h_b_2[0])
 
 
-# def compare_hands_bids_2(h_b_1, h_b_2) -> int:
-#     hand_1 = h_b_1[0]
-#     hand_2 = h_b_2[0]
-#     if J in hand_1 and hand_1 != [J, J, J, J, J]:
-#         hand_1 = get_max_hand(hand_1)
-#     if 1 in hand_2 and hand_2 != [J, J, J, J, J]:
-#         hand_2 = get_max_hand(hand_2)
-#     return compare_hands(hand_1, hand_2)
-
-
 def get_answer_1(hands_bids):
     print(hands_bids)
     sorted_hands_bids = sorted(
@@ -168,4 +158,5 @@ if __name__ == "__main__":
     ]
 
     assert get_max_hand([13, 13, 1, 7, 7]) == [13, 13, 13, 7, 7]
+    assert get_max_hand([1, 1, 1, 1, 1]) == [13, 13, 13, 13, 13]
     main()
