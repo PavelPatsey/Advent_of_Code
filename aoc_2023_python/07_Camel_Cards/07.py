@@ -1,3 +1,6 @@
+from functools import cmp_to_key
+from collections import defaultdict
+
 CARDS_DICT = {
     "A": 14,
     "K": 13,
@@ -14,7 +17,7 @@ CARDS_DICT = {
     "2": 2,
 }
 
-INPUT = "test_input"
+INPUT = "input"
 
 
 def get_hands_bids():
@@ -29,10 +32,55 @@ def get_hands_bids():
     return hands_bids
 
 
+def get_converted_hand(hand):
+    d = defaultdict(int)
+    for h in hand:
+        d[h] += 1
+    return [h for h in hand if d[h] >= 2]
+
+
+def compare_hands_bids(h_b_1, h_b_2) -> int:
+    hand_1 = h_b_1[0]
+    hand_2 = h_b_2[0]
+    if len(set(hand_1)) < len(set(hand_2)):
+        return 1
+    elif len(set(hand_1)) > len(set(hand_2)):
+        return -1
+    else:
+        converted_hand_1 = get_converted_hand(hand_1)
+        converted_hand_2 = get_converted_hand(hand_2)
+        if len(set(converted_hand_1)) < len(set(converted_hand_2)):
+            return 1
+        elif len(set(converted_hand_1)) > len(set(converted_hand_2)):
+            return -1
+        else:
+            if hand_1 > hand_2:
+                return 1
+            elif hand_1 == hand_2:
+                return 0
+            else:
+                return -1
+
+
+def get_answer_1(hands_bids):
+    sorted_hands_bids = sorted(
+        hands_bids, key=cmp_to_key(compare_hands_bids), reverse=False
+    )
+    sorted_binds = [x[1] for x in sorted_hands_bids]
+    return sum(map(lambda x: (x[0] + 1) * x[1], enumerate(sorted_binds)))
+
+
 def main():
     hands_bids = get_hands_bids()
-    print(hands_bids)
+    print(get_answer_1(hands_bids))
 
 
 if __name__ == "__main__":
+    assert get_converted_hand([2, 3, 3, 10, 13]) == [3, 3]
+    assert get_converted_hand([5, 5, 5, 10, 11]) == [5, 5, 5]
+
+    assert compare_hands_bids(([2, 3, 3, 10, 13], 765), ([5, 5, 5, 10, 11], 684)) == -1
+    assert compare_hands_bids(([2, 2, 2, 2, 2], 765), ([2, 2, 2, 2, 1], 684)) == 1
+    assert compare_hands_bids(([13, 13, 6, 7, 7], 28), ([13, 10, 11, 11, 10], 220)) == 1
+
     main()
