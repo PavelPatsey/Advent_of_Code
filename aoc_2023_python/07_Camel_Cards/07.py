@@ -130,27 +130,20 @@ def compare_hands_bids_2(h_b_1, h_b_2) -> int:
     return compare_hands_2(h_b_1[0], h_b_2[0])
 
 
-def get_answer_1(hands_bids):
+def get_answer(hands_bids, compare_hands_bids_function):
     sorted_hands_bids = sorted(
-        hands_bids, key=cmp_to_key(compare_hands_bids), reverse=False
+        hands_bids, key=cmp_to_key(compare_hands_bids_function), reverse=False
     )
     sorted_binds = [x[1] for x in sorted_hands_bids]
     return sum(map(lambda x: (x[0] + 1) * x[1], enumerate(sorted_binds)))
 
-
-def get_answer_2(hands_bids):
-    sorted_hands_bids = sorted(
-        hands_bids, key=cmp_to_key(compare_hands_bids_2), reverse=False
-    )
-    sorted_binds = [x[1] for x in sorted_hands_bids]
-    return sum(map(lambda x: (x[0] + 1) * x[1], enumerate(sorted_binds)))
 
 
 def main():
     hands_bids = get_hands_bids(CARDS_DICT)
-    print(get_answer_1(hands_bids))
+    print(get_answer(hands_bids, compare_hands_bids))
     hands_bids_2 = get_hands_bids(CARDS_DICT_2)
-    print(get_answer_2(hands_bids_2))
+    print(get_answer(hands_bids_2, compare_hands_bids_2))
 
 
 if __name__ == "__main__":
