@@ -38,26 +38,14 @@ CARDS_DICT_2 = {
 }
 
 
-def get_hands_bids():
+def get_hands_bids(cards_dict):
     with open(INPUT, "r") as file:
         data = file.readlines()
     hands_bids = []
     for line in data:
         hand_str, bid_str = line.strip().split()
         bid = int(bid_str)
-        hand_list = [CARDS_DICT[x] for x in hand_str]
-        hands_bids.append((hand_list, bid))
-    return hands_bids
-
-
-def get_hands_bids_2():
-    with open(INPUT, "r") as file:
-        data = file.readlines()
-    hands_bids = []
-    for line in data:
-        hand_str, bid_str = line.strip().split()
-        bid = int(bid_str)
-        hand_list = [CARDS_DICT_2[x] for x in hand_str]
+        hand_list = [cards_dict[x] for x in hand_str]
         hands_bids.append((hand_list, bid))
     return hands_bids
 
@@ -74,7 +62,6 @@ def get_jokered_hands(hand_list):
     all_jokered_hands = []
     len_hand = len(hand_list)
     replacements_list = [card for card in set(hand_list) if card != 1]
-    # (lst[:i] + ["j"] + lst[i + 1:])
     while jokered_hands:
         hand = jokered_hands.pop()
         if 1 in hand:
@@ -89,6 +76,8 @@ def get_jokered_hands(hand_list):
 
 
 def get_max_hand(hand):
+    if hand == [J, J, J, J, J]:
+        return [13, 13, 13, 13, 13]
     all_jokered_hands = get_jokered_hands(hand)
     return max(all_jokered_hands, key=cmp_to_key(compare_hands))
 
@@ -138,9 +127,10 @@ def get_answer_1(hands_bids):
 
 
 def get_answer_2(hands_bids):
+    print(hands_bids)
     jokered_hands_binds = []
     for hand, bind in hands_bids:
-        if J in hand and hand != [J, J, J, J, J]:
+        if J in hand:
             hand = get_max_hand(hand)
         jokered_hands_binds.append((hand, bind))
 
@@ -154,9 +144,9 @@ def get_answer_2(hands_bids):
 
 
 def main():
-    hands_bids = get_hands_bids()
+    hands_bids = get_hands_bids(CARDS_DICT)
     print(get_answer_1(hands_bids))
-    hands_bids_2 = get_hands_bids_2()
+    hands_bids_2 = get_hands_bids(CARDS_DICT_2)
     print(get_answer_2(hands_bids_2))
 
 
