@@ -1,5 +1,5 @@
-from functools import cmp_to_key
 from collections import defaultdict
+from functools import cmp_to_key
 
 CARDS_DICT = {
     "A": 14,
@@ -90,11 +90,11 @@ def compare_hands_bids(h_b_1, h_b_2) -> int:
                 return -1
 
 
-def get_all_jokered_hands(hand_list):
+def get_jokered_hands(hand_list):
     jokered_hands = [hand_list]
     all_jokered_hands = []
     len_hand = len(hand_list)
-    replacements_list = [card for card in CARDS_DICT_2.values() if card != 1]
+    replacements_list = [card for card in set(hand_list) if card != 1]
     # (lst[:i] + ["j"] + lst[i + 1:])
     while jokered_hands:
         hand = jokered_hands.pop()
@@ -104,12 +104,13 @@ def get_all_jokered_hands(hand_list):
                     for card in replacements_list:
                         jokered_hands.append(hand[:i] + [card] + hand[i + 1 :])
         else:
-            all_jokered_hands.append(hand)
+            if hand not in all_jokered_hands:
+                all_jokered_hands.append(hand)
     return all_jokered_hands
 
 
 def get_max_hand(hand):
-    all_jokered_hands = get_all_jokered_hands(hand)
+    all_jokered_hands = get_jokered_hands(hand)
     return
 
 
@@ -154,19 +155,12 @@ if __name__ == "__main__":
     assert compare_hands_bids(([2, 2, 2, 2, 2], 765), ([2, 2, 2, 2, 1], 684)) == 1
     assert compare_hands_bids(([13, 13, 6, 7, 7], 28), ([13, 10, 11, 11, 10], 220)) == 1
 
-    assert get_all_jokered_hands([13, 13, 1, 7, 7]) == [
-        [13, 13, 2, 7, 7],
-        [13, 13, 3, 7, 7],
-        [13, 13, 4, 7, 7],
-        [13, 13, 5, 7, 7],
-        [13, 13, 6, 7, 7],
+    assert get_jokered_hands([13, 13, 1, 7, 7]) == [
         [13, 13, 7, 7, 7],
-        [13, 13, 8, 7, 7],
-        [13, 13, 9, 7, 7],
-        [13, 13, 10, 7, 7],
-        [13, 13, 11, 7, 7],
-        [13, 13, 12, 7, 7],
         [13, 13, 13, 7, 7],
     ]
 
+    assert get_jokered_hands([1, 13, 1, 1, 1]) == [
+        [13, 13, 13, 13, 13],
+    ]
     main()
