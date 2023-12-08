@@ -39,8 +39,9 @@ def get_answer_2(instruction, nodes):
             key = nodes[key][follow_index]
         return counter
 
-    keys = [key for key in nodes.keys() if key.endswith("A")]
-    return lcm(*map(_get_counter, keys))
+    keys = filter(lambda key: key.endswith("A"), nodes.keys())
+    mapped = map(_get_counter, keys)
+    return lcm(*mapped)
 
 
 def main():
