@@ -1,4 +1,4 @@
-INPUT = "test_input"
+INPUT = "input"
 FOLLOW_DICT = {"L": 0, "R": 1}
 
 
