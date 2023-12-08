@@ -1,4 +1,4 @@
-INPUT = "input"
+INPUT = "test_input"
 FOLLOW_DICT = {"L": 0, "R": 1}
 
 
@@ -27,9 +27,25 @@ def get_answer_1(instruction, nodes):
     return counter
 
 
+def get_answer_2(instruction, nodes):
+    def _is_all_ends_z(keys_list):
+        return all(map(lambda x: x.endswith("Z"), keys_list))
+
+    counter = 0
+    keys = [key for key in nodes.keys() if key.endswith("A")]
+    len_instr = len(instruction)
+    while not _is_all_ends_z(keys):
+        index = counter % len_instr
+        follow_index = FOLLOW_DICT[instruction[index]]
+        counter += 1
+        keys = [nodes[key][follow_index] for key in keys]
+    return counter
+
+
 def main():
     instruction, nodes = get_input()
     print(get_answer_1(instruction, nodes))
+    print(get_answer_2(instruction, nodes))
 
 
 if __name__ == "__main__":
