@@ -18,7 +18,6 @@ def get_input():
 def get_answer_1(instruction, nodes):
     counter = 0
     key = "AAA"
-    node = nodes[key]
     len_instr = len(instruction)
     while not key == "ZZZ":
         index = counter % len_instr
