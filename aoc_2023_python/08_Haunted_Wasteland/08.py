@@ -1,8 +1,26 @@
 INPUT = "test_input"
 
 
+def get_input():
+    with open(INPUT, "r") as file:
+        data = file.read()
+    instruction, nodes_str = data.split("\n\n")
+    # 'AAA = (BBB, BBB)
+    # BBB = (AAA, ZZZ)
+    # ZZZ = (ZZZ, ZZZ)
+    # '
+    nodes = {}
+    for line in nodes_str.strip().split("\n"):
+        key, value = line.split(" = ")
+        value = value.strip("()").split(", ")
+        nodes[key] = value
+
+    return instruction, nodes
+
+
 def main():
-    print("start")
+    instruction, nodes = get_input()
+    print(instruction, nodes)
 
 
 if __name__ == "__main__":
