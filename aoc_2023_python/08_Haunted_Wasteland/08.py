@@ -22,8 +22,8 @@ def get_answer_1(instruction, nodes):
     while not key == "ZZZ":
         index = counter % len_instr
         follow_index = FOLLOW_DICT[instruction[index]]
-        key = nodes[key][follow_index]
         counter += 1
+        key = nodes[key][follow_index]
     return counter
 
 
