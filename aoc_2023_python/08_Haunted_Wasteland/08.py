@@ -1,9 +1,10 @@
-INPUT = "test_input"
+from math import lcm
+
 FOLLOW_DICT = {"L": 0, "R": 1}
 
 
-def get_input():
-    with open(INPUT, "r") as file:
+def get_input(inp):
+    with open(inp, "r") as file:
         data = file.read()
     instruction, nodes_str = data.split("\n\n")
     nodes = {}
@@ -28,22 +29,22 @@ def get_answer_1(instruction, nodes):
 
 
 def get_answer_2(instruction, nodes):
-    def _is_all_ends_z(keys_list):
-        return all(map(lambda x: x.endswith("Z"), keys_list))
+    def _get_counter(key):
+        counter = 0
+        len_instr = len(instruction)
+        while not key.endswith("Z"):
+            index = counter % len_instr
+            follow_index = FOLLOW_DICT[instruction[index]]
+            counter += 1
+            key = nodes[key][follow_index]
+        return counter
 
-    counter = 0
     keys = [key for key in nodes.keys() if key.endswith("A")]
-    len_instr = len(instruction)
-    while not _is_all_ends_z(keys):
-        index = counter % len_instr
-        follow_index = FOLLOW_DICT[instruction[index]]
-        counter += 1
-        keys = [nodes[key][follow_index] for key in keys]
-    return counter
+    return lcm(*map(_get_counter, keys))
 
 
 def main():
-    instruction, nodes = get_input()
+    instruction, nodes = get_input("input")
     print(get_answer_1(instruction, nodes))
     print(get_answer_2(instruction, nodes))
 
