@@ -43,4 +43,5 @@ if __name__ == "__main__":
     assert get_predicted_value([0, 3, 6, 9, 12, 15], part=2) == -3
     assert get_predicted_value([1, 3, 6, 10, 15, 21], part=2) == 0
     assert get_predicted_value([10, 13, 16, 21, 30, 45], part=2) == 5
+
     main()
