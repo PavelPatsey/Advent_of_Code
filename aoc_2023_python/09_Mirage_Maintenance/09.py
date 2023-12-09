@@ -11,9 +11,9 @@ def get_predicted_value(sequence, part):
 
     sequences = [sequence]
     while not _is_all_null(sequences[-1]):
-        previous_seq = sequences[-1]
-        new_seq = [y - x for x, y in zip(previous_seq, previous_seq[1:])]
-        sequences.append(new_seq)
+        current_seq = sequences[-1]
+        next_seq = [y - x for x, y in zip(current_seq, current_seq[1:])]
+        sequences.append(next_seq)
 
     if part == 1:
         return sum(map(lambda x: x[-1], sequences))
