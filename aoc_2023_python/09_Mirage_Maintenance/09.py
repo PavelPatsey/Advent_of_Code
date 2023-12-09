@@ -1,5 +1,5 @@
-def get_history(inp):
-    with open(inp, "r") as file:
+def get_history(input_file):
+    with open(input_file, "r") as file:
         data = file.readlines()
     history = list(map(lambda x: [int(y) for y in x.strip().split()], data))
     return history
@@ -18,10 +18,7 @@ def get_predicted_value(sequence, part):
     if part == 1:
         return sum(map(lambda x: x[-1], sequences))
     else:
-        result = 0
-        for i in reversed(range(1, len(sequences))):
-            result = sequences[i - 1][0] - result
-        return result
+        return sum(map(lambda x: (-1) ** x[0] * x[1][0], enumerate(sequences)))
 
 
 def get_answer_1(history):
