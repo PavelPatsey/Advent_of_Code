@@ -36,11 +36,11 @@ def main():
 
 
 if __name__ == "__main__":
-    assert get_predicted_value([0, 3, 6, 9, 12, 15], 1) == 18
-    assert get_predicted_value([1, 3, 6, 10, 15, 21], 1) == 28
-    assert get_predicted_value([10, 13, 16, 21, 30, 45], 1) == 68
+    assert get_predicted_value([0, 3, 6, 9, 12, 15], part=1) == 18
+    assert get_predicted_value([1, 3, 6, 10, 15, 21], part=1) == 28
+    assert get_predicted_value([10, 13, 16, 21, 30, 45], part=1) == 68
 
-    assert get_predicted_value([0, 3, 6, 9, 12, 15], 2) == -3
-    assert get_predicted_value([1, 3, 6, 10, 15, 21], 2) == 0
-    assert get_predicted_value([10, 13, 16, 21, 30, 45], 2) == 5
+    assert get_predicted_value([0, 3, 6, 9, 12, 15], part=2) == -3
+    assert get_predicted_value([1, 3, 6, 10, 15, 21], part=2) == 0
+    assert get_predicted_value([10, 13, 16, 21, 30, 45], part=2) == 5
     main()
