@@ -17,65 +17,65 @@ def get_pipes(input_file):
 
 
 def can_visit(nodes, i, j, di, dj):
+    right = (0, 1)
+    left = (0, -1)
+    up = (-1, 0)
+    down = (1, 0)
+
+    right_nodes = ["-", "7", "J"]
+    left_nodes = ["-", "L", "F"]
+    up_nodes = ["|", "7", "F"]
+    down_nodes = ["|", "L", "J"]
+
+    trend = di, dj
     current_node = nodes[i][j]
     next_node = nodes[i + di][j + dj]
+
     if next_node == ".":
         return False
-    if current_node == "S":
+    elif current_node == "S":
         return True
-    if current_node == "F":
+    elif current_node == "F":
         return (
-            di == 0
-            and dj == 1
-            and next_node == "-"
-            or di == 1
-            and dj == 0
-            and next_node == "|"
+            trend == right
+            and next_node in right_nodes
+            or trend == down
+            and next_node in down_nodes,
         )
     elif current_node == "7":
         return (
-            di == 0
-            and dj == -1
-            and next_node == "-"
-            or di == 1
-            and dj == 0
-            and next_node == "|"
+            trend == left
+            and next_node in left_nodes
+            or trend == down
+            and next_node in down_nodes
         )
     elif current_node == "J":
         return (
-            di == 0
-            and dj == -1
-            and next_node == "-"
-            or di == -1
-            and dj == 0
-            and next_node == "|"
+            trend == left
+            and next_node in left_nodes
+            or trend == up
+            and next_node in up_nodes
         )
     elif current_node == "L":
         return (
-            di == 0
-            and dj == 1
-            and next_node == "-"
-            or di == -1
-            and dj == 0
-            and next_node == "|"
+            trend == right
+            and next_node in right_nodes
+            or trend == up
+            and next_node in up_nodes
         )
     elif current_node == "-":
         return (
-            di == 0
-            and dj == 1
-            and next_node in ("7", "J")
-            or di == 0
-            and dj == -1
-            and next_node in ("F", "L")
+            trend == right
+            and next_node in right_nodes
+            or trend == left
+            and next_node in left_nodes
         )
     elif current_node == "|":
         return (
-            di == 1
-            and dj == 0
-            and next_node in ("L", "J")
-            or di == -1
-            and dj == 0
-            and next_node in ("F", "7")
+            trend == up
+            and next_node in up_nodes
+            or trend == down
+            and next_node in down_nodes
         )
     else:
         assert False
@@ -91,7 +91,7 @@ def get_max_steps_counter(start_i, start_j, nodes):
         i, j, counter = queue.popleft()
         for di, dj in INDEXES:
             new_i, new_j, new_counter = i + di, j + dj, counter + 1
-            if (new_i, new_j) not in visited and can_visit(nodes, i, j, di, dj):
+            if can_visit(nodes, i, j, di, dj) and (new_i, new_j) not in visited:
                 visited.append((new_i, new_j))
                 queue.append((new_i, new_j, new_counter))
                 max_counter = max(max_counter, new_counter)
@@ -126,4 +126,6 @@ def main():
 
 
 if __name__ == "__main__":
+    nodes = get_pipes("test_input")
+    assert can_visit(nodes, 2, 4, 1, 0) is True
     main()
