@@ -1,4 +1,3 @@
-from typing import Set
 from collections import deque
 
 INDEXES = ((1, 0), (0, 1), (-1, 0), (0, -1))
@@ -24,12 +23,6 @@ def get_pipes(input_file):
         + first_last_string
     )
     return pipes
-
-
-def get_updated_set(a: Set, b: Set) -> Set:
-    new_a = a.copy()
-    new_a.update(b)
-    return new_a
 
 
 def can_visit(nodes, i, j, di, dj):
