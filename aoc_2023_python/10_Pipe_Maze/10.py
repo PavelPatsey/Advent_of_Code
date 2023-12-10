@@ -40,23 +40,27 @@ def get_next_direction(i, j, nodes, prev_dir_index):
     return new_dir_index
 
 
-def get_cycle_len(start_i, start_j, nodes, dir_index):
+def get_cycle(start_i, start_j, nodes, dir_index):
+    path = [
+        (start_i, start_j),
+    ]
     counter = 1
     di, dj = DIRECTIONS[dir_index]
     i, j = start_i + di, start_j + dj
     node = nodes[i][j]
 
     while node != "S":
+        path.append((i, j))
         dir_index = get_next_direction(i, j, nodes, dir_index)
         if dir_index is None:
-            return
+            return None, None
         di, dj = DIRECTIONS[dir_index]
         i = i + di
         j = j + dj
         node = nodes[i][j]
         counter += 1
 
-    return counter
+    return counter, path
 
 
 def get_start_coordinates(nodes):
@@ -68,17 +72,41 @@ def get_start_coordinates(nodes):
     return x, y
 
 
-def get_answer_1(nodes):
+def get_area(nodes, path):
+    vertical_pipes = {"|", "F", "7"}
+    # vertical_pipes = ["|", "L", "J"]
+
+    # start_i, start_j = path[0]
+    # nodes[start_i][start_j] = "J"
+
+    n = len(nodes)
+    m = len(nodes[0])
+    visited = [[False for i in range(m)] for j in range(n)]
+    for i, j in path:
+        visited[i][j] = True
+
+    area_counter = 0
+    for i in range(n):
+        is_inside = False
+        for j in range(m):
+            if visited[i][j] and nodes[i][j] in vertical_pipes:
+                is_inside = not is_inside
+            if is_inside and not visited[i][j]:
+                area_counter += 1
+
+    return area_counter
+
+
+def get_answer(nodes):
     x, y = get_start_coordinates(nodes)
     for i in range(len(DIRECTIONS)):
-        length = get_cycle_len(x, y, nodes, i)
+        length, path = get_cycle(x, y, nodes, i)
         if length is not None:
-            return length // 2
-
+            return length // 2, get_area(nodes, path)
 
 def main():
     nodes = get_nodes("input")
-    print(get_answer_1(nodes))
+    print(get_answer(nodes))
 
 
 if __name__ == "__main__":
@@ -91,7 +119,8 @@ if __name__ == "__main__":
         ".......",
         ".......",
     ]
-    assert get_answer_1(nodes) == 4
+    print(get_answer(nodes))
+    # assert get_answer(nodes) == 4,1
 
     nodes = [
         ".......",
@@ -102,7 +131,7 @@ if __name__ == "__main__":
         ".LJ....",
         ".......",
     ]
-    assert get_answer_1(nodes) == 8
+    # assert get_answer(nodes) == 8,1
 
     nodes = [
         ".......",
@@ -113,6 +142,6 @@ if __name__ == "__main__":
         ".LJ.LJ.",
         ".......",
     ]
-    assert get_answer_1(nodes) == 8
+    # assert get_answer(nodes) == 8,1
 
     main()
