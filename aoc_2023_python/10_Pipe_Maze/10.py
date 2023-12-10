@@ -104,44 +104,11 @@ def get_answer(nodes):
         if length is not None:
             return length // 2, get_area(nodes, path)
 
+
 def main():
     nodes = get_nodes("input")
     print(get_answer(nodes))
 
 
 if __name__ == "__main__":
-    nodes = [
-        ".......",
-        ".......",
-        "..S-7..",
-        "..|.|..",
-        "..L-J..",
-        ".......",
-        ".......",
-    ]
-    print(get_answer(nodes))
-    # assert get_answer(nodes) == 4,1
-
-    nodes = [
-        ".......",
-        "...F7..",
-        "..FJ|..",
-        ".SJ.L7.",
-        ".|F--J.",
-        ".LJ....",
-        ".......",
-    ]
-    # assert get_answer(nodes) == 8,1
-
-    nodes = [
-        ".......",
-        ".7-F7-.",
-        "..FJ|7.",
-        ".SJLL7.",
-        ".|F--J.",
-        ".LJ.LJ.",
-        ".......",
-    ]
-    # assert get_answer(nodes) == 8,1
-
     main()
