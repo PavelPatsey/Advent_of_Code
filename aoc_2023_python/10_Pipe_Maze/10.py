@@ -1,4 +1,5 @@
 from typing import Set
+from collections import deque
 
 INDEXES = ((1, 0), (0, 1), (-1, 0), (0, -1))
 
@@ -97,23 +98,20 @@ def can_visit(nodes, i, j, di, dj):
 
 
 def get_max_steps_counter(start_i, start_j, nodes):
-    counter = 0
+    max_counter = 0
     visited = [(start_i, start_j)]
-    queue = [(start_i, start_j)]
+    queue = deque(((start_i, start_j, 0),))
 
     while queue:
-        i, j = queue.pop()
-        condition = True
+        i, j, counter = queue.popleft()
         for di, dj in INDEXES:
-            # if condition is True:
-            #     counter += 1
-            #     condition = False
-            new_i, new_j = i + di, j + dj
-            if (i + di, j + dj) not in visited and can_visit(nodes, i, j, di, dj):
+            new_i, new_j, new_counter = i + di, j + dj, counter + 1
+            if (new_i, new_j) not in visited and can_visit(nodes, i, j, di, dj):
                 visited.append((new_i, new_j))
-                queue.append((new_i, new_j))
+                queue.append((new_i, new_j, new_counter))
+                max_counter = max(max_counter, new_counter)
 
-    return counter
+    return max_counter
 
 
 def get_s_coordinates(nodes):
@@ -127,7 +125,6 @@ def get_s_coordinates(nodes):
 
 def get_answer_1(nodes):
     x, y = get_s_coordinates(nodes)
-    print(x, y)
     return get_max_steps_counter(x, y, nodes)
 
 
