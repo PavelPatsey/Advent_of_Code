@@ -2,16 +2,6 @@ from collections import deque
 
 INDEXES = ((1, 0), (0, 1), (-1, 0), (0, -1))
 
-PIPES_DICT = {
-    "F": ("-", "|"),
-    "7": 2,
-    "7": 2,
-    "|": 3,
-    "J": 4,
-    "-": ("-", "|"),
-    "L": 6,
-}
-
 
 def get_pipes(input_file):
     with open(input_file, "r") as file:
