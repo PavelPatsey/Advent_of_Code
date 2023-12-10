@@ -7,14 +7,14 @@ UP = (-1, 0)
 DOWN = (1, 0)
 
 
-def get_pipes(input_file):
+def get_nodes(input_file):
     with open(input_file, "r") as file:
         data = file.readlines()
     first_last_string = ["." * (len(data[0]) + 1)]
     pipes = (
-            first_last_string
-            + list(map(lambda x: "." + x[:-1] + ".", data))
-            + first_last_string
+        first_last_string
+        + list(map(lambda x: "." + x[:-1] + ".", data))
+        + first_last_string
     )
     return pipes
 
@@ -42,38 +42,38 @@ def can_visit(nodes, i, j, di, dj):
         )
     elif current_node == "7":
         return (
-                trend == LEFT
-                and next_node in left_nodes
-                or trend == DOWN
-                and next_node in down_nodes
+            trend == LEFT
+            and next_node in left_nodes
+            or trend == DOWN
+            and next_node in down_nodes
         )
     elif current_node == "J":
         return (
-                trend == LEFT
-                and next_node in left_nodes
-                or trend == UP
-                and next_node in up_nodes
+            trend == LEFT
+            and next_node in left_nodes
+            or trend == UP
+            and next_node in up_nodes
         )
     elif current_node == "L":
         return (
-                trend == RIGHT
-                and next_node in right_nodes
-                or trend == UP
-                and next_node in up_nodes
+            trend == RIGHT
+            and next_node in right_nodes
+            or trend == UP
+            and next_node in up_nodes
         )
     elif current_node == "-":
         return (
-                trend == RIGHT
-                and next_node in right_nodes
-                or trend == LEFT
-                and next_node in left_nodes
+            trend == RIGHT
+            and next_node in right_nodes
+            or trend == LEFT
+            and next_node in left_nodes
         )
     elif current_node == "|":
         return (
-                trend == UP
-                and next_node in up_nodes
-                or trend == DOWN
-                and next_node in down_nodes
+            trend == UP
+            and next_node in up_nodes
+            or trend == DOWN
+            and next_node in down_nodes
         )
     else:
         assert False
@@ -97,7 +97,7 @@ def get_max_steps_counter(start_i, start_j, nodes):
     max_counter = 0
     visited = [(start_i, start_j)]
     queue = deque(((start_i, start_j, 0),))
-    test_list = deepcopy(nodes)
+    # test_list = deepcopy(nodes)
 
     while queue:
         i, j, counter = queue.popleft()
@@ -109,9 +109,9 @@ def get_max_steps_counter(start_i, start_j, nodes):
                 queue.append((new_i, new_j, new_counter))
                 max_counter = max(max_counter, new_counter)
                 # test_list[new_i] = (
-                #     test_list[new_i][:new_j]
-                #     + str(new_counter)
-                #     + test_list[new_i][new_j + 1 :]
+                #         test_list[new_i][:new_j]
+                #         + str(new_counter)
+                #         + test_list[new_i][new_j + 1:]
                 # )
 
     # print()
@@ -135,11 +135,42 @@ def get_answer_1(nodes):
 
 
 def main():
-    assert get_answer_1(get_pipes("test_input")) == 4
-    assert get_answer_1(get_pipes("test_input_2")) == 8
-    assert get_answer_1(get_pipes("test_input_3")) == 8
-    print(get_answer_1(get_pipes("input")))
+    nodes = get_nodes("input")
+    print(get_answer_1(nodes))
 
 
 if __name__ == "__main__":
+    nodes = [
+        ".......",
+        ".......",
+        "..S-7..",
+        "..|.|..",
+        "..L-J..",
+        ".......",
+        ".......",
+    ]
+    assert get_answer_1(nodes) == 4
+
+    nodes = [
+        ".......",
+        "...F7..",
+        "..FJ|..",
+        ".SJ.L7.",
+        ".|F--J.",
+        ".LJ....",
+        ".......",
+    ]
+    assert get_answer_1(nodes) == 8
+
+    nodes = [
+        ".......",
+        ".7-F7-.",
+        "..FJ|7.",
+        ".SJLL7.",
+        ".|F--J.",
+        ".LJ.LJ.",
+        ".......",
+    ]
+    assert get_answer_1(nodes) == 8
+
     main()
