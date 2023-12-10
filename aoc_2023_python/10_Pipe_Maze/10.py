@@ -47,10 +47,7 @@ def get_cycle_len(start_i, start_j, nodes, dir_index):
     node = nodes[i][j]
 
     while node != "S":
-        n = node
-        prev = dir_index
         dir_index = get_next_direction(i, j, nodes, dir_index)
-        next = dir_index
         if dir_index is None:
             return
         di, dj = DIRECTIONS[dir_index]
