@@ -121,11 +121,10 @@ def get_answer_1(nodes):
 
 
 def main():
-    pipes = get_pipes("test_input")
-    print(get_answer_1(pipes))
+    assert get_answer_1(get_pipes("test_input")) == 4
+    assert get_answer_1(get_pipes("test_input_2")) == 8
+    # print(get_answer_1(get_pipes("input")))
 
 
 if __name__ == "__main__":
-    nodes = get_pipes("test_input")
-    assert can_visit(nodes, 2, 4, 1, 0) is True
     main()
