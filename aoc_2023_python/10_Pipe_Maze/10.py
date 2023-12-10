@@ -1,4 +1,5 @@
 from collections import deque
+from copy import deepcopy
 
 INDEXES = ((1, 0), (0, 1), (-1, 0), (0, -1))
 
@@ -84,6 +85,7 @@ def get_max_steps_counter(start_i, start_j, nodes):
     max_counter = 0
     visited = [(start_i, start_j)]
     queue = deque(((start_i, start_j, 0),))
+    test_list = deepcopy(nodes)
 
     while queue:
         i, j, counter = queue.popleft()
@@ -93,7 +95,14 @@ def get_max_steps_counter(start_i, start_j, nodes):
                 visited.append((new_i, new_j))
                 queue.append((new_i, new_j, new_counter))
                 max_counter = max(max_counter, new_counter)
+                test_list[new_i] = (
+                    test_list[new_i][:new_j]
+                    + str(new_counter)
+                    + test_list[new_i][new_j + 1 :]
+                )
 
+    for line in test_list:
+        print(line)
     return max_counter
 
 
