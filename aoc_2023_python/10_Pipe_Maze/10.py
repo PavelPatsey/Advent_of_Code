@@ -120,7 +120,7 @@ def get_max_steps_counter(start_i, start_j, nodes):
     return max_counter
 
 
-def get_s_coordinates(nodes):
+def get_start_coordinates(nodes):
     for i in range(len(nodes)):
         for j in range(len(nodes[0])):
             if nodes[i][j] == "S":
@@ -130,7 +130,7 @@ def get_s_coordinates(nodes):
 
 
 def get_answer_1(nodes):
-    x, y = get_s_coordinates(nodes)
+    x, y = get_start_coordinates(nodes)
     return get_max_steps_counter(x, y, nodes)
 
 
