@@ -8,7 +8,7 @@ def get_space(input_file):
     return space
 
 
-def get_empty_lines_indexes(space):
+def get_parsed_space(space):
     empty_rows_indexes, empty_columns_indexes = [], []
     len_row = len(space)
     len_column = len(space[0])
@@ -23,18 +23,14 @@ def get_empty_lines_indexes(space):
                 column_is_empty = False
         if column_is_empty:
             empty_columns_indexes.append(c)
-    return empty_rows_indexes, empty_columns_indexes
 
-
-def get_galaxies_coordinates(space):
-    galaxies_coordinates = []
-    len_row = len(space)
-    len_column = len(space[0])
+    galaxies_coordinates = deque([])
     for r in range(len_row):
         for c in range(len_column):
             if space[r][c] == "#":
                 galaxies_coordinates.append((r, c))
-    return galaxies_coordinates
+
+    return empty_rows_indexes, empty_columns_indexes, galaxies_coordinates
 
 
 def get_shortest_paths(
@@ -63,8 +59,9 @@ def get_shortest_paths(
 
 
 def get_answer(space):
-    galaxies_coordinates = deque(get_galaxies_coordinates(space))
-    empty_rows_indexes, empty_columns_indexes = get_empty_lines_indexes(space)
+    empty_rows_indexes, empty_columns_indexes, galaxies_coordinates = get_parsed_space(
+        space
+    )
     d_expansion_1 = 1
     shortest_paths_1 = get_shortest_paths(
         galaxies_coordinates,
