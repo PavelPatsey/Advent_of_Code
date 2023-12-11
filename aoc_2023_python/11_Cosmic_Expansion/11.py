@@ -28,10 +28,20 @@ def get_empty_lines_indexes(space):
     return empty_rows_indexes, empty_columns_indexes
 
 
-def get_answer_1(space):
+def get_galaxies_coordinates(space):
     galaxies_coordinates = []
+    len_row = len(space)
+    len_column = len(space[0])
+    for r in range(len_row):
+        for c in range(len_column):
+            if space[r][c] == "#":
+                galaxies_coordinates.append((r, c))
+    return galaxies_coordinates
+
+
+def get_answer_1(space):
+    galaxies_coordinates = get_galaxies_coordinates(space)
     empty_rows_indexes, empty_columns_indexes = get_empty_lines_indexes(space)
-    print(empty_rows_indexes, empty_columns_indexes)
 
 
 def main():
