@@ -4,8 +4,7 @@ from collections import deque
 def get_space(input_file):
     with open(input_file, "r") as file:
         data = file.readlines()
-    space = [[x for x in row.strip()] for row in data]
-    return space
+    return data
 
 
 def get_parsed_space(space):
