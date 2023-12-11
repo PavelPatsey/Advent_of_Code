@@ -58,9 +58,12 @@ def get_shortest_paths(
 
 
 def get_answer(space):
-    empty_rows_indexes, empty_columns_indexes, galaxies_coordinates = get_parsed_space(
-        space
-    )
+    (
+        empty_rows_indexes,
+        empty_columns_indexes,
+        galaxies_coordinates,
+    ) = get_parsed_space(space)
+
     expansion_coeff_1 = 1
     shortest_paths_1 = get_shortest_paths(
         galaxies_coordinates,
