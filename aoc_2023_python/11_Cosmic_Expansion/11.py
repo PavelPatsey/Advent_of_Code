@@ -44,9 +44,7 @@ def get_galaxies_coordinates(space):
 
 def get_answer_1(space):
     galaxies_coordinates = deque(get_galaxies_coordinates(space))
-    print(galaxies_coordinates)
     empty_rows_indexes, empty_columns_indexes = get_empty_lines_indexes(space)
-    print(empty_rows_indexes, empty_columns_indexes)
     shortest_paths = []
     while galaxies_coordinates:
         current_g_c = galaxies_coordinates.popleft()
@@ -62,14 +60,11 @@ def get_answer_1(space):
                 if c in empty_columns_indexes:
                     dc += 1
             shortest_paths.append(dr + dc)
-    print(shortest_paths)
-    print(sum(shortest_paths))
     return sum(shortest_paths)
 
 
 def main():
-    space = get_space("test_input")
-    print_space(space)
+    space = get_space("input")
     print(get_answer_1(space))
 
 
