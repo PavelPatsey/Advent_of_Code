@@ -36,7 +36,7 @@ def get_shortest_paths(
     galaxies_coordinates,
     empty_rows_indexes,
     empty_columns_indexes,
-    d_expansion,
+    expansion_coeff,
 ):
     galaxies_coordinates_copy = galaxies_coordinates.copy()
     shortest_paths = []
@@ -49,10 +49,10 @@ def get_shortest_paths(
             dc = c2 - c1
             for r in range(r1, r2 + 1):
                 if r in empty_rows_indexes:
-                    dr += d_expansion
+                    dr += expansion_coeff
             for c in range(c1, c2 + 1):
                 if c in empty_columns_indexes:
-                    dc += d_expansion
+                    dc += expansion_coeff
             shortest_paths.append(dr + dc)
     return shortest_paths
 
@@ -61,20 +61,20 @@ def get_answer(space):
     empty_rows_indexes, empty_columns_indexes, galaxies_coordinates = get_parsed_space(
         space
     )
-    d_expansion_1 = 1
+    expansion_coeff_1 = 1
     shortest_paths_1 = get_shortest_paths(
         galaxies_coordinates,
         empty_rows_indexes,
         empty_columns_indexes,
-        d_expansion_1,
+        expansion_coeff_1,
     )
 
-    d_expansion_2 = 1_000_000 - 1
+    expansion_coeff_2 = 1_000_000 - 1
     shortest_paths_2 = get_shortest_paths(
         galaxies_coordinates,
         empty_rows_indexes,
         empty_columns_indexes,
-        d_expansion_2,
+        expansion_coeff_2,
     )
     return sum(shortest_paths_1), sum(shortest_paths_2)
 
