@@ -8,11 +8,6 @@ def get_space(input_file):
     return space
 
 
-def print_space(space):
-    for i in range(len(space)):
-        print("".join(space[i]))
-
-
 def get_empty_lines_indexes(space):
     empty_rows_indexes, empty_columns_indexes = [], []
     len_row = len(space)
