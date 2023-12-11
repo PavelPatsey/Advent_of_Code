@@ -72,7 +72,7 @@ def get_answer(space):
         empty_columns_indexes,
         d_expansion_1,
     )
-    answer_1 = sum(shortest_paths_1)
+
     d_expansion_2 = 1_000_000 - 1
     shortest_paths_2 = get_shortest_paths(
         galaxies_coordinates,
@@ -80,8 +80,7 @@ def get_answer(space):
         empty_columns_indexes,
         d_expansion_2,
     )
-    answer_2 = sum(shortest_paths_2)
-    return answer_1, answer_2
+    return sum(shortest_paths_1), sum(shortest_paths_2)
 
 
 def main():
