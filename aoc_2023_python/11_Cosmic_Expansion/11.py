@@ -43,10 +43,11 @@ def get_shortest_paths(
     empty_columns_indexes,
     d_expansion,
 ):
+    galaxies_coordinates_copy = galaxies_coordinates.copy()
     shortest_paths = []
-    while galaxies_coordinates:
-        current_g_c = galaxies_coordinates.popleft()
-        for g_c in galaxies_coordinates:
+    while galaxies_coordinates_copy:
+        current_g_c = galaxies_coordinates_copy.popleft()
+        for g_c in galaxies_coordinates_copy:
             r1, r2 = sorted((current_g_c[0], g_c[0]))
             c1, c2 = sorted((current_g_c[1], g_c[1]))
             dr = r2 - r1
@@ -61,36 +62,31 @@ def get_shortest_paths(
     return shortest_paths
 
 
-def get_answer_1(space):
+def get_answer(space):
     galaxies_coordinates = deque(get_galaxies_coordinates(space))
     empty_rows_indexes, empty_columns_indexes = get_empty_lines_indexes(space)
-    d_expansion = 1
-    shortest_paths = get_shortest_paths(
+    d_expansion_1 = 1
+    shortest_paths_1 = get_shortest_paths(
         galaxies_coordinates,
         empty_rows_indexes,
         empty_columns_indexes,
-        d_expansion,
+        d_expansion_1,
     )
-    return sum(shortest_paths)
-
-
-def get_answer_2(space):
-    d_expansion = 1_000_000 - 1
-    galaxies_coordinates = deque(get_galaxies_coordinates(space))
-    empty_rows_indexes, empty_columns_indexes = get_empty_lines_indexes(space)
-    shortest_paths = shortest_paths = get_shortest_paths(
+    answer_1 = sum(shortest_paths_1)
+    d_expansion_2 = 1_000_000 - 1
+    shortest_paths_2 = get_shortest_paths(
         galaxies_coordinates,
         empty_rows_indexes,
         empty_columns_indexes,
-        d_expansion,
+        d_expansion_2,
     )
-    return sum(shortest_paths)
+    answer_2 = sum(shortest_paths_2)
+    return answer_1, answer_2
 
 
 def main():
     space = get_space("input")
-    print(get_answer_1(space))
-    print(get_answer_2(space))
+    print(get_answer(space))
 
 
 if __name__ == "__main__":
