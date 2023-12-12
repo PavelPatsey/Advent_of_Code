@@ -79,7 +79,7 @@ def get_answer_2(records):
 
 
 def main():
-    records = get_records("test_input")
+    records = get_records("input")
     print(get_answer_1(records))
     print(get_answer_2(records))
 
