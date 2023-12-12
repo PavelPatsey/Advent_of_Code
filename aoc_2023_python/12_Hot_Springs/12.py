@@ -1,3 +1,6 @@
+from functools import cache
+
+
 def get_records(input_file):
     with open(input_file, "r") as file:
         data = file.readlines()
@@ -16,6 +19,7 @@ def get_amount(line):
     len_row = len(row)
     len_parts = len(parts)
 
+    @cache
     def _get_amount(r_i, p_i, part_len):
         def _go_to_dot():
             if part_len == 0:
