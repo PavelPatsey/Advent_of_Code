@@ -8,7 +8,6 @@ def get_records(input_file):
         )
         for line in data
     ]
-
     return records
 
 
