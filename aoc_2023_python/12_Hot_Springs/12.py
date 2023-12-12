@@ -3,23 +3,27 @@ def get_records(input_file):
         data = file.readlines()
     records = [
         (
-            row.strip().split()[0],
-            list(map(int, row.strip().split()[1].split(","))),
+            line.strip().split()[0],
+            list(map(int, line.strip().split()[1].split(","))),
         )
-        for row in data
+        for line in data
     ]
 
     return records
 
 
-def get_answer_1(rows):
-    pass
+def get_possible_arrangements_number(line):
+    return
+
+
+def get_answer_1(records):
+    return sum(map(get_possible_arrangements_number, records))
 
 
 def main():
-    rows = get_records("test_input")
-    print(rows)
-    print(get_answer_1(rows))
+    records = get_records("test_input")
+    print(records)
+    print(get_answer_1(records))
 
 
 if __name__ == "__main__":
