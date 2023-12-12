@@ -59,22 +59,13 @@ def get_amount(line):
     return _get_amount(0, 0, 0)
 
 
-def get_converted_records(records):
-    converted_records = []
-    for row, parts in records:
-        new_row = (row + "?") * 4 + row
-        new_parts = parts * 5
-        converted_records.append((new_row, new_parts))
-    return converted_records
-
-
 def get_answer_1(records):
     return sum(map(get_amount, records))
 
 
 def get_answer_2(records):
-    converted_records = get_converted_records(records)
-    return sum(map(get_amount, converted_records))
+    unfolded_records = [((row + "?") * 4 + row, parts * 5) for row, parts in records]
+    return sum(map(get_amount, unfolded_records))
 
 
 def main():
@@ -90,7 +81,5 @@ if __name__ == "__main__":
     assert get_amount(("????.#...#...", [4, 1, 1])) == 1
     assert get_amount(("????.######..#####.", [1, 6, 5])) == 4
     assert get_amount(("?###????????", [3, 2, 1])) == 10
-
-    assert get_converted_records([(".#", [1])]) == [(".#?.#?.#?.#?.#", [1, 1, 1, 1, 1])]
 
     main()
