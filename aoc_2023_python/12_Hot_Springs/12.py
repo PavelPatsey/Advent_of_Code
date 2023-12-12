@@ -1,12 +1,25 @@
-def get_rows(input_file):
+def get_records(input_file):
     with open(input_file, "r") as file:
         data = file.readlines()
-    return [row.strip() for row in data]
+    records = [
+        (
+            row.strip().split()[0],
+            list(map(int, row.strip().split()[1].split(","))),
+        )
+        for row in data
+    ]
+
+    return records
+
+
+def get_answer_1(rows):
+    pass
 
 
 def main():
-    rows = get_rows("test_input")
+    rows = get_records("test_input")
     print(rows)
+    print(get_answer_1(rows))
 
 
 if __name__ == "__main__":
