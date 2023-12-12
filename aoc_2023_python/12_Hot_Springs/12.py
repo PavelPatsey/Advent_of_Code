@@ -30,7 +30,6 @@ def get_amount(line):
                 return 0
 
         def _go_to_hash():
-            # return _get_amount(r_i + 1, p_i, part_len + 1)
             if p_i < len_parts and part_len < parts[p_i]:
                 return _get_amount(r_i + 1, p_i, part_len + 1)
             return 0
