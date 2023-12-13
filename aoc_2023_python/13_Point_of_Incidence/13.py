@@ -10,38 +10,7 @@ def get_transposed(mirror):
     return list(map(lambda x: "".join(x), map(list, zip(*mirror))))
 
 
-def get_amount(mirror):
-    len_rows = len(mirror)
-    len_cols = len(mirror[0])
-    c = 0
-    line_is_found = False
-    while c < len_cols and not line_is_found:
-        dc = 0
-        left = c - dc
-        right = c + dc + 1
-        condition = 0 <= left < right < len_cols
-        is_break = False
-        while condition and not is_break:
-            is_break = False
-            for r in range(len_rows):
-                if mirror[r][left] != mirror[r][right]:
-                    is_break = True
-                    break
-            dc += 1
-            left = c - dc
-            right = c + dc + 1
-            condition = 0 <= left < right < len_cols
-        c += 1
-        if not is_break:
-            line_is_found = True
-
-    if c == len_cols:
-        return get_amount(get_transposed(mirror)) * 100
-    else:
-        return c
-
-
-def get_amount_2(mirror):
+def get_amount(mirror, part):
     len_rows = len(mirror)
     len_cols = len(mirror[0])
     c = 0
@@ -58,7 +27,7 @@ def get_amount_2(mirror):
             for r in range(len_rows):
                 if mirror[r][left] != mirror[r][right]:
                     mismatch += 1
-                    if mismatch > 1:
+                    if mismatch > part - 1:
                         is_break = True
                         break
             dc += 1
@@ -66,27 +35,23 @@ def get_amount_2(mirror):
             right = c + dc + 1
             condition = 0 <= left < right < len_cols
         c += 1
-        if not is_break and mismatch == 1:
+        if not is_break and mismatch == part - 1:
             line_is_found = True
 
     if c == len_cols:
-        return get_amount_2(get_transposed(mirror)) * 100
+        return get_amount(get_transposed(mirror), part=part) * 100
     else:
         return c
 
 
-def get_answer_1(mirrors):
-    return sum(map(get_amount, mirrors))
-
-
-def get_answer_2(mirrors):
-    return sum(map(get_amount_2, mirrors))
+def get_answer(mirrors, part):
+    return sum(map(lambda x: get_amount(x, part=part), mirrors))
 
 
 def main():
     mirrors = get_mirrors("input")
-    print(get_answer_1(mirrors))
-    print(get_answer_2(mirrors))
+    print(get_answer(mirrors, part=1))
+    print(get_answer(mirrors, part=2))
 
 
 if __name__ == "__main__":
@@ -109,11 +74,11 @@ if __name__ == "__main__":
         "#....#..#",
     ]
 
-    assert get_amount(mirror_1) == 5
-    assert get_amount(mirror_2) == 400
+    assert get_amount(mirror_1, part=1) == 5
+    assert get_amount(mirror_2, part=1) == 400
 
-    assert get_amount_2(mirror_1) == 300
-    assert get_amount_2(mirror_2) == 100
+    assert get_amount(mirror_1, part=2) == 300
+    assert get_amount(mirror_2, part=2) == 100
 
     mirror = ["#.##..##.", "..#.##.#.", "##......#", "##......#"]
     t_mirror = ["#.##", "..##", "##..", "#...", ".#..", ".#..", "#...", "##..", "..##"]
