@@ -47,8 +47,7 @@ def get_answer_1(mirrors):
 
 
 def main():
-    mirrors = get_mirrors("test_input")
-    print(mirrors)
+    mirrors = get_mirrors("input")
     print(get_answer_1(mirrors))
 
 
