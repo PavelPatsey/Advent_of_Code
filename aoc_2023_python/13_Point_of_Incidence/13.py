@@ -42,8 +42,7 @@ def get_amount(mirror):
 
 
 def get_answer_1(mirrors):
-    lst = list(map(get_amount, mirrors))
-    return sum(lst)
+    return sum(map(get_amount, mirrors))
 
 
 def main():
