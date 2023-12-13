@@ -6,6 +6,12 @@ def get_mirrors(input_file):
     return mirrors
 
 
+def get_transposed(mirror):
+    t_mirror = mirror.copy()
+    t_mirror = list(map(lambda x: "".join(x), map(list, zip(*t_mirror))))
+    return t_mirror
+
+
 def get_amount(mirror):
     len_rows = len(mirror)
     len_cols = len(mirror[0])
@@ -55,5 +61,9 @@ if __name__ == "__main__":
         "#.#.##.#.",
     ]
     assert get_amount(mirror) == 5
+
+    mirror = ["#.##..##.", "..#.##.#.", "##......#", "##......#"]
+    t_mirror = ["#.##", "..##", "##..", "#...", ".#..", ".#..", "#...", "##..", "..##"]
+    assert get_transposed(mirror) == t_mirror
 
     # main()
