@@ -11,6 +11,7 @@ def get_transposed(mirror):
 
 
 def get_amount(mirror, part):
+    max_mismatch = part - 1
     len_rows = len(mirror)
     len_cols = len(mirror[0])
     c = 0
@@ -27,7 +28,7 @@ def get_amount(mirror, part):
             for r in range(len_rows):
                 if mirror[r][left] != mirror[r][right]:
                     mismatch += 1
-                    if mismatch > part - 1:
+                    if mismatch > max_mismatch:
                         is_break = True
                         break
             dc += 1
@@ -35,7 +36,7 @@ def get_amount(mirror, part):
             right = c + dc + 1
             condition = 0 <= left < right < len_cols
         c += 1
-        if not is_break and mismatch == part - 1:
+        if not is_break and mismatch == max_mismatch:
             line_is_found = True
 
     if c == len_cols:
@@ -80,8 +81,23 @@ if __name__ == "__main__":
     assert get_amount(mirror_1, part=2) == 300
     assert get_amount(mirror_2, part=2) == 100
 
-    mirror = ["#.##..##.", "..#.##.#.", "##......#", "##......#"]
-    t_mirror = ["#.##", "..##", "##..", "#...", ".#..", ".#..", "#...", "##..", "..##"]
-    assert get_transposed(mirror) == t_mirror
+    mirror = [
+        "#.##..##.",
+        "..#.##.#.",
+        "##......#",
+        "##......#",
+    ]
+    transposed_mirror = [
+        "#.##",
+        "..##",
+        "##..",
+        "#...",
+        ".#..",
+        ".#..",
+        "#...",
+        "##..",
+        "..##",
+    ]
+    assert get_transposed(mirror) == transposed_mirror
 
     main()
