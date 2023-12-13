@@ -34,7 +34,11 @@ def get_amount(mirror):
         c += 1
         if not is_break:
             line_is_found = True
-    return c
+
+    if c == len_cols:
+        return get_amount(get_transposed(mirror)) * 100
+    else:
+        return c
 
 
 def get_answer_1(mirrors):
@@ -60,8 +64,19 @@ if __name__ == "__main__":
     ]
     assert get_amount(mirror) == 5
 
+    mirror = [
+        "#...##..#",
+        "#....#..#",
+        "..##..###",
+        "#####.##.",
+        "#####.##.",
+        "..##..###",
+        "#....#..#",
+    ]
+    assert get_amount(mirror) == 400
+
     mirror = ["#.##..##.", "..#.##.#.", "##......#", "##......#"]
     t_mirror = ["#.##", "..##", "##..", "#...", ".#..", ".#..", "#...", "##..", "..##"]
     assert get_transposed(mirror) == t_mirror
 
-    # main()
+    main()
