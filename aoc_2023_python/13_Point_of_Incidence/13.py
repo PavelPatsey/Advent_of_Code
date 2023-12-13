@@ -41,7 +41,7 @@ def get_amount(mirror):
         return c
 
 
-def get_mismatches_number(row_1, row_2):
+def get_mismatches_count(row_1, row_2):
     return sum([1 for x, y in zip(row_1, row_2) if x != y])
 
 
@@ -60,7 +60,7 @@ def get_amount_2(mirror):
         while condition and not is_break:
             is_break = False
             for r in range(len_rows):
-                mismatch += get_mismatches_number(mirror[r][left], mirror[r][right])
+                mismatch += get_mismatches_count(mirror[r][left], mirror[r][right])
                 if mismatch > 1:
                     is_break = True
                     break
@@ -93,8 +93,8 @@ def main():
 
 
 if __name__ == "__main__":
-    assert get_mismatches_number("#.##", "#.##") == 0
-    assert get_mismatches_number("#.##", "#.#.") == 1
+    assert get_mismatches_count("#.##", "#.##") == 0
+    assert get_mismatches_count("#.##", "#.#.") == 1
 
     mirror_1 = [
         "#.##..##.",
