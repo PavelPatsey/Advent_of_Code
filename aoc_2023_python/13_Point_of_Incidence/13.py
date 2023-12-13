@@ -7,9 +7,7 @@ def get_mirrors(input_file):
 
 
 def get_transposed(mirror):
-    t_mirror = mirror.copy()
-    t_mirror = list(map(lambda x: "".join(x), map(list, zip(*t_mirror))))
-    return t_mirror
+    return list(map(lambda x: "".join(x), map(list, zip(*mirror))))
 
 
 def get_amount(mirror):
