@@ -41,17 +41,62 @@ def get_amount(mirror):
         return c
 
 
+def get_mismatches_number(row_1, row_2):
+    return sum([1 for x, y in zip(row_1, row_2) if x != y])
+
+
+def get_amount_2(mirror):
+    len_rows = len(mirror)
+    len_cols = len(mirror[0])
+    c = 0
+    line_is_found = False
+    while c < len_cols and not line_is_found:
+        dc = 0
+        left = c - dc
+        right = c + dc + 1
+        condition = 0 <= left < right < len_cols
+        is_break = False
+        mismatch = 0
+        while condition and not is_break:
+            is_break = False
+            for r in range(len_rows):
+                mismatch += get_mismatches_number(mirror[r][left], mirror[r][right])
+                if mismatch > 1:
+                    is_break = True
+                    break
+            dc += 1
+            left = c - dc
+            right = c + dc + 1
+            condition = 0 <= left < right < len_cols
+        c += 1
+        if not is_break and mismatch == 1:
+            line_is_found = True
+
+    if c == len_cols:
+        return get_amount_2(get_transposed(mirror)) * 100
+    else:
+        return c
+
+
 def get_answer_1(mirrors):
     return sum(map(get_amount, mirrors))
 
 
+def get_answer_2(mirrors):
+    return sum(map(get_amount_2, mirrors))
+
+
 def main():
-    mirrors = get_mirrors("input")
+    mirrors = get_mirrors("test_input")
     print(get_answer_1(mirrors))
+    print(get_answer_2(mirrors))
 
 
 if __name__ == "__main__":
-    mirror = [
+    assert get_mismatches_number("#.##", "#.##") == 0
+    assert get_mismatches_number("#.##", "#.#.") == 1
+
+    mirror_1 = [
         "#.##..##.",
         "..#.##.#.",
         "##......#",
@@ -60,9 +105,7 @@ if __name__ == "__main__":
         "..##..##.",
         "#.#.##.#.",
     ]
-    assert get_amount(mirror) == 5
-
-    mirror = [
+    mirror_2 = [
         "#...##..#",
         "#....#..#",
         "..##..###",
@@ -71,7 +114,12 @@ if __name__ == "__main__":
         "..##..###",
         "#....#..#",
     ]
-    assert get_amount(mirror) == 400
+
+    assert get_amount(mirror_1) == 5
+    assert get_amount(mirror_2) == 400
+
+    assert get_amount_2(mirror_1) == 300
+    assert get_amount_2(mirror_2) == 100
 
     mirror = ["#.##..##.", "..#.##.#.", "##......#", "##......#"]
     t_mirror = ["#.##", "..##", "##..", "#...", ".#..", ".#..", "#...", "##..", "..##"]
