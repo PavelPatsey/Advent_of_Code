@@ -87,7 +87,7 @@ def get_answer_2(mirrors):
 
 
 def main():
-    mirrors = get_mirrors("test_input")
+    mirrors = get_mirrors("input")
     print(get_answer_1(mirrors))
     print(get_answer_2(mirrors))
 
