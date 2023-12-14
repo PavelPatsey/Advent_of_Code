@@ -8,18 +8,16 @@ def get_platform(input_file):
 def get_total_load(platform):
     len_rows = len(platform)
     len_cols = len(platform[0])
-    load_matrix = []
+    total_load = 0
     for c in range(len_cols):
-        load_column = []
         current_load = len_rows
         for r in range(len_rows):
             if platform[r][c] == "O":
-                load_column.append(current_load)
+                total_load += current_load
                 current_load -= 1
             elif platform[r][c] == "#":
                 current_load = len_rows - r - 1
-        load_matrix.append(load_column)
-    return sum(map(sum, load_matrix))
+    return total_load
 
 
 def main():
