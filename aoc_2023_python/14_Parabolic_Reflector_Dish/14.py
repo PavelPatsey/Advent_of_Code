@@ -23,8 +23,7 @@ def get_answer_1(platform):
 
 
 def main():
-    platform = get_platform("test_input")
-    print(platform)
+    platform = get_platform("input")
     print(get_answer_1(platform))
 
 
