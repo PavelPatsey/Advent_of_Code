@@ -1,11 +1,11 @@
 def get_platform(input_file):
     with open(input_file, "r") as file:
         data = file.readlines()
-    platform = [row.strip() for row in data]
+    platform = [[y for y in row.strip()] for row in data]
     return platform
 
 
-def get_answer_1(platform):
+def get_total_load(platform):
     len_rows = len(platform)
     len_cols = len(platform[0])
     load_matrix = []
@@ -23,8 +23,9 @@ def get_answer_1(platform):
 
 
 def main():
-    platform = get_platform("input")
-    print(get_answer_1(platform))
+    platform = get_platform("test_input")
+    print(platform)
+    print(get_total_load(platform))
 
 
 if __name__ == "__main__":
