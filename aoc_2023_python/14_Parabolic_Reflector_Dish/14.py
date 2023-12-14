@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 def get_platform(input_file):
     with open(input_file, "r") as file:
         data = file.readlines()
@@ -8,6 +11,19 @@ def get_platform(input_file):
 def get_rotated(matrix):
     list_of_tuples = zip(*matrix[::-1])
     return [list(elem) for elem in list_of_tuples]
+
+
+def get_rolled(matrix):
+    platform = deepcopy(matrix)
+    len_rows = len(platform)
+    len_cols = len(platform[0])
+    for c in range(len_cols):
+        for _ in range(len_rows):
+            for r in range(len_rows):
+                if platform[r][c] == "O" and r > 0 and platform[r - 1][c] == ".":
+                    platform[r][c] = "."
+                    platform[r - 1][c] = "O"
+    return platform
 
 
 def get_total_load(platform):
@@ -27,6 +43,7 @@ def get_total_load(platform):
 
 def main():
     platform = get_platform("test_input")
+    print(platform)
     print(get_total_load(platform))
 
 
