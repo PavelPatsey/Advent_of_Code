@@ -53,11 +53,13 @@ def get_answer_2(platform):
             platform = get_rolled(platform)
             platform = get_rotated(platform)
         platform_tuple = tuple(tuple(row) for row in platform)
-        if platform_tuple in cache_dict:
-            cycle_length = t - cache_dict[platform_tuple]
+        h = hash(platform_tuple)
+        if h in cache_dict:
+            idx_cycle_start = cache_dict[h]
+            cycle_length = t - idx_cycle_start
             cycle_count = (max_t - t) // cycle_length
             t += cycle_count * cycle_length
-        cache_dict[platform_tuple] = t
+        cache_dict[h] = t
     return get_load(platform)
 
 
