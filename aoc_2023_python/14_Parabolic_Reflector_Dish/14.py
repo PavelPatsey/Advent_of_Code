@@ -64,14 +64,12 @@ def get_answer_2(platform):
 
 
 def main():
-    t0 = time.time()
     platform = get_platform("input")
     print(get_answer_1(platform))
-    print(f"finished in {time.time() - t0:0f} sec")
 
     t0 = time.time()
     print(get_answer_2(platform))
-    print(f"finished in {time.time() - t0:0f} sec")
+    print(f"finished part 2 in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
