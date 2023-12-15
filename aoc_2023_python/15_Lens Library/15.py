@@ -5,12 +5,10 @@ def get_sequence(input_file):
 
 
 def get_hash(string):
-    current_value = 0
+    value = 0
     for ch in string:
-        current_value += ord(ch)
-        current_value *= 17
-        current_value = current_value % 256
-    return current_value
+        value = (value + ord(ch)) * 17 % 256
+    return value
 
 
 def get_answer_1(sequence):
