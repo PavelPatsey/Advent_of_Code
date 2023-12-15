@@ -21,24 +21,24 @@ def get_answer_2(sequence):
         if "=" in item:
             label, value = item.split("=")
             lenses = boxes[get_hash(label)]
-            lens_label_is_found = False
+            label_is_found = False
             i = 0
-            while i < len(lenses) and not lens_label_is_found:
+            while i < len(lenses) and not label_is_found:
                 if lenses[i][0] == label:
                     lenses[i][1] = int(value)
-                    lens_label_is_found = True
+                    label_is_found = True
                 i += 1
-            if not lens_label_is_found:
+            if not label_is_found:
                 lenses.append([label, int(value)])
         elif "-" in item:
             label, _ = item.split("-")
             lenses = boxes[get_hash(label)]
-            lens_label_is_found = False
+            label_is_found = False
             i = 0
-            while i < len(lenses) and not lens_label_is_found:
+            while i < len(lenses) and not label_is_found:
                 if lenses[i][0] == label:
                     del lenses[i]
-                    lens_label_is_found = True
+                    label_is_found = True
                 i += 1
         else:
             assert False
