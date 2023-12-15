@@ -76,9 +76,6 @@ def get_area(nodes, path):
     vertical_pipes = {"|", "F", "7"}
     # vertical_pipes = ["|", "L", "J"]
 
-    # start_i, start_j = path[0]
-    # nodes[start_i][start_j] = "J"
-
     n = len(nodes)
     m = len(nodes[0])
     visited = [[False for i in range(m)] for j in range(n)]
