@@ -38,9 +38,9 @@ def get_answer_2(sequence):
             assert False
 
     result = 0
-    for b in range(len(boxes)):
-        for i in range(len(boxes[b])):
-            result = result + (b + 1) * (i + 1) * boxes[b][i][1]
+    for i, lens in enumerate(boxes):
+        for j, (_, v) in enumerate(lens):
+            result += (i + 1) * (j + 1) * v
     return result
 
 
