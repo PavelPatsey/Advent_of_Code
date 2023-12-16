@@ -52,7 +52,7 @@ def get_directions(node, dir):
         assert False
 
 
-def traverse_grid(grid):
+def bfs(grid):
     len_rows = len(grid)
     len_cols = len(grid[0])
     visited = set()
@@ -79,7 +79,7 @@ def traverse_grid(grid):
 
 
 def get_answer_1(grid):
-    return traverse_grid(grid)
+    return bfs(grid)
 
 
 def main():
