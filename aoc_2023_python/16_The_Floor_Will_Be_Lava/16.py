@@ -52,12 +52,12 @@ def get_directions(node, dir):
         assert False
 
 
-def bfs(grid):
+def bfs(grid, start, direction):
     len_rows = len(grid)
     len_cols = len(grid[0])
     visited = set()
     queue = deque()
-    queue.append(((0, 0), RIGHT))
+    queue.append((start, direction))
     while queue:
         node, direction = queue.popleft()
         if (node, direction) not in visited:
@@ -79,12 +79,24 @@ def bfs(grid):
 
 
 def get_answer_1(grid):
-    return bfs(grid)
+    return bfs(grid, (0, 0), RIGHT)
+
+
+def get_answer_2(grid):
+    len_rows = len(grid)
+    len_cols = len(grid[0])
+    max_down = max((bfs(grid, (0, c), DOWN) for c in range(len_cols)))
+    max_up = max((bfs(grid, (len_rows - 1, c), UP) for c in range(len_cols)))
+    max_right = max((bfs(grid, (0, r), RIGHT) for r in range(len_rows)))
+    max_left = max((bfs(grid, (len_cols - 1, r), LEFT) for r in range(len_rows)))
+
+    return max(max_down, max_up, max_right, max_left)
 
 
 def main():
     grid = get_grid("input")
     print(get_answer_1(grid))
+    print(get_answer_2(grid))
 
 
 if __name__ == "__main__":
