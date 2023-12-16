@@ -3,54 +3,41 @@ from collections import deque
 
 LEFT, RIGHT, UP, DOWN = (0, -1), (0, 1), (-1, 0), (1, 0)
 
+DIRS_INDEXES = {RIGHT: 0, DOWN: 1, LEFT: 2, UP: 3}
+
+DIRECTIONS_DICT = {
+    ".": [[RIGHT], [DOWN], [LEFT], [UP]],
+    "\\": [
+        [DOWN],
+        [RIGHT],
+        [UP],
+        [LEFT],
+    ],
+    "/": [
+        [UP],
+        [LEFT],
+        [DOWN],
+        [RIGHT],
+    ],
+    "|": [
+        [UP, DOWN],
+        [DOWN],
+        [UP, DOWN],
+        [UP],
+    ],
+    "-": [
+        [RIGHT],
+        [LEFT, RIGHT],
+        [LEFT],
+        [LEFT, RIGHT],
+    ],
+}
+
 
 def get_grid(input_file):
     with open(input_file, "r") as file:
         data = file.read().strip()
     return data.split()
-
-
-def get_directions(node, dir):
-    if node == ".":
-        return [dir]
-    elif node == "\\":
-        if dir == RIGHT:
-            return [DOWN]
-        elif dir == DOWN:
-            return [RIGHT]
-        elif dir == LEFT:
-            return [UP]
-        elif dir == UP:
-            return [LEFT]
-    elif node == "/":
-        if dir == RIGHT:
-            return [UP]
-        elif dir == DOWN:
-            return [LEFT]
-        elif dir == LEFT:
-            return [DOWN]
-        elif dir == UP:
-            return [RIGHT]
-    elif node == "|":
-        if dir == RIGHT:
-            return [UP, DOWN]
-        elif dir == DOWN:
-            return [DOWN]
-        elif dir == LEFT:
-            return [UP, DOWN]
-        elif dir == UP:
-            return [UP]
-    elif node == "-":
-        if dir == RIGHT:
-            return [RIGHT]
-        elif dir == DOWN:
-            return [LEFT, RIGHT]
-        elif dir == LEFT:
-            return [LEFT]
-        elif dir == UP:
-            return [LEFT, RIGHT]
-    else:
-        assert False
 
 
 def bfs(grid, start, direction):
@@ -64,8 +51,9 @@ def bfs(grid, start, direction):
         if (node, direction) not in visited:
             visited.add((node, direction))
 
-        node_str = grid[node[0]][node[1]]
-        new_directions = get_directions(node_str, direction)
+        node_key = grid[node[0]][node[1]]
+        i = DIRS_INDEXES[direction]
+        new_directions = DIRECTIONS_DICT[node_key][i]
         for new_direction in new_directions:
             r, c = node
             dr, dc = new_direction
