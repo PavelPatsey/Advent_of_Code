@@ -1,3 +1,4 @@
+import time
 from collections import deque
 
 LEFT, RIGHT, UP, DOWN = (0, -1), (0, 1), (-1, 0), (1, 0)
@@ -96,7 +97,9 @@ def get_answer_2(grid):
 def main():
     grid = get_grid("input")
     print(get_answer_1(grid))
+    t0 = time.time()
     print(get_answer_2(grid))
+    print(f"finished part 2 in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
