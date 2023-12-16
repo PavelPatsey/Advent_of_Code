@@ -7,30 +7,10 @@ DIRS_INDEXES = {RIGHT: 0, DOWN: 1, LEFT: 2, UP: 3}
 
 DIRECTIONS_DICT = {
     ".": [[RIGHT], [DOWN], [LEFT], [UP]],
-    "\\": [
-        [DOWN],
-        [RIGHT],
-        [UP],
-        [LEFT],
-    ],
-    "/": [
-        [UP],
-        [LEFT],
-        [DOWN],
-        [RIGHT],
-    ],
-    "|": [
-        [UP, DOWN],
-        [DOWN],
-        [UP, DOWN],
-        [UP],
-    ],
-    "-": [
-        [RIGHT],
-        [LEFT, RIGHT],
-        [LEFT],
-        [LEFT, RIGHT],
-    ],
+    "\\": [[DOWN], [RIGHT], [UP], [LEFT]],
+    "/": [[UP], [LEFT], [DOWN], [RIGHT]],
+    "|": [[UP, DOWN], [DOWN], [UP, DOWN], [UP]],
+    "-": [[RIGHT], [LEFT, RIGHT], [LEFT], [LEFT, RIGHT]],
 }
 
 
