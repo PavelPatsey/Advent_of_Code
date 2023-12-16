@@ -74,8 +74,8 @@ def bfs(grid):
                 if (new_node, new_direction) not in visited:
                     queue.append((new_node, new_direction))
 
-    visited_nodes = map(lambda x: x[0], visited)
-    return len(set(visited_nodes))
+    visited_nodes = {x[0] for x in visited}
+    return len(visited_nodes)
 
 
 def get_answer_1(grid):
