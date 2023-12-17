@@ -10,6 +10,8 @@ def get_matrix(input_file):
 
 
 def get_new_dirs_lens_1(direction, len_dir):
+    if direction == (0, 0):
+        return [(RIGHT, 1), (DOWN, 1)]
     if direction in (RIGHT, LEFT):
         new_dirs_lens = [(UP, 1), (DOWN, 1)]
     elif direction in (UP, DOWN):
@@ -40,10 +42,7 @@ def get_new_dirs_lens_2(direction, len_dir):
 def get_min_heat_loss(matrix, part_2=False):
     len_rows = len(matrix)
     len_cols = len(matrix[0])
-    if part_2:
-        queue = [(0, 0, 0, (0, 0), 0)]
-    else:
-        queue = [(0, 0, 0, RIGHT, 0)]
+    queue = [(0, 0, 0, (0, 0), 0)]
     heapq.heapify(queue)
     state = [[{} for _ in range(len_cols)] for _ in range(len_rows)]
 
