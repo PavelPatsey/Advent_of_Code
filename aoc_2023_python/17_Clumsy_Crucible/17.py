@@ -48,6 +48,14 @@ def get_min_heat_loss(matrix, part_2=False):
 
     while queue:
         dist, r, c, cur_dir, len_dir = heapq.heappop(queue)
+
+        if part_2:
+            if r == len(matrix) - 1 and c == len(matrix[0]) - 1 and len_dir >= 4:
+                return dist
+        else:
+            if r == len(matrix) - 1 and c == len(matrix[0]) - 1:
+                return dist
+
         if (cur_dir, len_dir) in state[r][c]:
             continue
         state[r][c][(cur_dir, len_dir)] = dist
@@ -63,13 +71,6 @@ def get_min_heat_loss(matrix, part_2=False):
             if 0 <= new_r < len_rows and 0 <= new_c < len_cols:
                 new_dist = dist + matrix[new_r][new_c]
                 heapq.heappush(queue, (new_dist, new_r, new_c, new_dir, new_len_dir))
-
-    if part_2:
-        for ((cur_dir, len_dir), dist) in state[len_rows - 1][len_cols - 1].items():
-            if len_dir >= 4:
-                return dist
-    else:
-        return min(state[len_rows - 1][len_cols - 1].values())
 
 
 def get_answer(matrix, part_2=False):
