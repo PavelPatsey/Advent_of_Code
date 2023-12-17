@@ -80,7 +80,7 @@ def get_answer(matrix, part_2=False):
 def main():
     matrix = get_matrix("input")
     print(get_answer(matrix))
-    print(get_answer(matrix, True))
+    print(get_answer(matrix, part_2=True))
 
 
 if __name__ == "__main__":
