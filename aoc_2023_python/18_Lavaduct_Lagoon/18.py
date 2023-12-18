@@ -1,3 +1,6 @@
+DIR_DICT = {"L": (-1, 0), "R": (1, 0), "U": (0, 1), "D": (0, -1)}
+
+
 def get_plan(input_file):
     def _get_parsed(line):
         splitted_line = line.split()
@@ -14,16 +17,35 @@ def get_triangle_area(x1, y1, x2, y2, x3, y3):
 
 
 def get_answer_1(plan):
-    return
+    points = [(0, 0)]
+    length = 0
+    for dir_, n, _ in plan:
+        length += n
+        x, y = points[-1]
+        dx, dy = dir_[0] * n, dir_[1] * n
+        points.append((x + dx, y + dy))
+
+    triangle_areas = []
+    for ((x2, y2), (x3, y3)) in zip(points[1:], points[2:]):
+        triangle_areas.append(get_triangle_area(0, 0, x2, y2, x3, y3))
+
+    area = abs(sum(triangle_areas))
+    area_1 = area - length // 2 + 1
+    result = area_1 + length
+    return result
 
 
 def main():
-    plan = get_plan("test_input")
-    print(plan)
+    plan = get_plan("input")
     print(get_answer_1(plan))
 
 
 if __name__ == "__main__":
     assert get_triangle_area(0, 0, 2, 0, 0, 1) == 1
     assert get_triangle_area(0, 0, 2, 0, 0, -1) == -1
+    assert get_triangle_area(0, 0, 2, 0, 3, 0) == 0
+    assert get_triangle_area(4, -5, 4, -7, 6, -7) == 2
+    assert get_triangle_area(0, 0, 4, -5, 4, -7) == -4
+    assert get_triangle_area(0, 0, 4, -7, 6, -7) == 7
+
     main()
