@@ -31,13 +31,11 @@ def get_answer_1(plan):
         points.append((x + dx, y + dy))
 
     triangle_areas = []
-    for ((x2, y2), (x3, y3)) in zip(points[1:], points[2:]):
+    for (x2, y2), (x3, y3) in zip(points[1:], points[2:]):
         triangle_areas.append(get_triangle_area(0, 0, x2, y2, x3, y3))
 
     area = abs(sum(triangle_areas))
-    area_1 = area - length // 2 + 1
-    result = area_1 + length
-    return result
+    return area + length // 2 + 1
 
 
 def get_answer_2(plan):
@@ -52,13 +50,11 @@ def get_answer_2(plan):
         points.append((x + dx, y + dy))
 
     triangle_areas = []
-    for ((x2, y2), (x3, y3)) in zip(points[1:], points[2:]):
+    for (x2, y2), (x3, y3) in zip(points[1:], points[2:]):
         triangle_areas.append(get_triangle_area(0, 0, x2, y2, x3, y3))
 
     area = abs(sum(triangle_areas))
-    area_1 = area - length // 2 + 1
-    result = area_1 + length
-    return result
+    return area + length // 2 + 1
 
 
 def main():
