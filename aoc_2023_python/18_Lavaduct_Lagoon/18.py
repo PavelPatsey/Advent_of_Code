@@ -24,20 +24,14 @@ def get_triangle_area(x1, y1, x2, y2, x3, y3):
 def get_answer(plan, part_2=False):
     points = [(0, 0)]
     length = 0
-    if not part_2:
-        for dir_, n, _ in plan:
-            length += n
-            x, y = points[-1]
-            dx, dy = dir_[0] * n, dir_[1] * n
-            points.append((x + dx, y + dy))
-    else:
-        for _, _, hexadecimal_code in plan:
+    for dir_, n, hexadecimal_code in plan:
+        if part_2:
             n = int(hexadecimal_code[1:-1], 16)
             dir_ = DIR_LIST[int(hexadecimal_code[-1])]
-            length += n
-            x, y = points[-1]
-            dx, dy = dir_[0] * n, dir_[1] * n
-            points.append((x + dx, y + dy))
+        length += n
+        x, y = points[-1]
+        dx, dy = dir_[0] * n, dir_[1] * n
+        points.append((x + dx, y + dy))
 
     triangle_areas = []
     for (x2, y2), (x3, y3) in zip(points[1:], points[2:]):
