@@ -22,13 +22,15 @@ def get_triangle_area(x1, y1, x2, y2, x3, y3):
 
 
 def get_answer(plan, part_2=False):
+    # see Pick's theorem
+    # A = i + b/2 - 1
     points = [(0, 0)]
-    length = 0
+    b = 0
     for dir_, n, hexadecimal_code in plan:
         if part_2:
             n = int(hexadecimal_code[1:-1], 16)
             dir_ = DIR_LIST[int(hexadecimal_code[-1])]
-        length += n
+        b += n
         x, y = points[-1]
         dx, dy = dir_[0] * n, dir_[1] * n
         points.append((x + dx, y + dy))
@@ -38,7 +40,7 @@ def get_answer(plan, part_2=False):
         for (x2, y2), (x3, y3) in zip(points[1:], points[2:])
     ]
     area = abs(sum(triangle_areas))
-    return area + length // 2 + 1
+    return area + b // 2 + 1
 
 
 def main():
