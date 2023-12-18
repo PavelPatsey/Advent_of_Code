@@ -21,33 +21,23 @@ def get_triangle_area(x1, y1, x2, y2, x3, y3):
     return (1 / 2) * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2))
 
 
-def get_answer_1(plan):
+def get_answer(plan, part_2=False):
     points = [(0, 0)]
     length = 0
-    for dir_, n, _ in plan:
-        length += n
-        x, y = points[-1]
-        dx, dy = dir_[0] * n, dir_[1] * n
-        points.append((x + dx, y + dy))
-
-    triangle_areas = []
-    for (x2, y2), (x3, y3) in zip(points[1:], points[2:]):
-        triangle_areas.append(get_triangle_area(0, 0, x2, y2, x3, y3))
-
-    area = abs(sum(triangle_areas))
-    return area + length // 2 + 1
-
-
-def get_answer_2(plan):
-    points = [(0, 0)]
-    length = 0
-    for _, _, hexadecimal_code in plan:
-        n = int(hexadecimal_code[1:-1], 16)
-        dir_ = DIR_LIST[int(hexadecimal_code[-1])]
-        length += n
-        x, y = points[-1]
-        dx, dy = dir_[0] * n, dir_[1] * n
-        points.append((x + dx, y + dy))
+    if not part_2:
+        for dir_, n, _ in plan:
+            length += n
+            x, y = points[-1]
+            dx, dy = dir_[0] * n, dir_[1] * n
+            points.append((x + dx, y + dy))
+    else:
+        for _, _, hexadecimal_code in plan:
+            n = int(hexadecimal_code[1:-1], 16)
+            dir_ = DIR_LIST[int(hexadecimal_code[-1])]
+            length += n
+            x, y = points[-1]
+            dx, dy = dir_[0] * n, dir_[1] * n
+            points.append((x + dx, y + dy))
 
     triangle_areas = []
     for (x2, y2), (x3, y3) in zip(points[1:], points[2:]):
@@ -59,8 +49,8 @@ def get_answer_2(plan):
 
 def main():
     plan = get_plan("input")
-    print(get_answer_1(plan))
-    print(get_answer_2(plan))
+    print(get_answer(plan))
+    print(get_answer(plan, part_2=True))
 
 
 if __name__ == "__main__":
