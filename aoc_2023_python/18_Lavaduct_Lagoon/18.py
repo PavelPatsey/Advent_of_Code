@@ -33,10 +33,10 @@ def get_answer(plan, part_2=False):
         dx, dy = dir_[0] * n, dir_[1] * n
         points.append((x + dx, y + dy))
 
-    triangle_areas = []
-    for (x2, y2), (x3, y3) in zip(points[1:], points[2:]):
-        triangle_areas.append(get_triangle_area(0, 0, x2, y2, x3, y3))
-
+    triangle_areas = [
+        get_triangle_area(0, 0, x2, y2, x3, y3)
+        for (x2, y2), (x3, y3) in zip(points[1:], points[2:])
+    ]
     area = abs(sum(triangle_areas))
     return area + length // 2 + 1
 
