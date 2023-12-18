@@ -22,8 +22,10 @@ def get_triangle_area(x1, y1, x2, y2, x3, y3):
 
 
 def get_answer(plan, part_2=False):
-    # see Pick's theorem
-    # A = i + b/2 - 1
+    """
+    see Pick's theorem
+    A = i + b/2 - 1
+    """
     points = [(0, 0)]
     b = 0
     for dir_, n, hexadecimal_code in plan:
