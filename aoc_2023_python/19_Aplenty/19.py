@@ -58,12 +58,8 @@ def is_accepted(part, workflows):
 
 
 def get_answer_1(workflows, parts):
-    # print(list(map(lambda x: is_accepted(x, workflows), parts)))
-    result = 0
-    for part in parts:
-        if is_accepted(part, workflows):
-            result += sum(part.values())
-    return result
+    filtered = filter(lambda x: is_accepted(x, workflows) is True, parts)
+    return sum(map(lambda x: sum(x.values()), filtered))
 
 
 def main():
