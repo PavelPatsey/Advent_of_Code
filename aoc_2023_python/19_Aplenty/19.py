@@ -37,12 +37,8 @@ def is_accepted(part, workflows):
 
     key = "in"
     i = 0
-    while True:
-        if key in ("A", "R"):
-            break
-
+    while key not in ("A", "R"):
         value = workflows[key][i]
-
         if ":" in value:
             condition, go_to = value.split(":")
             condition = eval(condition)
