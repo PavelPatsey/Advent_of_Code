@@ -12,12 +12,6 @@ def get_parsed_input(input_file):
         key, value = line.split("{")
         value = value.replace("}", "")
         value = value.split(",")
-        # value_dict = {}
-        # for v in value:
-        #     if ":" in v:
-        #         value_dict[v[0]] = v
-        #     else:
-        #         value_dict[v] = v
         workflows_dict[key] = value
 
     parts = parts.split()
