@@ -47,42 +47,6 @@ def get_config(input_file):
     return config
 
 
-def get_converted_module(module, input_pulse):
-    if module["type"] == "broadcaster":
-        return module
-
-    new_module = dict(module)
-    pulse = new_module["pulse"]
-    memory = new_module["memory"]
-    turn = new_module["turn"]
-
-    if module["type"] == "%":
-        if not input_pulse:
-            if turn:
-                turn = pulse = False
-            else:
-                turn = pulse = True
-    elif module["type"] == "&":
-        # rework here
-        pass
-        # memory.append(input_pulse)
-        #     memory = input_pulse
-        # elif memory:
-        #     memory = input_pulse
-        # elif not memory:
-        #     pass
-        # else:
-        #     assert False
-        # pulse = not memory
-    else:
-        assert False
-
-    new_module["memory"] = memory
-    new_module["pulse"] = pulse
-    new_module["turn"] = turn
-    return new_module
-
-
 def get_answer_1(config_):
     config = deepcopy(config_)
     N = 1
@@ -93,19 +57,31 @@ def get_answer_1(config_):
         queue = deque([])
         for next_name in config["broadcaster"]["dest_mods"]:
             queue.append(("broadcaster", next_name, False))
-        print(queue)
         while queue:
-            print(queue)
             prev_name, name, pulse = queue.popleft()
             if pulse:
                 h_p += 1
             else:
                 l_p += 1
             module = config[name]
-            new_module = get_converted_module(module, pulse)
-            config[name] = new_module
-            next_pulse = new_module["pulse"]
-            for next_name in new_module["dest_mods"]:
+
+            # convert module
+            if module["type"] == "%":
+                if pulse is False:
+                    if module["turn"]:
+                        module["turn"] = module["pulse"] = False
+                    else:
+                        module["turn"] = module["pulse"] = True
+            elif module["type"] == "&":
+                module["memory"][prev_name] = pulse
+                print(module["memory"].values())
+                all_memory = all(module["memory"].values())
+                module["pulse"] = False if all_memory else True
+            else:
+                assert False
+
+            next_pulse = module["pulse"]
+            for next_name in module["dest_mods"]:
                 queue.append((name, next_name, next_pulse))
 
     return h_p * l_p
