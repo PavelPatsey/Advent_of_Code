@@ -35,45 +35,44 @@ def get_config(input_file):
     return config
 
 
-def get_converted_module(module, pulse):
-    """
-    module = {"type_": type_, "pulse": False, "dest_mods": dest_mods, "memory": None}
-    """
+def get_converted_module(module, input_pulse):
+    if module["type"] == "broadcaster":
+        return module
+
     new_module = dict(module)
     pulse = new_module["pulse"]
     memory = new_module["memory"]
-    if module["type"] == "broadcaster":
-        pass
-    elif module["type"] == "%":
-        if not pulse:
-            pulse = not pulse
+    turn = new_module["turn"]
+
+    if module["type"] == "%":
+        if not input_pulse:
+            if turn:
+                turn = pulse = False
+            else:
+                turn = pulse = True
     elif module["type"] == "&":
-        if memory is None and pulse:
-            memory = True
-            pulse = False
-        elif memory is None and not pulse:
-            pass
-        elif memory and pulse:
-            pulse = False
-        elif memory and not pulse:
-            memory = False
-            pulse = True
+        if memory is None:
+            memory = input_pulse
+        elif memory:
+            memory = input_pulse
         elif not memory:
-            pulse = True
+            pass
         else:
             assert False
+        pulse = not memory
     else:
         assert False
 
     new_module["memory"] = memory
     new_module["pulse"] = pulse
+    new_module["turn"] = turn
     return new_module
 
 
 def is_all_triggers_turn_off(config):
     all_triggers_turn_off = True
     for module in config.values():
-        if module["type"] == "%" and not module["pulse"]:
+        if module["type"] == "%" and not module["turn"]:
             all_triggers_turn_off = False
             break
     return all_triggers_turn_off
