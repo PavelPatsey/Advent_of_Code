@@ -49,7 +49,7 @@ def get_config(input_file):
 
 def get_answer_1(config_):
     config = deepcopy(config_)
-    N = 1
+    N = 1000
     l_p = 0
     h_p = 0
     for t in range(N):
@@ -72,18 +72,20 @@ def get_answer_1(config_):
                         module["turn"] = module["pulse"] = False
                     else:
                         module["turn"] = module["pulse"] = True
+                    next_pulse = module["pulse"]
+                    for next_name in module["dest_mods"]:
+                        queue.append((name, next_name, next_pulse))
             elif module["type"] == "&":
                 module["memory"][prev_name] = pulse
-                print(module["memory"].values())
                 all_memory = all(module["memory"].values())
                 module["pulse"] = False if all_memory else True
+
+                next_pulse = module["pulse"]
+                for next_name in module["dest_mods"]:
+                    queue.append((name, next_name, next_pulse))
+
             else:
                 assert False
-
-            next_pulse = module["pulse"]
-            for next_name in module["dest_mods"]:
-                queue.append((name, next_name, next_pulse))
-
     return h_p * l_p
 
 
