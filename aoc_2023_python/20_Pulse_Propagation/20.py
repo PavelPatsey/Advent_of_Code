@@ -89,8 +89,7 @@ def get_answer_1(config_):
 
 
 def main():
-    config = get_config("test_input_2")
-    print(config)
+    config = get_config("input")
     print(get_answer_1(config))
 
 
