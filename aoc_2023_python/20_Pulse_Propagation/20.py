@@ -83,15 +83,6 @@ def get_converted_module(module, input_pulse):
     return new_module
 
 
-def is_all_triggers_turn_off(config):
-    all_triggers_turn_off = True
-    for module in config.values():
-        if module["type"] == "%" and not module["turn"]:
-            all_triggers_turn_off = False
-            break
-    return all_triggers_turn_off
-
-
 def get_answer_1(config_):
     config = deepcopy(config_)
     N = 1
