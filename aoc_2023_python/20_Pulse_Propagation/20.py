@@ -7,37 +7,37 @@ def get_config(input_file):
         data = file.readlines()
     config = {}
     for line in data:
-        mod, dest_mods = line.strip().split(" -> ")
+        mod, outputs = line.strip().split(" -> ")
         if mod == "broadcaster":
             name = type_ = "broadcaster"
         else:
             type_ = mod[0]
             name = mod[1:]
-        dest_mods = dest_mods.split(", ")
+        outputs = outputs.split(", ")
         if type_ == "%":
             config[name] = {
                 "type": type_,
                 "pulse": False,
                 "turn": False,
-                "dest_mods": dest_mods,
+                "outputs": outputs,
             }
         elif type_ == "&":
             config[name] = {
                 "type": type_,
                 "pulse": True,
                 "memory": {},
-                "dest_mods": dest_mods,
+                "outputs": outputs,
             }
         elif type_ == "broadcaster":
             config[name] = {
                 "type": type_,
-                "dest_mods": dest_mods,
+                "outputs": outputs,
             }
         else:
             assert False
 
     for name, module in config.items():
-        for next_name in module["dest_mods"]:
+        for next_name in module["outputs"]:
             if config[next_name]["type"] == "&":
                 config[next_name]["memory"][name] = False
 
@@ -52,7 +52,7 @@ def get_answer_1(config_):
     for t in range(N):
         l_p += 1
         queue = deque([])
-        for next_name in config["broadcaster"]["dest_mods"]:
+        for next_name in config["broadcaster"]["outputs"]:
             queue.append(("broadcaster", next_name, False))
         while queue:
             prev_name, name, pulse = queue.popleft()
@@ -69,7 +69,7 @@ def get_answer_1(config_):
                     else:
                         module["turn"] = module["pulse"] = True
                     next_pulse = module["pulse"]
-                    for next_name in module["dest_mods"]:
+                    for next_name in module["outputs"]:
                         queue.append((name, next_name, next_pulse))
             elif module["type"] == "&":
                 module["memory"][prev_name] = pulse
@@ -77,7 +77,7 @@ def get_answer_1(config_):
                 module["pulse"] = False if all_memory else True
 
                 next_pulse = module["pulse"]
-                for next_name in module["dest_mods"]:
+                for next_name in module["outputs"]:
                     queue.append((name, next_name, next_pulse))
 
             else:
