@@ -1,6 +1,6 @@
+import math
 from collections import deque
 from copy import deepcopy
-import math
 
 
 def get_config(input_file):
@@ -79,9 +79,7 @@ def get_answer_1(config_):
                     assert presses == seen[prev_name] * cycle_lengths[prev_name]
 
                 if all(seen.values()):
-                    x = 1
-                    for cycle_length in cycle_lengths.values():
-                        x = x * cycle_length // math.gcd(x, cycle_length)
+                    x = math.lcm(*cycle_lengths.values())
                     answer_is_found = True
 
             if module["type"] == "%":
