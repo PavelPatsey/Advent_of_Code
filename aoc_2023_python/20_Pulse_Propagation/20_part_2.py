@@ -1,5 +1,6 @@
 from collections import deque
 from copy import deepcopy
+import math
 
 
 def get_config(input_file):
@@ -46,24 +47,44 @@ def get_config(input_file):
 
 def get_answer_1(config_):
     config = deepcopy(config_)
-    N = 1000
-    l_p = 0
-    h_p = 0
-    for t in range(N):
-        l_p += 1
+
+    module_to_rx = [name for name, module in config.items() if "rx" in module["outputs"]][0]
+    cycle_lengths = {}
+    seen = {name: 0 for name, module in config.items() if module_to_rx in module["outputs"]}
+
+    presses = 0
+    answer_is_found = False
+    while not answer_is_found:
+        presses += 1
         queue = deque([])
         for next_name in config["broadcaster"]["outputs"]:
             queue.append(("broadcaster", next_name, False))
         while queue:
             prev_name, name, pulse = queue.popleft()
-            if pulse:
-                h_p += 1
-            else:
-                l_p += 1
 
             if name not in config:
                 continue
             module = config[name]
+
+            if name == module_to_rx and pulse is True:
+                seen[prev_name] += 1
+                print(f"{seen=}")
+                print(f"{cycle_lengths=}")
+
+                if prev_name not in cycle_lengths:
+                    cycle_lengths[prev_name] = presses
+                else:
+                    print("else", f"{seen[prev_name]=}")
+                    print("else", f"{cycle_lengths[prev_name]=}")
+                    assert presses == seen[prev_name] * cycle_lengths[prev_name]
+
+                print(f"{seen.values()}=")
+
+                if all(seen.values()):
+                    x = 1
+                    for cycle_length in cycle_lengths.values():
+                        x = x * cycle_length // math.gcd(x, cycle_length)
+                    answer_is_found = True
 
             if module["type"] == "%":
                 if pulse is False:
@@ -85,7 +106,7 @@ def get_answer_1(config_):
 
             else:
                 assert False
-    return h_p * l_p
+    return x
 
 
 def main():
