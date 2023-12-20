@@ -90,12 +90,9 @@ def get_answer_1(config_):
     h_p = 0
     for t in range(N):
         l_p += 1
-        queue = deque(
-            [
-                ("broadcaster", module_name, False)
-                for module_name in config["broadcaster"]["dest_mods"]
-            ]
-        )
+        queue = deque([])
+        for next_name in config["broadcaster"]["dest_mods"]:
+            queue.append(("broadcaster", next_name, False))
         print(queue)
         while queue:
             print(queue)
