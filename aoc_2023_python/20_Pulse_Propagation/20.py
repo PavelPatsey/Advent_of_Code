@@ -15,7 +15,7 @@ def get_config(input_file):
             name = mod[1:]
         pulse = None
         turn = None
-        memory = None
+        memory = []
         if type_ == "%":
             pulse = False
             turn = False
@@ -51,15 +51,17 @@ def get_converted_module(module, input_pulse):
             else:
                 turn = pulse = True
     elif module["type"] == "&":
-        if memory is None:
-            memory = input_pulse
-        elif memory:
-            memory = input_pulse
-        elif not memory:
-            pass
-        else:
-            assert False
-        pulse = not memory
+        # rework here
+        pass
+        # memory.append(input_pulse)
+        #     memory = input_pulse
+        # elif memory:
+        #     memory = input_pulse
+        # elif not memory:
+        #     pass
+        # else:
+        #     assert False
+        # pulse = not memory
     else:
         assert False
 
@@ -84,23 +86,27 @@ def get_answer_1(config_):
     l_p = 0
     h_p = 0
     for t in range(N):
-        queue = deque(["broadcaster"])
+        l_p += 1
+        queue = deque(
+            [
+                ("broadcaster", module_name, False)
+                for module_name in config["broadcaster"]["dest_mods"]
+            ]
+        )
+        print(queue)
         while queue:
-            name = queue.popleft()
-
-            if is_all_triggers_turn_off(config) and t != 0:
-                print(t)
-                break
-
-            module = config[name]
-            pulse = module["pulse"]
+            print(queue)
+            prev_name, name, pulse = queue.popleft()
             if pulse:
                 h_p += 1
             else:
                 l_p += 1
+            module = config[name]
             new_module = get_converted_module(module, pulse)
             config[name] = new_module
-            queue = queue + deque(new_module["dest_mods"])
+            next_pulse = new_module["pulse"]
+            for next_name in new_module["dest_mods"]:
+                queue.append((name, next_name, next_pulse))
 
     return h_p * l_p
 
