@@ -13,9 +13,6 @@ def get_config(input_file):
         else:
             type_ = mod[0]
             name = mod[1:]
-        pulse = None
-        turn = None
-        memory = None
         dest_mods = dest_mods.split(", ")
         if type_ == "%":
             config[name] = {
@@ -65,7 +62,6 @@ def get_answer_1(config_):
                 l_p += 1
             module = config[name]
 
-            # convert module
             if module["type"] == "%":
                 if pulse is False:
                     if module["turn"]:
