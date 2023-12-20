@@ -15,23 +15,35 @@ def get_config(input_file):
             name = mod[1:]
         pulse = None
         turn = None
-        memory = []
-        if type_ == "%":
-            pulse = False
-            turn = False
-        if type_ == "%":
-            pulse = True
-            turn = False
-        else:
-            pass
+        memory = None
         dest_mods = dest_mods.split(", ")
-        config[name] = {
-            "type": type_,
-            "pulse": pulse,
-            "turn": turn,
-            "dest_mods": dest_mods,
-            "memory": memory,
-        }
+        if type_ == "%":
+            config[name] = {
+                "type": type_,
+                "pulse": False,
+                "turn": False,
+                "dest_mods": dest_mods,
+            }
+        elif type_ == "&":
+            config[name] = {
+                "type": type_,
+                "pulse": True,
+                "memory": {},
+                "dest_mods": dest_mods,
+            }
+        elif type_ == "broadcaster":
+            config[name] = {
+                "type": type_,
+                "dest_mods": dest_mods,
+            }
+        else:
+            assert False
+
+    for name, module in config.items():
+        for next_name in module["dest_mods"]:
+            if config[next_name]["type"] == "&":
+                config[next_name]["memory"][name] = False
+
     return config
 
 
