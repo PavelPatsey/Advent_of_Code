@@ -38,7 +38,7 @@ def get_config(input_file):
 
     for name, module in config.items():
         for next_name in module["outputs"]:
-            if config[next_name]["type"] == "&":
+            if next_name in config and config[next_name]["type"] == "&":
                 config[next_name]["memory"][name] = False
 
     return config
@@ -60,6 +60,9 @@ def get_answer_1(config_):
                 h_p += 1
             else:
                 l_p += 1
+
+            if name not in config:
+                continue
             module = config[name]
 
             if module["type"] == "%":
@@ -86,7 +89,7 @@ def get_answer_1(config_):
 
 
 def main():
-    config = get_config("test_input_1")
+    config = get_config("test_input_2")
     print(config)
     print(get_answer_1(config))
 
