@@ -4,8 +4,13 @@ def get_config(input_file):
     config = {}
     for line in data:
         mod, dest_mods = line.strip().split(" -> ")
+        if mod == "broadcaster":
+            name = prefix = "broadcaster"
+        else:
+            prefix = mod[0]
+            name = mod[1:]
         dest_mods = dest_mods.split(", ")
-        config[mod] = dest_mods
+        config[name] = {"prefix": prefix, "dest_mods": dest_mods}
     return config
 
 
