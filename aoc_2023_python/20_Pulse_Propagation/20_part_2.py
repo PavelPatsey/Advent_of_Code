@@ -48,9 +48,13 @@ def get_config(input_file):
 def get_answer_1(config_):
     config = deepcopy(config_)
 
-    module_to_rx = [name for name, module in config.items() if "rx" in module["outputs"]][0]
+    module_to_rx = [
+        name for name, module in config.items() if "rx" in module["outputs"]
+    ][0]
     cycle_lengths = {}
-    seen = {name: 0 for name, module in config.items() if module_to_rx in module["outputs"]}
+    seen = {
+        name: 0 for name, module in config.items() if module_to_rx in module["outputs"]
+    }
 
     presses = 0
     answer_is_found = False
@@ -68,17 +72,11 @@ def get_answer_1(config_):
 
             if name == module_to_rx and pulse is True:
                 seen[prev_name] += 1
-                print(f"{seen=}")
-                print(f"{cycle_lengths=}")
 
                 if prev_name not in cycle_lengths:
                     cycle_lengths[prev_name] = presses
                 else:
-                    print("else", f"{seen[prev_name]=}")
-                    print("else", f"{cycle_lengths[prev_name]=}")
                     assert presses == seen[prev_name] * cycle_lengths[prev_name]
-
-                print(f"{seen.values()}=")
 
                 if all(seen.values()):
                     x = 1
