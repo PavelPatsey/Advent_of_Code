@@ -1,7 +1,7 @@
 DIRS_LIST = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 
 
-def get_map(input_file):
+def get_parsed_input(input_file):
     with open(input_file, "r") as file:
         data = file.readlines()
     elfs_map = [[x for x in line.strip()] for line in data]
@@ -41,7 +41,7 @@ def get_answer_1(elfs_map, start, max_steps):
 
 
 def main():
-    elfs_map, start = get_map("input")
+    elfs_map, start = get_parsed_input("input")
     max_steps = 64
     print(get_answer_1(elfs_map, start, max_steps))
 
