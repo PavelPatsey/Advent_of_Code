@@ -25,24 +25,24 @@ def get_answer_1(elfs_map, start, max_steps):
     queue.add(start)
     s = 0
     while s < max_steps:
-        # neighbour
         next_queue = set()
         for r, c in queue:
             for dr, dc in DIRS_LIST:
                 new_r, new_c = r + dr, c + dc
-                if 0 <= new_r < len_rows and 0 <= new_c < len_cols:
-                    if elfs_map[new_r][new_c] in (".", "S"):
-                        next_queue.add((new_r, new_c))
+                if (
+                    0 <= new_r < len_rows
+                    and 0 <= new_c < len_cols
+                    and elfs_map[new_r][new_c] in (".", "S")
+                ):
+                    next_queue.add((new_r, new_c))
         queue = next_queue
         s += 1
     return len(queue)
 
 
 def main():
-    elfs_map, start = get_map("test_input")
-    max_steps = 6
-    print(start)
-    print(start)
+    elfs_map, start = get_map("input")
+    max_steps = 64
     print(get_answer_1(elfs_map, start, max_steps))
 
 
