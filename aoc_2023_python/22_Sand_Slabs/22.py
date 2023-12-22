@@ -18,14 +18,34 @@ def get_bricks(input_file):
 
 
 def is_intersect(brick_1, brick_2):
-    (x11, y11, _), (x21, y21, _) = brick_1
-    (x12, y12, _), (x22, y22, _) = brick_2
-    return True
+    (b1_x1, b1_y1, _), (b1_x2, b1_y2, _) = brick_1
+    (b2_x1, b2_y1, _), (b2_x2, b2_y2, _) = brick_2
+
+    dx_b1 = b1_x2 - b1_x1
+    dy_b1 = b1_y2 - b1_y1
+    dx_b2 = b2_x2 - b2_x1
+    dy_b2 = b2_y2 - b2_y1
+
+    if dx_b1 == dx_b2 == 0:
+        assert dy_b1 != 0 and dy_b2 != 0
+        return b1_x1 == b2_x1
+    elif dy_b1 == dy_b2:
+        assert dx_b1 != 0 and dx_b2 != 0
+        return b1_y1 == b2_y1
+    else:
+        if dx_b1 == 0:
+            assert dx_b2 != 0
+            return b1_y1 <= b2_y1 <= b1_y2
+        elif dy_b1 == 0:
+            assert dy_b2 != 0
+            return b1_x1 <= b2_x1 <= b1_x2
+        else:
+            assert False
 
 
 def get_answer_1(input_bricks):
     sorted_bricks = sorted(input_bricks, key=lambda x: x[0][2])
-    supporting = {}
+    support_dict = {}
 
     for i, cur_brick in enumerate(sorted_bricks):
         cur_z = cur_brick[0][2]
@@ -39,9 +59,15 @@ def get_answer_1(input_bricks):
                     support_set = set()
                 if cur_z - 1 == z_max:
                     support_set.add(j)
-        supporting[i] = support_set
+                dz = z_max + 1 - cur_z
+                new_brick = sorted_bricks[i]
+                new_brick[0][2] += dz
+                new_brick[1][2] += dz
+                sorted_bricks[i] = new_brick
+        support_dict[i] = support_set
 
-    return sum(map(lambda v: v - 1, supporting.values()))
+    print(support_dict)
+    return sum(map(lambda v: len(v) - 1 if len(v) != 0 else 0, support_dict.values()))
 
 
 def main():
@@ -51,4 +77,31 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    brick_1, brick_2 = ([[0, 0, 0], [0, 3, 0]], [[2, 0, 0], [2, 3, 0]])
+    assert is_intersect(brick_1, brick_2) is False
+
+    brick_1, brick_2 = ([[0, 0, 0], [0, 3, 0]], [[0, 1, 0], [0, 10, 0]])
+    assert is_intersect(brick_1, brick_2) is True
+
+    brick_1, brick_2 = ([[0, 0, 0], [3, 0, 0]], [[-1, 2, 0], [5, 2, 0]])
+    assert is_intersect(brick_1, brick_2) is False
+
+    brick_1, brick_2 = ([[0, 2, 0], [3, 2, 0]], [[-1, 2, 0], [5, 2, 0]])
+    assert is_intersect(brick_1, brick_2) is True
+
+    brick_1, brick_2 = ([[0, -1, 0], [0, 2, 0]], [[-1, 0, 0], [5, 0, 0]])
+    assert is_intersect(brick_1, brick_2) is True
+
+    brick_1, brick_2 = ([[0, -1, 0], [0, 2, 0]], [[-1, -10, 0], [5, -10, 0]])
+    assert is_intersect(brick_1, brick_2) is False
+
+    brick_1, brick_2 = ([[-1, 0, 0], [5, 0, 0]], [[0, -10, 0], [0, 10, 0]])
+    assert is_intersect(brick_1, brick_2) is True
+
+    brick_1, brick_2 = ([[-1, 0, 0], [5, 0, 0]], [[-5, -10, 0], [-5, 10, 0]])
+    assert is_intersect(brick_1, brick_2) is False
+
+    brick_1, brick_2 = ([[-1, 0, 0], [5, 0, 0]], [[-1, 0, 0], [-1, 10, 0]])
+    assert is_intersect(brick_1, brick_2) is True
+
+    # main()
