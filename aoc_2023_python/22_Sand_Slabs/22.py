@@ -4,9 +4,17 @@ def get_bricks(input_file):
             map(lambda x: [int(y) for y in x.split(",")], line.strip().split("~"))
         )
 
+    def _check_bricks(bricks):
+        for brick in bricks:
+            z1, z2 = brick[0][2], brick[1][2]
+            assert z1 <= z2
+
     with open(input_file, "r") as file:
         data = file.readlines()
-    return [_get_parsed_line(line) for line in data]
+
+    bricks = [_get_parsed_line(line) for line in data]
+    _check_bricks(bricks)
+    return bricks
 
 
 def is_intersect(brick_1, brick_2):
@@ -17,15 +25,21 @@ def is_intersect(brick_1, brick_2):
 
 def get_answer_1(input_bricks):
     sorted_bricks = sorted(input_bricks, key=lambda x: x[0][2])
-    bricks = []
     supporting = {}
 
-    for i, brick in enumerate(sorted_bricks):
-        while not is_may_fall(brick, sorted_bricks[:i]):
-            brick = get_dropped_brick()
-        bricks.append(brick)
-        for x in get_on_whom_lies(i, sorted_bricks[:i]):
-            supporting[x].add(i)
+    for i, cur_brick in enumerate(sorted_bricks):
+        cur_z = cur_brick[0][2]
+        z_max = 0
+        support_set = set()
+        for j, prev_brick in enumerate(sorted_bricks[:i]):
+            if is_intersect(cur_brick, prev_brick):
+                prev_z = prev_brick[1][2]
+                if prev_z > z_max:
+                    z_max = prev_z
+                    support_set = set()
+                if cur_z - 1 == z_max:
+                    support_set.add(j)
+        supporting[i] = support_set
 
     return sum(map(lambda v: v - 1, supporting.values()))
 
