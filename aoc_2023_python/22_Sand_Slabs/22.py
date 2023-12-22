@@ -27,10 +27,8 @@ def is_intersect(brick_1, brick_2):
     dy_b2 = b2_y2 - b2_y1
 
     if dx_b1 == dx_b2 == 0:
-        assert dy_b1 != 0 and dy_b2 != 0
         return b1_x1 == b2_x1
     elif dy_b1 == dy_b2:
-        assert dx_b1 != 0 and dx_b2 != 0
         return b1_y1 == b2_y1
     else:
         if dx_b1 == 0:
@@ -104,4 +102,7 @@ if __name__ == "__main__":
     brick_1, brick_2 = ([[-1, 0, 0], [5, 0, 0]], [[-1, 0, 0], [-1, 10, 0]])
     assert is_intersect(brick_1, brick_2) is True
 
-    # main()
+    brick_1, brick_2 = ([[1, 1, 8], [1, 1, 9]], [[1, 0, 1], [1, 2, 1]])
+    assert is_intersect(brick_1, brick_2) is True
+
+    main()
