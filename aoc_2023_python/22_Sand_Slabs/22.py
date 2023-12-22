@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 def get_bricks(input_file):
     def _get_parsed_line(line: str):
         return list(
@@ -42,35 +45,46 @@ def is_intersect(brick_1, brick_2):
 
 
 def get_answer_1(input_bricks):
-    sorted_bricks = sorted(input_bricks, key=lambda x: x[0][2])
-    support_dict = {}
+    bricks = sorted(input_bricks, key=lambda x: x[0][2])
+    print(bricks)
 
-    for i, cur_brick in enumerate(sorted_bricks):
+    # make bricks settled
+    for i, cur_brick in enumerate(bricks):
+        max_z = 1
         cur_z = cur_brick[0][2]
-        z_max = 0
-        support_set = set()
-        for j, prev_brick in enumerate(sorted_bricks[:i]):
+        for j, prev_brick in enumerate(bricks[:i]):
             if is_intersect(cur_brick, prev_brick):
                 prev_z = prev_brick[1][2]
-                if prev_z > z_max:
-                    z_max = prev_z
-                    support_set = set()
-                if cur_z - 1 == z_max:
-                    support_set.add(j)
-                dz = z_max + 1 - cur_z
-                new_brick = sorted_bricks[i]
-                new_brick[0][2] += dz
-                new_brick[1][2] += dz
-                sorted_bricks[i] = new_brick
-        support_dict[i] = support_set
+                max_z = max(max_z, prev_z + 1)
+        dz = max_z - cur_z
+        cur_brick[0][2] = max_z
+        cur_brick[1][2] += dz
 
-    print(support_dict)
-    return sum(map(lambda v: len(v) - 1 if len(v) != 0 else 0, support_dict.values()))
+    print(bricks)
+    # search supporting
+    k_supports_v = {i: set() for i in range(len(bricks))}
+    v_supports_k = {i: set() for i in range(len(bricks))}
+
+    for j, upper in enumerate(bricks):
+        for i, lower in enumerate(bricks[:j]):
+            lower_z = lower[1][2]
+            upper_z = upper[0][2]
+            if is_intersect(lower, upper) and lower_z + 1 == upper_z:
+                k_supports_v[i].add(j)
+                v_supports_k[j].add(i)
+
+    print(k_supports_v)
+    print(v_supports_k)
+
+    result = 0
+    for i in range(len(bricks)):
+        if all(len(v_supports_k[j]) >= 2 for j in k_supports_v[i]):
+            result += 1
+    return result
 
 
 def main():
     bricks = get_bricks("test_input")
-    print(bricks)
     print(get_answer_1(bricks))
 
 
@@ -104,5 +118,11 @@ if __name__ == "__main__":
 
     brick_1, brick_2 = ([[1, 1, 8], [1, 1, 9]], [[1, 0, 1], [1, 2, 1]])
     assert is_intersect(brick_1, brick_2) is True
+
+    brick_1, brick_2 = ([[1, 1, 1], [1, 1, 1]], [[1, 1, 1], [1, 1, 1]])
+    assert is_intersect(brick_1, brick_2) is True
+
+    brick_1, brick_2 = ([[1, 1, 1], [1, 1, 1]], [[2, 2, 2], [2, 2, 2]])
+    assert is_intersect(brick_1, brick_2) is False
 
     main()
