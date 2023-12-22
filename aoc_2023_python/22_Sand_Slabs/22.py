@@ -9,26 +9,10 @@ def get_bricks(input_file):
     return [_get_parsed_line(line) for line in data]
 
 
-def is_may_fall(brick, before_bricks):
-    start, end = brick
-    xs, ys, zs = start
-    xe, ye, ze = end
-    assert zs <= ze
-    return False
-
-
-def get_on_whom_lies(index, other_bricks):
-    return set()
-
-
-def get_dropped_brick(brick):
-    start, end = brick
-    xs, ys, zs = start
-    xe, ye, ze = end
-    assert zs <= ze
-    zs = zs - 1
-    ze = ze - 1
-    return (xs, ys, zs), (xe, ye, ze)
+def is_intersect(brick_1, brick_2):
+    (x11, y11, _), (x21, y21, _) = brick_1
+    (x12, y12, _), (x22, y22, _) = brick_2
+    return True
 
 
 def get_answer_1(input_bricks):
@@ -53,7 +37,4 @@ def main():
 
 
 if __name__ == "__main__":
-    brick = (0, 0, 4), (0, 2, 4)
-    assert get_dropped_brick(brick) == ((0, 0, 3), (0, 2, 3))
-
     main()
