@@ -9,7 +9,11 @@ def get_bricks(input_file):
     return [_get_parsed_line(line) for line in data]
 
 
-def is_may_fall(brick, other_bricks):
+def is_may_fall(brick, before_bricks):
+    start, end = brick
+    xs, ys, zs = start
+    xe, ye, ze = end
+    assert zs <= ze
     return False
 
 
