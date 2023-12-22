@@ -1,6 +1,3 @@
-from copy import deepcopy
-
-
 def get_bricks(input_file):
     def _get_parsed_line(line: str):
         return list(
@@ -24,13 +21,13 @@ def is_intersect(brick_1, brick_2):
     (b1_x1, b1_y1, _), (b1_x2, b1_y2, _) = brick_1
     (b2_x1, b2_y1, _), (b2_x2, b2_y2, _) = brick_2
 
-    return max(b1_x1, b2_x1) <= min(b1_x2, b2_x2) and max(b1_y1, b2_y1) <= min(b1_y2, b2_y2)
+    return max(b1_x1, b2_x1) <= min(b1_x2, b2_x2) and max(b1_y1, b2_y1) <= min(
+        b1_y2, b2_y2
+    )
 
 
 def get_answer_1(input_bricks):
-    print(input_bricks)
     bricks = sorted(input_bricks, key=lambda x: x[0][2])
-    print(bricks)
 
     # make bricks settled
     for i, cur_brick in enumerate(bricks):
@@ -44,31 +41,27 @@ def get_answer_1(input_bricks):
         cur_brick[0][2] = max_z
         cur_brick[1][2] += dz
 
-    print(bricks)
     # search supporting
-    k_supports_v = {i: set() for i in range(len(bricks))}
-    v_supports_k = {i: set() for i in range(len(bricks))}
+    lower_supports_upper = {i: set() for i in range(len(bricks))}
+    upper_lies_on_lower = {i: set() for i in range(len(bricks))}
 
     for j, upper in enumerate(bricks):
         for i, lower in enumerate(bricks[:j]):
             lower_z = lower[1][2]
             upper_z = upper[0][2]
             if is_intersect(lower, upper) and lower_z + 1 == upper_z:
-                k_supports_v[i].add(j)
-                v_supports_k[j].add(i)
-
-    print(k_supports_v)
-    print(v_supports_k)
+                lower_supports_upper[i].add(j)
+                upper_lies_on_lower[j].add(i)
 
     result = 0
     for i in range(len(bricks)):
-        if all(len(v_supports_k[j]) >= 2 for j in k_supports_v[i]):
+        if all(len(upper_lies_on_lower[j]) >= 2 for j in lower_supports_upper[i]):
             result += 1
     return result
 
 
 def main():
-    bricks = get_bricks("test_input")
+    bricks = get_bricks("input")
     print(get_answer_1(bricks))
 
 
