@@ -24,27 +24,11 @@ def is_intersect(brick_1, brick_2):
     (b1_x1, b1_y1, _), (b1_x2, b1_y2, _) = brick_1
     (b2_x1, b2_y1, _), (b2_x2, b2_y2, _) = brick_2
 
-    dx_b1 = b1_x2 - b1_x1
-    dy_b1 = b1_y2 - b1_y1
-    dx_b2 = b2_x2 - b2_x1
-    dy_b2 = b2_y2 - b2_y1
-
-    if dx_b1 == dx_b2 == 0:
-        return b1_x1 == b2_x1
-    elif dy_b1 == dy_b2:
-        return b1_y1 == b2_y1
-    else:
-        if dx_b1 == 0:
-            assert dx_b2 != 0
-            return b1_y1 <= b2_y1 <= b1_y2
-        elif dy_b1 == 0:
-            assert dy_b2 != 0
-            return b1_x1 <= b2_x1 <= b1_x2
-        else:
-            assert False
+    return max(b1_x1, b2_x1) <= min(b1_x2, b2_x2) and max(b1_y1, b2_y1) <= min(b1_y2, b2_y2)
 
 
 def get_answer_1(input_bricks):
+    print(input_bricks)
     bricks = sorted(input_bricks, key=lambda x: x[0][2])
     print(bricks)
 
@@ -52,7 +36,7 @@ def get_answer_1(input_bricks):
     for i, cur_brick in enumerate(bricks):
         max_z = 1
         cur_z = cur_brick[0][2]
-        for j, prev_brick in enumerate(bricks[:i]):
+        for prev_brick in bricks[:i]:
             if is_intersect(cur_brick, prev_brick):
                 prev_z = prev_brick[1][2]
                 max_z = max(max_z, prev_z + 1)
