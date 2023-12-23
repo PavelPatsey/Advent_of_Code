@@ -18,8 +18,7 @@ def get_vertex_configuration(r, c, matrix, len_rows, len_cols):
     d_counter = 0
     d_dirs = []
     while not len(d_dirs) > 1:
-        lst = DIRS[matrix[cur_r][cur_c]]
-        for dr, dc in lst:
+        for dr, dc in DIRS[matrix[cur_r][cur_c]]:
             new_r, new_c = cur_r + dr, cur_c + dc
             if (
                 0 <= new_r < len_rows
