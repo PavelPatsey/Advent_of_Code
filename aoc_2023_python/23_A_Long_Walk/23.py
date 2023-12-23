@@ -49,20 +49,26 @@ def get_max_steps(matrix):
             print((r, c, visited, counter))
             return counter
 
-        next_vertex, d_dirs, d_counter = get_vertex_configuration(
+        vertex, d_dirs, d_counter = get_vertex_configuration(
             r, c, matrix, len_rows, len_cols
         )
-        print(next_vertex, d_dirs, d_counter)
-        exit(0)
+        print(f"{(vertex, d_dirs, d_counter)=}")
 
-        visited.add(next_vertex)
-        r, c = next_vertex
+        if vertex not in visited:
+            visited.add(vertex)
+        else:
+            print("vertex not in visited")
+            return 0
 
+        r, c = vertex
         lst = []
         for dr, dc in d_dirs:
-            lst.append(_get_max_steps(r + dr, c + dc, set(visited), counter))
+            lst.append(
+                _get_max_steps(r + dr, c + dc, set(visited), counter + d_counter)
+            )
 
         if not lst:
+            print("lst=[]")
             return 0
 
         return max(lst)
@@ -77,7 +83,7 @@ def get_max_steps(matrix):
 def main():
     matrix = get_matrix("test_input")
     print(f"{matrix=}")
-    # print(get_max_steps(matrix))
+    print(get_max_steps(matrix))
 
 
 if __name__ == "__main__":
@@ -106,4 +112,19 @@ if __name__ == "__main__":
         [(1, 0), (0, 1)],
         2,
     )
-    # main()
+
+    matrix = [
+        "#.#####################",
+        "#.......#########...###",
+        "#######.#########.#.###",
+        "###.....#.>.>.###.#.###",
+        "###v#####.#v#.###.#.###",
+        "###.>...#.#.#.....#...#",
+        "###v###.#.#.#########.#",
+    ]
+    assert get_vertex_configuration(0, 1, matrix, len(matrix), len(matrix[0])) == (
+        (5, 3),
+        [(1, 0), (0, 1)],
+        15,
+    )
+    main()
