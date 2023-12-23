@@ -27,31 +27,34 @@ def is_intersect(brick_1, brick_2):
 
 
 def get_answer_1(input_bricks):
+    def _make_bricks_settled():
+        for i, cur_brick in enumerate(bricks):
+            max_z = 1
+            cur_z = cur_brick[0][2]
+            for prev_brick in bricks[:i]:
+                if is_intersect(cur_brick, prev_brick):
+                    prev_z = prev_brick[1][2]
+                    max_z = max(max_z, prev_z + 1)
+            dz = max_z - cur_z
+            cur_brick[0][2] = max_z
+            cur_brick[1][2] += dz
+
+    def _get_supporting_dicts():
+        lower_supports_upper = {i: set() for i in range(len(bricks))}
+        upper_lies_on_lower = {i: set() for i in range(len(bricks))}
+
+        for j, upper in enumerate(bricks):
+            for i, lower in enumerate(bricks[:j]):
+                lower_z = lower[1][2]
+                upper_z = upper[0][2]
+                if is_intersect(lower, upper) and lower_z + 1 == upper_z:
+                    lower_supports_upper[i].add(j)
+                    upper_lies_on_lower[j].add(i)
+        return lower_supports_upper, upper_lies_on_lower
+
     bricks = sorted(input_bricks, key=lambda x: x[0][2])
-
-    # make bricks settled
-    for i, cur_brick in enumerate(bricks):
-        max_z = 1
-        cur_z = cur_brick[0][2]
-        for prev_brick in bricks[:i]:
-            if is_intersect(cur_brick, prev_brick):
-                prev_z = prev_brick[1][2]
-                max_z = max(max_z, prev_z + 1)
-        dz = max_z - cur_z
-        cur_brick[0][2] = max_z
-        cur_brick[1][2] += dz
-
-    # search supporting
-    lower_supports_upper = {i: set() for i in range(len(bricks))}
-    upper_lies_on_lower = {i: set() for i in range(len(bricks))}
-
-    for j, upper in enumerate(bricks):
-        for i, lower in enumerate(bricks[:j]):
-            lower_z = lower[1][2]
-            upper_z = upper[0][2]
-            if is_intersect(lower, upper) and lower_z + 1 == upper_z:
-                lower_supports_upper[i].add(j)
-                upper_lies_on_lower[j].add(i)
+    _make_bricks_settled()
+    lower_supports_upper, upper_lies_on_lower = _get_supporting_dicts()
 
     result = 0
     for i in range(len(bricks)):
