@@ -13,24 +13,25 @@ def get_matrix(input_file):
 
 
 def get_vertex_configuration(r, c, matrix, len_rows, len_cols):
-    cur_r = r
-    cur_c = c
+    cur_r, cur_c = r, c
+    prev_r, prev_c = -1, -1
     d_counter = 0
     d_dirs = []
     while not len(d_dirs) > 1:
-        for dr, dc in DIRS[matrix[cur_r][cur_c]]:
+        lst = DIRS[matrix[cur_r][cur_c]]
+        for dr, dc in lst:
             new_r, new_c = cur_r + dr, cur_c + dc
             if (
                 0 <= new_r < len_rows
                 and 0 <= new_c < len_cols
                 and matrix[new_r][new_c] != "#"
-                and new_r != cur_r
-                and new_c != cur_c
+                and (new_r, new_c) != (prev_r, prev_c)
             ):
                 d_dirs.append((dr, dc))
         if len(d_dirs) == 1:
+            prev_r, prev_c = cur_r, cur_c
             dr, dc = d_dirs[0]
-            cur_r, cur_c = cur_r + dr, cur_c + dc
+            cur_r, cur_c = prev_r + dr, prev_c + dc
             d_counter += 1
             d_dirs = []
         elif len(d_dirs) > 1:
@@ -85,13 +86,25 @@ if __name__ == "__main__":
         "#.####",
         "#.#.##",
         "#....#",
+        "###.##",
+        "######",
+    ]
+    assert get_vertex_configuration(0, 1, matrix, len(matrix), len(matrix[0])) == (
+        (2, 3),
+        [(-1, 0), (1, 0), (0, 1)],
+        4,
+    )
+
+    matrix = [
+        "#.####",
+        "#.#.##",
+        "#....#",
         "#.#.##",
         "#.####",
     ]
-    d_dirs = [(-1, 0), (1, 0), (0, 1)]
     assert get_vertex_configuration(0, 1, matrix, len(matrix), len(matrix[0])) == (
-        (2, 3),
-        d_dirs,
-        4,
+        (2, 1),
+        [(1, 0), (0, 1)],
+        2,
     )
-    main()
+    # main()
