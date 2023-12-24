@@ -28,6 +28,17 @@ def get_intersection_point(stone_1, stone_2):
     x0 = (c2 - c1) / (k1 - k2)
     y0 = k1 * x0 + c1
 
+    crossed_in_future = all(
+        (
+            (x0 - x1) / dx1 > 0,
+            (x0 - x2) / dx2 > 0,
+            (y0 - y1) / dy1 > 0,
+            (y0 - y2) / dy2 > 0,
+        )
+    )
+
+    if not crossed_in_future:
+        return crossed_in_future
     return x0, y0
 
 
@@ -55,6 +66,10 @@ if __name__ == "__main__":
     x1, y1 = get_intersection_point(stone_1, stone_2)
     assert math.isclose(x0, x1) is True
     assert math.isclose(y0, y1) is True
+
+    stone_1 = [19, 13, 30, -2, 1, -2]
+    stone_2 = [20, 19, 15, 1, -5, -3]
+    assert get_intersection_point(stone_1, stone_2) is False
 
     stone_1 = [18, 19, 22, -1, -1, -2]
     stone_2 = [20, 25, 34, -2, -2, -4]
