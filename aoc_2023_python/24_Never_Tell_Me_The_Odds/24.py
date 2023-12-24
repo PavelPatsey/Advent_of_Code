@@ -1,9 +1,10 @@
 import math
 import re
+from functools import reduce
 from itertools import combinations
 
-MIN_COORD = 7
-MAX_COORD = 27
+MIN_COORD = 200000000000000
+MAX_COORD = 400000000000000
 
 
 def get_stones(input_file):
@@ -25,7 +26,7 @@ def get_intersection_point(stone_1, stone_2):
     k2 = dy2 / dx2
 
     if k1 == k2:
-        return
+        return None
     c1 = y1 - k1 * x1
     c2 = y2 - k2 * x2
 
@@ -47,25 +48,19 @@ def get_intersection_point(stone_1, stone_2):
 
 
 def get_answer_1(stones):
-    pairs = list(combinations(stones, 2))
-    print(pairs)
-    points = list(map(lambda x: get_intersection_point(x[0], x[1]), pairs))
-    print(points)
-    filtered = list(filter(lambda x: x, points))
-    print(filtered)
-    filtered_2 = list(
-        filter(
-            lambda x: MIN_COORD <= x[0] <= MAX_COORD and MIN_COORD <= x[1] <= MAX_COORD,
-            filtered,
-        )
+    pairs = combinations(stones, 2)
+    points_configuration = map(lambda x: get_intersection_point(x[0], x[1]), pairs)
+    filtered = filter(
+        lambda x: x
+        and MIN_COORD <= x[0] <= MAX_COORD
+        and MIN_COORD <= x[1] <= MAX_COORD,
+        points_configuration,
     )
-    print(filtered_2)
-    return len(filtered_2)
+    return reduce(lambda acc, x: acc + 1, filtered, 0)
 
 
 def main():
-    stones = get_stones("test_input")
-    print(stones)
+    stones = get_stones("input")
     print(get_answer_1(stones))
 
 
