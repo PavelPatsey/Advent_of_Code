@@ -23,7 +23,6 @@ def get_vertex_configuration(r, c, matrix, len_rows, len_cols):
             new_r, new_c = cur_r + dr, cur_c + dc
             if (new_r, new_c) == end:
                 return (new_r, new_c), [], d_counter + 1
-
             if (
                 0 <= new_r < len_rows
                 and 0 <= new_c < len_cols
@@ -40,37 +39,24 @@ def get_vertex_configuration(r, c, matrix, len_rows, len_cols):
         elif len(d_dirs) > 1:
             continue
         else:
-            return
+            print("d_dirs = [], vertex_configuration is None")
+            assert False
     return (cur_r, cur_c), d_dirs, d_counter + 1
 
 
 def get_max_steps(matrix):
     def _get_max_steps(r, c, visited, counter) -> int:
-        # print(r, c, "start")
-        # if (r, c) == end:
-        #     print("visit end", len(visited))
-        #     print((r, c, visited, counter))
-        #     return counter
-
-        vertex_configuration = get_vertex_configuration(
+        vertex, d_dirs, d_counter = get_vertex_configuration(
             r, c, matrix, len_rows, len_cols
         )
-        if vertex_configuration:
-            vertex, d_dirs, d_counter = vertex_configuration
-        else:
-            # print("vertex_configuration is None")
-            return 0
-
-        # print(f"{(vertex, d_dirs, d_counter)=}")
 
         if vertex == end:
-            print("visit end", r, c, visited, counter + d_counter)
             return counter + d_counter
 
         if vertex not in visited:
             visited.add(vertex)
         else:
-            # print("vertex is visited")
+            print("vertex is visited")
             return 0
 
         r, c = vertex
@@ -79,10 +65,6 @@ def get_max_steps(matrix):
             lst.append(
                 _get_max_steps(r + dr, c + dc, set(visited), counter + d_counter)
             )
-
-        if not lst:
-            # print("lst=[]")
-            return 0
 
         return max(lst)
 
@@ -94,8 +76,7 @@ def get_max_steps(matrix):
 
 
 def main():
-    matrix = get_matrix("test_input")
-    print(f"{matrix=}")
+    matrix = get_matrix("input")
     print(get_max_steps(matrix))
 
 
