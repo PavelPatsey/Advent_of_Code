@@ -60,13 +60,12 @@ def get_max_steps(matrix):
             return 0
 
         r, c = vertex
-        lst = []
-        for dr, dc in d_dirs:
-            lst.append(
+        return max(
+            [
                 _get_max_steps(r + dr, c + dc, set(visited), counter + d_counter)
-            )
-
-        return max(lst)
+                for dr, dc in d_dirs
+            ]
+        )
 
     len_rows = len(matrix)
     len_cols = len(matrix[0])
