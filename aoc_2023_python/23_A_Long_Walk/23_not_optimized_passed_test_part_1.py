@@ -18,7 +18,7 @@ def get_max_steps(matrix):
 
         # print((r, c))
         if (r, c) == end:
-            print("visit end", len(visited))
+            print("visit end", len(visited) - 1)
             return len(visited) - 1
         lst = []
         dir_key = matrix[r][c]
