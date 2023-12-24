@@ -1,3 +1,5 @@
+import time
+
 DIRS = {
     "v": [(1, 0)],
     "<": [(0, -1)],
@@ -56,7 +58,7 @@ def get_max_steps(matrix):
         if vertex not in visited:
             visited.add(vertex)
         else:
-            print("vertex is visited")
+            # print("vertex is visited")
             return 0
 
         r, c = vertex
@@ -76,7 +78,9 @@ def get_max_steps(matrix):
 
 def main():
     matrix = get_matrix("input")
+    t0 = time.time()
     print(get_max_steps(matrix))
+    print(f"finished in {time.time() - t0:0f} sec")
 
 
 if __name__ == "__main__":
