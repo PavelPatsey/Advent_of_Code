@@ -49,4 +49,15 @@ if __name__ == "__main__":
     assert math.isclose(x0, x1) is True
     assert math.isclose(y0, y1) is True
 
+    stone_1 = [19, 13, 30, -2, 1, -2]
+    stone_2 = [20, 25, 34, -2, -2, -4]
+    x0, y0 = 11.666666666667, 16.666666666667
+    x1, y1 = get_intersection_point(stone_1, stone_2)
+    assert math.isclose(x0, x1) is True
+    assert math.isclose(y0, y1) is True
+
+    stone_1 = [18, 19, 22, -1, -1, -2]
+    stone_2 = [20, 25, 34, -2, -2, -4]
+    assert get_intersection_point(stone_1, stone_2) is None
+
     # main()
