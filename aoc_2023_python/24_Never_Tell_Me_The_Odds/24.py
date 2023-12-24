@@ -1,10 +1,34 @@
 import re
+import math
 
 
 def get_stone(input_file):
     with open(input_file, "r") as file:
         data = file.read().splitlines()
     return [[int(x) for x in re.split(r",|@", line)] for line in data]
+
+
+def get_intersection_point(stone_1, stone_2):
+    """
+    y = k1 * x + c1
+    y = k2 * x + c2
+    x0 = (c2 - c1) / (k1 - k2)
+    y0 = k1 * x0 + c1
+    """
+    x1, y1, _, dx1, dy1, _ = stone_1
+    x2, y2, _, dx2, dy2, _ = stone_2
+    k1 = dy1 / dx1
+    k2 = dy2 / dx2
+
+    if k1 == k2:
+        return
+    c1 = y1 - k1 * x1
+    c2 = y2 - k2 * x2
+
+    x0 = (c2 - c1) / (k1 - k2)
+    y0 = k1 * x0 + c1
+
+    return x0, y0
 
 
 def get_answer_1(stone):
@@ -18,4 +42,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    stone_1 = [19, 13, 30, -2, 1, -2]
+    stone_2 = [18, 19, 22, -1, -1, -2]
+    x0, y0 = 14.33333333, 15.33333333
+    x1, y1 = get_intersection_point(stone_1, stone_2)
+    assert math.isclose(x0, x1) is True
+    assert math.isclose(y0, y1) is True
+
+    # main()
