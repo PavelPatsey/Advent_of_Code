@@ -1,8 +1,12 @@
 import math
 import re
+from itertools import combinations
+
+MIN_COORD = 7
+MAX_COORD = 27
 
 
-def get_stone(input_file):
+def get_stones(input_file):
     with open(input_file, "r") as file:
         data = file.read().splitlines()
     return [[int(x) for x in re.split(r",|@", line)] for line in data]
@@ -42,14 +46,27 @@ def get_intersection_point(stone_1, stone_2):
     return x0, y0
 
 
-def get_answer_1(stone):
-    return
+def get_answer_1(stones):
+    pairs = list(combinations(stones, 2))
+    print(pairs)
+    points = list(map(lambda x: get_intersection_point(x[0], x[1]), pairs))
+    print(points)
+    filtered = list(filter(lambda x: x, points))
+    print(filtered)
+    filtered_2 = list(
+        filter(
+            lambda x: MIN_COORD <= x[0] <= MAX_COORD and MIN_COORD <= x[1] <= MAX_COORD,
+            filtered,
+        )
+    )
+    print(filtered_2)
+    return len(filtered_2)
 
 
 def main():
-    stone = get_stone("test_input")
-    print(stone)
-    print(get_answer_1(stone))
+    stones = get_stones("test_input")
+    print(stones)
+    print(get_answer_1(stones))
 
 
 if __name__ == "__main__":
@@ -75,4 +92,4 @@ if __name__ == "__main__":
     stone_2 = [20, 25, 34, -2, -2, -4]
     assert get_intersection_point(stone_1, stone_2) is None
 
-    # main()
+    main()
