@@ -13,12 +13,7 @@ def get_data(input_file):
 
 
 def get_answer_1(a, b):
-    _a = sorted(a)
-    _b = sorted(b)
-    res = 0
-    for i, j in zip(_a, _b):
-        res += abs(i - j)
-    return res
+    return sum(abs(i - j) for i, j in zip(sorted(a), sorted(b)))
 
 
 def get_answer_2(a, b):
